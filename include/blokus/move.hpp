@@ -7,11 +7,15 @@
 namespace Blokus {
     class Move {
     private:
-        Position position;
+        Position destination;
         Piece piece;
         Color color;
 
     public:
-        Move(const Position& position, Piece piece, Color color);
+        Move(const Position& destination, Piece piece, Color color);
+
+        const Position& GetDestination();
+        const Piece GetPiece();
+        const Color GetColor();
     };
 }  // namespace Blokus

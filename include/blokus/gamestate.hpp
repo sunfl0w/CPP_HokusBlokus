@@ -1,21 +1,23 @@
 #pragma once
 
+#include <vector>
+
 #include "board.hpp"
 #include "move.hpp"
-
-#include <vector>
 
 namespace Blokus {
     class Gamestate {
     private:
-    Board board;
-    unsigned int turn;
+        Board board;
+        unsigned int turn;
 
     public:
-    Gamestate();
+        Gamestate();
 
-    Board& GetBoard();
+        Board& GetBoard();
 
-    std::vector<Move> GetPossibleMoves();
+        std::vector<Move> GetPossibleMoves();
+
+        void PerformMove(const Move& move);
     };
-}
+}  // namespace Blokus

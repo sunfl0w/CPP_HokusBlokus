@@ -11,6 +11,6 @@ namespace Blokus {
         std::bitset<400> yellowSet;
 
     public:
-    Board();
-   };
-}
+        Board();
+    };
+}  // namespace Blokus
