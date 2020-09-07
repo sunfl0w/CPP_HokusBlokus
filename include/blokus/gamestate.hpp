@@ -5,7 +5,7 @@
 #include "board.hpp"
 #include "move.hpp"
 
-namespace Blokus {
+namespace HokusBlokus::Blokus {
     class Gamestate {
     private:
         Board board;

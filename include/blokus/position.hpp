@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Blokus {
+namespace HokusBlokus::Blokus {
     class Position {
     public:
         unsigned int x, y;

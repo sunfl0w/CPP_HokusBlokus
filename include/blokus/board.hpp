@@ -2,7 +2,7 @@
 
 #include <bitset>
 
-namespace Blokus {
+namespace HokusBlokus::Blokus {
     class Board {
     private:
         std::bitset<400> blueSet;

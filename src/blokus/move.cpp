@@ -1,6 +1,6 @@
 #include "move.hpp"
 
-namespace Blokus {
+namespace HokusBlokus::Blokus {
     Move::Move(const Position& destination, Piece piece, Color color) : destination(destination), piece(piece), color(color) {
     }
 

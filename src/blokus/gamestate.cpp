@@ -1,6 +1,6 @@
 #include "gamestate.hpp"
 
-namespace Blokus {
+namespace HokusBlokus::Blokus {
     Gamestate::Gamestate() {
     }
 
@@ -9,10 +9,10 @@ namespace Blokus {
     }
 
     std::vector<Move> Gamestate::GetPossibleMoves() {
-
+        
     }
 
     void Gamestate::PerformMove(const Move& move) {
-        //Moves will not be chhecked for validity to improve perfromance
+        //Moves will not be checked for validity to improve perfromance
     }
 }

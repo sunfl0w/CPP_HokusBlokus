@@ -4,7 +4,7 @@
 #include "piece.hpp"
 #include "position.hpp"
 
-namespace Blokus {
+namespace HokusBlokus::Blokus {
     class Move {
     private:
         Position destination;
