@@ -1,15 +1,15 @@
 #include "move.hpp"
 
 namespace HokusBlokus::Blokus {
-    Move::Move(const Position& destination, Piece piece, Color color) : destination(destination), piece(piece), color(color) {
+    Move::Move(const Vec2ui& destination, PieceType pieceType, Color color) : destination(destination), pieceType(pieceType), color(color) {
     }
 
-    const Position& Move::GetDestination() {
+    const Vec2ui& Move::GetDestination() {
         return destination;
     }
 
-    const Piece Move::GetPiece() {
-        return piece;
+    const PieceType Move::GetPieceType() {
+        return pieceType;
     }
 
     const Color Move::GetColor() {

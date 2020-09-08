@@ -1,10 +1,10 @@
 #pragma once
 
 namespace HokusBlokus::Blokus {
-    class Position {
+    class Vec2ui {
     public:
         unsigned int x, y;
 
-        Position(unsigned int x, unsigned int y);
+        Vec2ui(unsigned int x, unsigned int y);
     };
 }  // namespace Blokus

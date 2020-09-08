@@ -1,21 +1,21 @@
 #pragma once
 
 #include "color.hpp"
-#include "piece.hpp"
-#include "position.hpp"
+#include "piecetype.hpp"
+#include "vec2ui.hpp"
 
 namespace HokusBlokus::Blokus {
     class Move {
     private:
-        Position destination;
-        Piece piece;
+        Vec2ui destination;
+        PieceType pieceType;
         Color color;
 
     public:
-        Move(const Position& destination, Piece piece, Color color);
+        Move(const Vec2ui& destination, PieceType pieceType, Color color);
 
-        const Position& GetDestination();
-        const Piece GetPiece();
+        const Vec2ui& GetDestination();
+        const PieceType GetPieceType();
         const Color GetColor();
     };
 }  // namespace Blokus

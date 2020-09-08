@@ -1,7 +1,7 @@
 #pragma once
 
 namespace HokusBlokus::Blokus {
-    enum class Piece {
+    enum class PieceType {
         MONOMINO,
         DOMINO,
         TRIO_L,

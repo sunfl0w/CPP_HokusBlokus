@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/pbm/pbmimage.hpp
+boost/dynamic_bitset.hpp
+-
+
+../include/pbm/pbmloader.hpp
+pbmimage.hpp
+../include/pbm/pbmimage.hpp
+string
+-
+fstream
+-
+iostream
+-
+vector
+-
+
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/src/pbm/pbmloader.cpp
+pbmloader.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/src/pbm/pbmloader.hpp
+
