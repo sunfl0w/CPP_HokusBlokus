@@ -2,10 +2,13 @@
 
 #include <bitset>
 #include <vector>
+#include <iostream>
+#include <fstream>
 
 #include "piecetype.hpp"
 #include "vec2ui.hpp"
 #include "pbmimage.hpp"
+#include "pbmloader.hpp"
 
 namespace HokusBlokus::Blokus {
     class BitsetManager {
@@ -13,8 +16,13 @@ namespace HokusBlokus::Blokus {
         static std::vector<std::bitset<484>> pieceEdgeBitsets;
         static std::vector<std::bitset<484>> pieceCornerBitsets;
 
+        static std::vector<Vec2ui> pieceDimensions;
+        static std::vector<Vec2ui> pieceEdgeCornerDimensions;
+
     public:
-        static void InitBitsetManager(PBM::PBMImage pieceBitmap, PBM::PBMImage pieceEdgeBitmap, PBM::PBMImage pieceCornerBitmap);
+        static void LoadBitsets();
+
+        static void LoadPieceDimensions();
 
         static std::bitset<484>& GetBitsetOfPiece(PieceType pieceType);
 
@@ -28,5 +36,9 @@ namespace HokusBlokus::Blokus {
 
     private:
         BitsetManager();
+
+        static std::vector<std::bitset<484>> PBMPiecesToFullScaleBitsets(const PBM::PBMImage& bitmap, unsigned int pieceSize);
+
+        static std::vector<Vec2ui> LoadDimensionListingFromFile(std::string path);
     };
 }  // namespace HokusBlokus::Blokus

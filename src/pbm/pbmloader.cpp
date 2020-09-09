@@ -28,6 +28,7 @@ namespace HokusBlokus::PBM {
             }
             lineCount++;
         }
+        inputStream.close();
 
         //Read bitmap data
         boost::dynamic_bitset<> data = boost::dynamic_bitset<>(width * height);

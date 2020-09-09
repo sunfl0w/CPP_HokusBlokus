@@ -10,10 +10,10 @@ namespace HokusBlokus::PBM {
     public:
         PBMImage(unsigned int width, unsigned int height, boost::dynamic_bitset<> data);
 
-        unsigned int GetWidth();
+        unsigned int GetWidth() const;
 
-        unsigned int GetHeight();
+        unsigned int GetHeight() const;
 
-        boost::dynamic_bitset<>& GetData();
+        const boost::dynamic_bitset<>& GetData() const;
     };
 }  // namespace HokusBlokus::PBM
