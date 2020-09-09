@@ -4,11 +4,14 @@
 
 #include "board.hpp"
 #include "move.hpp"
+#include "player.hpp"
 
 namespace HokusBlokus::Blokus {
     class Gamestate {
     private:
         Board board;
+        Player player0;
+        Player player1;
         Color currentPlayerColor;
         std::vector<Move> performedMoves;
         unsigned int turn;
