@@ -12,11 +12,11 @@
 
 namespace HokusBlokus::Blokus {
     class BitsetManager {
-        static std::vector<std::bitset<484>> pieceBitsets;
+        static std::vector<std::bitset<484>> pieceShapeBitsets;
         static std::vector<std::bitset<484>> pieceEdgeBitsets;
         static std::vector<std::bitset<484>> pieceCornerBitsets;
 
-        static std::vector<Vec2ui> pieceDimensions;
+        static std::vector<Vec2ui> pieceShapeDimensions;
         static std::vector<Vec2ui> pieceEdgeCornerDimensions;
 
     public:
@@ -24,7 +24,7 @@ namespace HokusBlokus::Blokus {
 
         static void LoadPieceDimensions();
 
-        static std::bitset<484>& GetBitsetOfPiece(PieceType pieceType);
+        static std::bitset<484>& GetShapeBitsetOfPiece(PieceType pieceType);
 
         static std::bitset<484>& GetEdgeBitsetOfPiece(PieceType pieceType);
 
