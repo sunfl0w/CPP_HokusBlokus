@@ -19,7 +19,7 @@ namespace HokusBlokus::Blokus {
         PENTO_W = 14,
         PENTO_R = 15,
         PENTO_X = 16,
-        PENTP_Z = 17,
+        PENTO_Z = 17,
         PENTO_Y = 18,
         PENTO_T = 19,
         PENTO_S = 20

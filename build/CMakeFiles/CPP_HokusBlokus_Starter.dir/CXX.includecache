@@ -6,23 +6,61 @@
 
 #IncludeRegexTransform: 
 
+../include/blokus/bitsetmanager.hpp
+bitset
+-
+vector
+-
+iostream
+-
+fstream
+-
+pieceshape.hpp
+../include/blokus/pieceshape.hpp
+vec2ui.hpp
+../include/blokus/vec2ui.hpp
+pbmimage.hpp
+../include/blokus/pbmimage.hpp
+pbmloader.hpp
+../include/blokus/pbmloader.hpp
+
+../include/blokus/pieceshape.hpp
+
+../include/blokus/vec2ui.hpp
+
 ../include/pbm/pbmimage.hpp
 boost/dynamic_bitset.hpp
 -
 
 ../include/pbm/pbmloader.hpp
-pbmimage.hpp
-../include/pbm/pbmimage.hpp
-string
--
 fstream
 -
 iostream
 -
+string
+-
 vector
 -
+pbmimage.hpp
+../include/pbm/pbmimage.hpp
 
-/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/src/pbm/pbmloader.cpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/src/client/starter.cpp
+iostream
+-
+string
+-
+bitset
+-
+filesystem
+-
+pbmimage.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/src/client/pbmimage.hpp
 pbmloader.hpp
-/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/src/pbm/pbmloader.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/src/client/pbmloader.hpp
+bitsetmanager.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/src/client/bitsetmanager.hpp
+pieceshape.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/src/client/pieceshape.hpp
+vec2ui.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/src/client/vec2ui.hpp
 

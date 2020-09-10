@@ -142,6 +142,33 @@ CPP_HokusBlokus_Starter/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPP_HokusBlokus_Starter.dir/build.make CMakeFiles/CPP_HokusBlokus_Starter.dir/build
 .PHONY : CPP_HokusBlokus_Starter/fast
 
+src/blokus/bitsetmanager.o: src/blokus/bitsetmanager.cpp.o
+
+.PHONY : src/blokus/bitsetmanager.o
+
+# target to build an object file
+src/blokus/bitsetmanager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPP_HokusBlokus_Starter.dir/build.make CMakeFiles/CPP_HokusBlokus_Starter.dir/src/blokus/bitsetmanager.cpp.o
+.PHONY : src/blokus/bitsetmanager.cpp.o
+
+src/blokus/bitsetmanager.i: src/blokus/bitsetmanager.cpp.i
+
+.PHONY : src/blokus/bitsetmanager.i
+
+# target to preprocess a source file
+src/blokus/bitsetmanager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPP_HokusBlokus_Starter.dir/build.make CMakeFiles/CPP_HokusBlokus_Starter.dir/src/blokus/bitsetmanager.cpp.i
+.PHONY : src/blokus/bitsetmanager.cpp.i
+
+src/blokus/bitsetmanager.s: src/blokus/bitsetmanager.cpp.s
+
+.PHONY : src/blokus/bitsetmanager.s
+
+# target to generate assembly for a file
+src/blokus/bitsetmanager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPP_HokusBlokus_Starter.dir/build.make CMakeFiles/CPP_HokusBlokus_Starter.dir/src/blokus/bitsetmanager.cpp.s
+.PHONY : src/blokus/bitsetmanager.cpp.s
+
 src/blokus/board.o: src/blokus/board.cpp.o
 
 .PHONY : src/blokus/board.o
@@ -223,32 +250,59 @@ src/blokus/move.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPP_HokusBlokus_Starter.dir/build.make CMakeFiles/CPP_HokusBlokus_Starter.dir/src/blokus/move.cpp.s
 .PHONY : src/blokus/move.cpp.s
 
-src/blokus/position.o: src/blokus/position.cpp.o
+src/blokus/player.o: src/blokus/player.cpp.o
 
-.PHONY : src/blokus/position.o
+.PHONY : src/blokus/player.o
 
 # target to build an object file
-src/blokus/position.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPP_HokusBlokus_Starter.dir/build.make CMakeFiles/CPP_HokusBlokus_Starter.dir/src/blokus/position.cpp.o
-.PHONY : src/blokus/position.cpp.o
+src/blokus/player.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPP_HokusBlokus_Starter.dir/build.make CMakeFiles/CPP_HokusBlokus_Starter.dir/src/blokus/player.cpp.o
+.PHONY : src/blokus/player.cpp.o
 
-src/blokus/position.i: src/blokus/position.cpp.i
+src/blokus/player.i: src/blokus/player.cpp.i
 
-.PHONY : src/blokus/position.i
+.PHONY : src/blokus/player.i
 
 # target to preprocess a source file
-src/blokus/position.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPP_HokusBlokus_Starter.dir/build.make CMakeFiles/CPP_HokusBlokus_Starter.dir/src/blokus/position.cpp.i
-.PHONY : src/blokus/position.cpp.i
+src/blokus/player.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPP_HokusBlokus_Starter.dir/build.make CMakeFiles/CPP_HokusBlokus_Starter.dir/src/blokus/player.cpp.i
+.PHONY : src/blokus/player.cpp.i
 
-src/blokus/position.s: src/blokus/position.cpp.s
+src/blokus/player.s: src/blokus/player.cpp.s
 
-.PHONY : src/blokus/position.s
+.PHONY : src/blokus/player.s
 
 # target to generate assembly for a file
-src/blokus/position.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPP_HokusBlokus_Starter.dir/build.make CMakeFiles/CPP_HokusBlokus_Starter.dir/src/blokus/position.cpp.s
-.PHONY : src/blokus/position.cpp.s
+src/blokus/player.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPP_HokusBlokus_Starter.dir/build.make CMakeFiles/CPP_HokusBlokus_Starter.dir/src/blokus/player.cpp.s
+.PHONY : src/blokus/player.cpp.s
+
+src/blokus/vec2ui.o: src/blokus/vec2ui.cpp.o
+
+.PHONY : src/blokus/vec2ui.o
+
+# target to build an object file
+src/blokus/vec2ui.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPP_HokusBlokus_Starter.dir/build.make CMakeFiles/CPP_HokusBlokus_Starter.dir/src/blokus/vec2ui.cpp.o
+.PHONY : src/blokus/vec2ui.cpp.o
+
+src/blokus/vec2ui.i: src/blokus/vec2ui.cpp.i
+
+.PHONY : src/blokus/vec2ui.i
+
+# target to preprocess a source file
+src/blokus/vec2ui.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPP_HokusBlokus_Starter.dir/build.make CMakeFiles/CPP_HokusBlokus_Starter.dir/src/blokus/vec2ui.cpp.i
+.PHONY : src/blokus/vec2ui.cpp.i
+
+src/blokus/vec2ui.s: src/blokus/vec2ui.cpp.s
+
+.PHONY : src/blokus/vec2ui.s
+
+# target to generate assembly for a file
+src/blokus/vec2ui.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CPP_HokusBlokus_Starter.dir/build.make CMakeFiles/CPP_HokusBlokus_Starter.dir/src/blokus/vec2ui.cpp.s
+.PHONY : src/blokus/vec2ui.cpp.s
 
 src/client/starter.o: src/client/starter.cpp.o
 
@@ -340,6 +394,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... CPP_HokusBlokus_Starter"
+	@echo "... src/blokus/bitsetmanager.o"
+	@echo "... src/blokus/bitsetmanager.i"
+	@echo "... src/blokus/bitsetmanager.s"
 	@echo "... src/blokus/board.o"
 	@echo "... src/blokus/board.i"
 	@echo "... src/blokus/board.s"
@@ -349,9 +406,12 @@ help:
 	@echo "... src/blokus/move.o"
 	@echo "... src/blokus/move.i"
 	@echo "... src/blokus/move.s"
-	@echo "... src/blokus/position.o"
-	@echo "... src/blokus/position.i"
-	@echo "... src/blokus/position.s"
+	@echo "... src/blokus/player.o"
+	@echo "... src/blokus/player.i"
+	@echo "... src/blokus/player.s"
+	@echo "... src/blokus/vec2ui.o"
+	@echo "... src/blokus/vec2ui.i"
+	@echo "... src/blokus/vec2ui.s"
 	@echo "... src/client/starter.o"
 	@echo "... src/client/starter.i"
 	@echo "... src/client/starter.s"

@@ -1,22 +1,33 @@
 #include <iostream>
 #include <string>
+#include <bitset>
+#include <filesystem>
 
 #include "pbmimage.hpp"
 #include "pbmloader.hpp"
+#include "bitsetmanager.hpp"
+#include "pieceshape.hpp"
+#include "vec2ui.hpp"
 
 int main() {
     std::cout << "Hello There\n";
-    //Test load pbm
-    HokusBlokus::PBM::PBMImage image = HokusBlokus::PBM::PBMLoader::LoadPBM("resources/BlokusPieces.pbm");
+    std::cout << "Current path is " << std::filesystem::current_path() << '\n';
+    //Test bitset manager
+    HokusBlokus::Blokus::BitsetManager::LoadBitsets();
+    HokusBlokus::Blokus::BitsetManager::LoadPieceDimensions();
 
-    //Drawing the image
-    for (int y = 0; y < image.GetHeight(); y++) {
+    HokusBlokus::Blokus::PieceShape shape = HokusBlokus::Blokus::PieceShape::PENTO_S;
+    std::bitset<484> bitset = HokusBlokus::Blokus::BitsetManager::GetShapeBitsetOfPiece(shape);
+    HokusBlokus::Blokus::Vec2ui dimensions = HokusBlokus::Blokus::BitsetManager::GetDimensionsOfPiece(shape);
+    HokusBlokus::Blokus::Vec2ui edgeDimensions = HokusBlokus::Blokus::BitsetManager::GetEdgeDimensionsOfPiece(shape);
+
+    for(int y = 0; y < 22; y++) {
         std::string line;
-        for (int x = 0; x < image.GetWidth(); x++) {
-            if (image.GetData()[x + y * image.GetWidth()] == 1) {
-                line.append("0");
+        for(int x = 0; x < 22; x++) {
+            if(bitset[x + 22 * y]) {
+                line += "1";
             } else {
-                line.append("1");
+                line += "0";
             }
         }
         std::cout << line << "\n";

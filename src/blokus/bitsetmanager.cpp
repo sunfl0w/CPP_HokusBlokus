@@ -1,6 +1,13 @@
 #include "bitsetmanager.hpp"
 
 namespace HokusBlokus::Blokus {
+    std::vector<std::bitset<484>> BitsetManager::pieceShapeBitsets = std::vector<std::bitset<484>>();
+    std::vector<std::bitset<484>> BitsetManager::pieceEdgeBitsets = std::vector<std::bitset<484>>();
+    std::vector<std::bitset<484>> BitsetManager::pieceCornerBitsets = std::vector<std::bitset<484>>();
+
+    std::vector<Vec2ui> BitsetManager::pieceShapeDimensions = std::vector<Vec2ui>();
+    std::vector<Vec2ui> BitsetManager::pieceEdgeCornerDimensions = std::vector<Vec2ui>();
+
     void BitsetManager::LoadBitsets() {
         std::string pathToResources = "resources/";
 
@@ -19,24 +26,24 @@ namespace HokusBlokus::Blokus {
         pieceEdgeCornerDimensions = LoadDimensionListingFromFile(pathToResources + "BlokusPieceEdgeCornerDimensions.txt");
     }
 
-    std::bitset<484>& BitsetManager::GetShapeBitsetOfPiece(PieceType pieceType) {
-        return pieceShapeBitsets[PieceTypeToUInt(pieceType)];
+    std::bitset<484>& BitsetManager::GetShapeBitsetOfPiece(PieceShape pieceShape) {
+        return pieceShapeBitsets[PieceShapeToUInt(pieceShape)];
     }
 
-    std::bitset<484>& BitsetManager::GetEdgeBitsetOfPiece(PieceType pieceType) {
-        return pieceEdgeBitsets[PieceTypeToUInt(pieceType)];
+    std::bitset<484>& BitsetManager::GetEdgeBitsetOfPiece(PieceShape pieceShape) {
+        return pieceEdgeBitsets[PieceShapeToUInt(pieceShape)];
     }
 
-    std::bitset<484>& BitsetManager::GetCornerBitsetOfPiece(PieceType pieceType) {
-        return pieceCornerBitsets[PieceTypeToUInt(pieceType)];
+    std::bitset<484>& BitsetManager::GetCornerBitsetOfPiece(PieceShape pieceShape) {
+        return pieceCornerBitsets[PieceShapeToUInt(pieceShape)];
     }
 
-    Vec2ui& BitsetManager::GetDimensionsOfPiece(PieceType pieceType) {
-        return pieceShapeDimensions[PieceTypeToUInt(pieceType)];
+    Vec2ui& BitsetManager::GetDimensionsOfPiece(PieceShape pieceShape) {
+        return pieceShapeDimensions[PieceShapeToUInt(pieceShape)];
     }
 
-    Vec2ui& BitsetManager::GetEdgeDimensionsOfPiece(PieceType pieceType) {
-        return pieceEdgeCornerDimensions[PieceTypeToUInt(pieceType)];
+    Vec2ui& BitsetManager::GetEdgeDimensionsOfPiece(PieceShape pieceShape) {
+        return pieceEdgeCornerDimensions[PieceShapeToUInt(pieceShape)];
     }
 
     std::vector<std::bitset<484>> BitsetManager::PBMPiecesToFullScaleBitsets(const PBM::PBMImage& bitmap, unsigned int pieceSize) {
@@ -46,11 +53,11 @@ namespace HokusBlokus::Blokus {
         unsigned int maxX = pieceSize;
         unsigned int maxY = pieceSize;
 
-        for (int i = 0; i < 21; i++) {
+        for (unsigned int i = 0; i < 21; i++) {
             std::bitset<484> bitset = std::bitset<484>();
-            for (int x = minX; x < maxX; x++) {
-                for (int y = minY; y < maxY; y++) {
-                    bitset[x % pieceSize + (y % pieceSize) * 22] = bitmap.GetData()[x + y * bitmap.GetWidth()];
+            for (unsigned int x = minX; x < maxX; x++) {
+                for (unsigned int y = minY; y < maxY; y++) {
+                    bitset[x % pieceSize + (y % pieceSize) * 22] = !bitmap.GetData()[x + y * bitmap.GetWidth()];
                 }
             }
             bitsets.push_back(bitset);
@@ -69,7 +76,7 @@ namespace HokusBlokus::Blokus {
     std::vector<Vec2ui> BitsetManager::LoadDimensionListingFromFile(std::string path) {
         std::ifstream inputStream(path);
         if (!inputStream) {
-            std::cout << "Unable to open txt file.\n";
+            std::cout << "Unable to open txt file at: " << path << "\n";
             std::exit(1);
         }
 
@@ -79,7 +86,7 @@ namespace HokusBlokus::Blokus {
 
         std::vector<Vec2ui> pieceDimensions = std::vector<Vec2ui>();
         for (int i = 0; i < 21; i++) {
-            pieceDimensions.push_back(Vec2ui(line[i * 2], line[i * 2 + 1]));
+            pieceDimensions.push_back(Vec2ui(line[i * 2] - 48, line[i * 2 + 1] - 48));
         }
         return pieceDimensions;
     }

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "piecetype.hpp"
+#include "pieceshape.hpp"
 #include "vec2ui.hpp"
 #include "pbmimage.hpp"
 #include "pbmloader.hpp"
@@ -24,15 +24,15 @@ namespace HokusBlokus::Blokus {
 
         static void LoadPieceDimensions();
 
-        static std::bitset<484>& GetShapeBitsetOfPiece(PieceType pieceType);
+        static std::bitset<484>& GetShapeBitsetOfPiece(PieceShape pieceShape);
 
-        static std::bitset<484>& GetEdgeBitsetOfPiece(PieceType pieceType);
+        static std::bitset<484>& GetEdgeBitsetOfPiece(PieceShape pieceShape);
 
-        static std::bitset<484>& GetCornerBitsetOfPiece(PieceType pieceType);
+        static std::bitset<484>& GetCornerBitsetOfPiece(PieceShape pieceShape);
 
-        static Vec2ui& GetDimensionsOfPiece(PieceType pieceType);
+        static Vec2ui& GetDimensionsOfPiece(PieceShape pieceShape);
 
-        static Vec2ui& GetEdgeDimensionsOfPiece(PieceType pieceType);
+        static Vec2ui& GetEdgeDimensionsOfPiece(PieceShape pieceShape);
 
     private:
         BitsetManager();

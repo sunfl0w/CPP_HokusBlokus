@@ -4,10 +4,12 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/src/blokus/bitsetmanager.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/build/CMakeFiles/CPP_HokusBlokus_Starter.dir/src/blokus/bitsetmanager.cpp.o"
   "/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/src/blokus/board.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/build/CMakeFiles/CPP_HokusBlokus_Starter.dir/src/blokus/board.cpp.o"
   "/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/src/blokus/gamestate.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/build/CMakeFiles/CPP_HokusBlokus_Starter.dir/src/blokus/gamestate.cpp.o"
   "/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/src/blokus/move.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/build/CMakeFiles/CPP_HokusBlokus_Starter.dir/src/blokus/move.cpp.o"
-  "/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/src/blokus/position.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/build/CMakeFiles/CPP_HokusBlokus_Starter.dir/src/blokus/position.cpp.o"
+  "/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/src/blokus/player.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/build/CMakeFiles/CPP_HokusBlokus_Starter.dir/src/blokus/player.cpp.o"
+  "/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/src/blokus/vec2ui.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/build/CMakeFiles/CPP_HokusBlokus_Starter.dir/src/blokus/vec2ui.cpp.o"
   "/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/src/client/starter.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/build/CMakeFiles/CPP_HokusBlokus_Starter.dir/src/client/starter.cpp.o"
   "/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/src/pbm/pbmimage.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/build/CMakeFiles/CPP_HokusBlokus_Starter.dir/src/pbm/pbmimage.cpp.o"
   "/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/src/pbm/pbmloader.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/build/CMakeFiles/CPP_HokusBlokus_Starter.dir/src/pbm/pbmloader.cpp.o"

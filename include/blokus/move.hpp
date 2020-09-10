@@ -1,7 +1,7 @@
 #pragma once
 
 #include "color.hpp"
-#include "piecetype.hpp"
+#include "pieceshape.hpp"
 #include "vec2ui.hpp"
 
 namespace HokusBlokus::Blokus {
@@ -12,7 +12,7 @@ namespace HokusBlokus::Blokus {
         Color color;
 
     public:
-        Move(const Vec2ui& destination, PieceShape pieceType, Color color);
+        Move(const Vec2ui& destination, PieceShape pieceShape, Color color);
 
         const Vec2ui& GetDestination();
         const PieceShape GetPieceShape();

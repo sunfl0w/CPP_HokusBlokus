@@ -7,7 +7,7 @@ namespace HokusBlokus::PBM {
 
         std::ifstream inputStream(path);
         if (!inputStream) {
-            std::cout << "Unable to open pbm file.\n";
+            std::cout << "Unable to open pbm file at: " << path << "\n";
             std::exit(1);
         }
 
