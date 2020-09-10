@@ -1,3 +1,0 @@
-/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/build/CMakeFiles/rebuild_cache.dir
-/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/build/CMakeFiles/edit_cache.dir
-/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/build/CMakeFiles/CPP_HokusBlokus_Starter.dir
