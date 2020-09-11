@@ -12,33 +12,33 @@
 
 namespace HokusBlokus::Blokus {
     class BitsetManager {
-        static std::vector<std::bitset<484>> pieceShapeBitsets;
-        static std::vector<std::bitset<484>> pieceEdgeBitsets;
-        static std::vector<std::bitset<484>> pieceCornerBitsets;
+        std::vector<std::bitset<484>> pieceShapeBitsets;
+        std::vector<std::bitset<484>> pieceEdgeBitsets;
+        std::vector<std::bitset<484>> pieceCornerBitsets;
 
-        static std::vector<Vec2ui> pieceShapeDimensions;
-        static std::vector<Vec2ui> pieceEdgeCornerDimensions;
+        std::vector<Vec2ui> pieceShapeDimensions;
+        std::vector<Vec2ui> pieceEdgeCornerDimensions;
 
     public:
-        static void LoadBitsets();
-
-        static void LoadPieceDimensions();
-
-        static std::bitset<484>& GetShapeBitsetOfPiece(PieceShape pieceShape);
-
-        static std::bitset<484>& GetEdgeBitsetOfPiece(PieceShape pieceShape);
-
-        static std::bitset<484>& GetCornerBitsetOfPiece(PieceShape pieceShape);
-
-        static Vec2ui& GetDimensionsOfPiece(PieceShape pieceShape);
-
-        static Vec2ui& GetEdgeDimensionsOfPiece(PieceShape pieceShape);
-
-    private:
         BitsetManager();
 
-        static std::vector<std::bitset<484>> PBMPiecesToFullScaleBitsets(const PBM::PBMImage& bitmap, unsigned int pieceSize);
+        void LoadBitsets();
 
-        static std::vector<Vec2ui> LoadDimensionListingFromFile(std::string path);
+        void LoadPieceDimensions();
+
+        std::bitset<484>& GetShapeBitsetOfPiece(PieceShape pieceShape);
+
+        std::bitset<484>& GetEdgeBitsetOfPiece(PieceShape pieceShape);
+
+        std::bitset<484>& GetCornerBitsetOfPiece(PieceShape pieceShape);
+
+        Vec2ui& GetDimensionsOfPiece(PieceShape pieceShape);
+
+        Vec2ui& GetEdgeDimensionsOfPiece(PieceShape pieceShape);
+
+    private:
+        std::vector<std::bitset<484>> PBMPiecesToFullScaleBitsets(const PBM::PBMImage& bitmap, unsigned int pieceSize);
+
+        std::vector<Vec2ui> LoadDimensionListingFromFile(std::string path);
     };
 }  // namespace HokusBlokus::Blokus

@@ -5,7 +5,7 @@
 
 #include "pbmimage.hpp"
 #include "pbmloader.hpp"
-#include "bitsetmanager.hpp"
+#include "globals.hpp"
 #include "pieceshape.hpp"
 #include "vec2ui.hpp"
 
@@ -13,13 +13,12 @@ int main() {
     std::cout << "Hello There\n";
     std::cout << "Current path is " << std::filesystem::current_path() << '\n';
     //Test bitset manager
-    HokusBlokus::Blokus::BitsetManager::LoadBitsets();
-    HokusBlokus::Blokus::BitsetManager::LoadPieceDimensions();
+    HokusBlokus::Blokus::InitBitsetManager();
 
     HokusBlokus::Blokus::PieceShape shape = HokusBlokus::Blokus::PieceShape::PENTO_S;
-    std::bitset<484> bitset = HokusBlokus::Blokus::BitsetManager::GetShapeBitsetOfPiece(shape);
-    HokusBlokus::Blokus::Vec2ui dimensions = HokusBlokus::Blokus::BitsetManager::GetDimensionsOfPiece(shape);
-    HokusBlokus::Blokus::Vec2ui edgeDimensions = HokusBlokus::Blokus::BitsetManager::GetEdgeDimensionsOfPiece(shape);
+    std::bitset<484> bitset = HokusBlokus::Blokus::bitsetManager.GetShapeBitsetOfPiece(shape);
+    HokusBlokus::Blokus::Vec2ui dimensions = HokusBlokus::Blokus::bitsetManager.GetDimensionsOfPiece(shape);
+    HokusBlokus::Blokus::Vec2ui edgeDimensions = HokusBlokus::Blokus::bitsetManager.GetEdgeDimensionsOfPiece(shape);
 
     for(int y = 0; y < 22; y++) {
         std::string line;

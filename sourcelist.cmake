@@ -1,6 +1,7 @@
 src/blokus/bitsetmanager.cpp
 src/blokus/board.cpp
 src/blokus/gamestate.cpp
+src/blokus/globals.cpp
 src/blokus/move.cpp
 src/blokus/player.cpp
 src/blokus/vec2ui.cpp
