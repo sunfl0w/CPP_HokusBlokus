@@ -1,10 +1,12 @@
 #include "bitsetmanager.hpp"
 
 namespace HokusBlokus::Blokus {
-    BitsetManager::BitsetManager() {
-        LoadBitsets();
-        LoadPieceDimensions();
-    }
+    std::vector<std::bitset<484>> BitsetManager::pieceShapeBitsets = std::vector<std::bitset<484>>();
+    std::vector<std::bitset<484>> BitsetManager::pieceEdgeBitsets = std::vector<std::bitset<484>>();
+    std::vector<std::bitset<484>> BitsetManager::pieceCornerBitsets = std::vector<std::bitset<484>>();
+
+    std::vector<Vec2ui> BitsetManager::pieceShapeDimensions = std::vector<Vec2ui>();
+    std::vector<Vec2ui> BitsetManager::pieceEdgeCornerDimensions = std::vector<Vec2ui>();
 
     void BitsetManager::LoadBitsets() {
         std::string pathToResources = "resources/";
