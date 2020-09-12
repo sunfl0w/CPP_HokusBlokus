@@ -1,16 +1,21 @@
 #pragma once
 
+#include <array>
 #include <bitset>
+
+#include "color.hpp"
 
 namespace HokusBlokus::Blokus {
     class Board {
     private:
-        std::bitset<484> blueSet;
-        std::bitset<484> redSet;
-        std::bitset<484> greenSet;
-        std::bitset<484> yellowSet;
+        //Order: Blue, Yellow, Red, Green
+        std::array<std::bitset<484>, 4> bitsets;
 
     public:
         Board();
+
+        void InitStartingBoard();
+
+        std::bitset<484>& GetBitset(Color color);
     };
-}  // namespace Blokus
+}  // namespace HokusBlokus::Blokus

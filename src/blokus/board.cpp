@@ -2,9 +2,19 @@
 
 namespace HokusBlokus::Blokus {
     Board::Board() {
-        blueSet = std::bitset<484>();
-        redSet = std::bitset<484>();
-        greenSet = std::bitset<484>();
-        yellowSet = std::bitset<484>();
+        std::array<std::bitset<484>, 4> bitsets = std::array<std::bitset<484>, 4>();
     }
-}
+
+    void Board::InitStartingBoard() {
+        for(int i = 0; i < 4; i++) {
+            bitsets[i][0] = 1;
+            bitsets[i][21] = 1;
+            bitsets[i][462] = 1;
+            bitsets[i][483] = 1;
+        }
+    }
+
+    std::bitset<484>& Board::GetBitset(Color color) {
+        return bitsets[ColorToUInt(color)];
+    }
+}  // namespace HokusBlokus::Blokus

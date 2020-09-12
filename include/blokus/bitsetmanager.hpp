@@ -37,8 +37,8 @@ namespace HokusBlokus::Blokus {
     private:
         BitsetManager();
 
-        static std::vector<std::bitset<484>> PBMPiecesToFullScaleBitsets(const PBM::PBMImage& bitmap, unsigned int pieceSize);
+        static std::vector<std::bitset<484>> PBMPieceDataToFullScaleBitsets(const PBM::PBMImage& bitmap, unsigned int pieceSize, const Vec2ui& offset);
 
-        static std::vector<Vec2ui> LoadDimensionListingFromFile(std::string path);
+        static std::vector<Vec2ui> LoadPieceDataDimensionsFromFile(std::string path);
     };
 }  // namespace HokusBlokus::Blokus

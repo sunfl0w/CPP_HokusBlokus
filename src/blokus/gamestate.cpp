@@ -10,6 +10,7 @@ namespace HokusBlokus::Blokus {
 
     void Gamestate::InitStartingGameState() {
         board = Board();
+        board.InitStartingBoard();
         player0 = Player(Color::BLUE, Color::RED);
         player1 = Player(Color::YELLOW, Color::GREEN);
         currentPlayerColor = Color::BLUE;
@@ -29,7 +30,16 @@ namespace HokusBlokus::Blokus {
     }
 
     std::vector<Move> Gamestate::GetPossibleMoves() {
+        std::bitset occupiedSet = board.GetBitset(Color::BLUE) & board.GetBitset(Color::YELLOW) & board.GetBitset(Color::RED) & board.GetBitset(Color::GREEN);
 
+        unsigned int maxPieceShiftX;
+        unsigned int maxPieceShiftY;
+
+        for(int y = 0; y < maxPieceShiftY; y++) {
+            for(int x = 0; x < maxPieceShiftX; x++) {
+                
+            }
+        }
     }
 
     void Gamestate::PerformMove(const Move& move) {

@@ -1,13 +1,13 @@
-#include <iostream>
-#include <string>
 #include <bitset>
 #include <filesystem>
+#include <iostream>
+#include <string>
 
+#include "bitsetmanager.hpp"
 #include "pbmimage.hpp"
 #include "pbmloader.hpp"
 #include "pieceshape.hpp"
 #include "vec2ui.hpp"
-#include "bitsetmanager.hpp"
 
 int main() {
     std::cout << "Hello There\n";
@@ -21,10 +21,10 @@ int main() {
     HokusBlokus::Blokus::Vec2ui dimensions = HokusBlokus::Blokus::BitsetManager::GetDimensionsOfPiece(shape);
     HokusBlokus::Blokus::Vec2ui edgeDimensions = HokusBlokus::Blokus::BitsetManager::GetEdgeDimensionsOfPiece(shape);
 
-    for(int y = 0; y < 22; y++) {
+    for (int y = 0; y < 22; y++) {
         std::string line;
-        for(int x = 0; x < 22; x++) {
-            if(bitset[x + 22 * y]) {
+        for (int x = 0; x < 22; x++) {
+            if (bitset[x + 22 * y]) {
                 line += "1";
             } else {
                 line += "0";
