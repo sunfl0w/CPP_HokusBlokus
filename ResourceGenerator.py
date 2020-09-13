@@ -30,6 +30,18 @@ def main():
     pieceShapeImageWF.save(os.path.join(generatedResourcePath, "BlokusPieceShapesWF.pbm"))
 
 
+def loadPieceShapeDimensionData():
+    dimensionDataFile = open("resources/BlokusPieceShapeDimensions.txt", "r")
+    dimensionDataString = dimensionDataFile.read()
+    dimensionDataList = []
+
+    for i in range(21):
+        dimensionDataList.append((dimensionDataString[i * 2], dimensionDataString[i * 2 + 1]))
+
+    dimensionDataFile.close()
+    return dimensionDataList
+
+
 def generateRotatetTiledImage(image, tileSize, rotationDegrees):
     tiledRotatedImage = Image.new('1', image.size)
 
@@ -40,7 +52,10 @@ def generateRotatetTiledImage(image, tileSize, rotationDegrees):
     for i in range(21):
         pieceShape = image.crop((minX, minY, maxX, maxY))
         pieceShape = pieceShape.rotate(rotationDegrees)
-        tiledRotatedImage.paste(pieceShape, (minX, minY, maxX, maxY))
+
+        pieceShape = cropImageToContent(pieceShape)
+
+        tiledRotatedImage.paste(pieceShape, (minX, minY))
 
         minX = maxX % image.width
         maxX = minX + tileSize
@@ -61,7 +76,10 @@ def generateFlippedTiledImage(image, tileSize):
     for i in range(21):
         pieceShape = image.crop((minX, minY, maxX, maxY))
         pieceShape = pieceShape.transpose(Image.FLIP_TOP_BOTTOM)
-        tiledFlippedImage.paste(pieceShape, (minX, minY, maxX, maxY))
+
+        pieceShape = cropImageToContent(pieceShape)
+
+        tiledFlippedImage.paste(pieceShape, (minX, minY))
 
         minX = maxX % image.width
         maxX = minX + tileSize
@@ -70,6 +88,23 @@ def generateFlippedTiledImage(image, tileSize):
             maxY += tileSize
 
     return tiledFlippedImage
+
+
+def cropImageToContent(image):
+    contentMinX = image.width
+    contentMinY = image.height
+    contentMaxX = 0
+    contentMaxY = 0
+
+    for x in range(image.width):
+        for y in range(image.height):
+            if image.getpixel((x, y)):
+                contentMinX = min(contentMinX, x)
+                contentMinY = min(contentMinY, y)
+                contentMaxX = max(contentMaxX, x + 1)
+                contentMaxY = max(contentMaxY, y + 1)
+
+    return image.crop((contentMinX, contentMinY, contentMaxX, contentMaxY))
 
 
 if __name__ == "__main__":
