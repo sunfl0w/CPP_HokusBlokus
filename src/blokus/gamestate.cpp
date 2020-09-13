@@ -32,12 +32,12 @@ namespace HokusBlokus::Blokus {
     std::vector<Move> Gamestate::GetPossibleMoves() {
         std::bitset occupiedSet = board.GetBitset(Color::BLUE) & board.GetBitset(Color::YELLOW) & board.GetBitset(Color::RED) & board.GetBitset(Color::GREEN);
 
-        unsigned int maxPieceShiftX;
-        unsigned int maxPieceShiftY;
+        unsigned int minShift;
+        unsigned int maxShift;
 
-        for(int y = 0; y < maxPieceShiftY; y++) {
-            for(int x = 0; x < maxPieceShiftX; x++) {
-                
+        for (int i = 0; i < 21; i++) {
+            for (int s = minShift; s < maxShift; s++) {
+
             }
         }
     }
@@ -45,4 +45,4 @@ namespace HokusBlokus::Blokus {
     void Gamestate::PerformMove(const Move& move) {
         //Moves will not be checked for validity to improve perfromance
     }
-}
+}  // namespace HokusBlokus::Blokus
