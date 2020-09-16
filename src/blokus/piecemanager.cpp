@@ -4,10 +4,10 @@ namespace HokusBlokus::Blokus {
     std::vector<Piece> PieceManager::pieces = std::vector<Piece>();
 
     void PieceManager::Init() {
-        std::array<std::vector<PieceBitset>, 21> pieceBitsets = LoadBitsets();
+        std::array<std::vector<PieceBitmask>, 21> pieceBitmasks = LoadBitmasks();
 
         for(unsigned int i = 0; i < 21; i++) {
-            pieces.push_back(Piece(pieceBitsets[i]));
+            pieces.push_back(Piece(pieceBitmasks[i]));
         }
     }
 
@@ -17,7 +17,7 @@ namespace HokusBlokus::Blokus {
 
     //PRIVATE
 
-    std::array<std::vector<PieceBitset>, 21> PieceManager::LoadBitsets() {
+    std::array<std::vector<PieceBitmask>, 21> PieceManager::LoadBitmasks() {
         std::string pathToResources = "generatedResources/";
         if (!std::filesystem::exists(pathToResources)) {
             std::cout << "Path to generated resources does not exist. Were the resources generated?\n";
@@ -42,7 +42,7 @@ namespace HokusBlokus::Blokus {
             }
         }
 
-        std::array<std::vector<PieceBitset>, 21> pieceBitsets = std::array<std::vector<PieceBitset>, 21>();
+        std::array<std::vector<PieceBitmask>, 21> pieceBitmasks = std::array<std::vector<PieceBitmask>, 21>();
 
         for(unsigned int i = 0; i < pieceBitmaps.size(); i++) {
             std::vector<std::bitset<484>> tempBitsets = std::vector<std::bitset<484>>();
@@ -54,11 +54,11 @@ namespace HokusBlokus::Blokus {
             }
 
             for (unsigned int k = 0; k < 21; k++) {
-                pieceBitsets[k].push_back(PieceBitset(tempBitsets[k], pieceBitmapMaskTypes[i]));
+                pieceBitmasks[k].push_back(PieceBitmask(tempBitsets[k], pieceBitmapMaskTypes[i]));
             }
         }
 
-        return pieceBitsets;
+        return pieceBitmasks;
     }
 
     std::vector<Vec2ui> PieceManager::LoadPieceDimensions() {

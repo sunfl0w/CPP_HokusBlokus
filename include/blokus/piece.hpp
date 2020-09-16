@@ -5,25 +5,25 @@
 #include <algorithm>
 
 #include "vec2ui.hpp"
-#include "piecebitset.hpp"
+#include "piecebitmask.hpp"
 
 namespace HokusBlokus::Blokus {
     class Piece {
     private:
-        std::vector<PieceBitset> pieceShapeBitsets;
-        std::vector<PieceBitset> pieceCornerBitsets;
-        std::vector<PieceBitset> pieceEdgeBitsets;
+        std::vector<PieceBitmask> pieceShapeBitmasks;
+        std::vector<PieceBitmask> pieceCornerBitmasks;
+        std::vector<PieceBitmask> pieceEdgeBitmasks;
 
     public:
-        Piece(std::vector<PieceBitset> pieceBitsets);
+        Piece(std::vector<PieceBitmask> pieceBitmasks);
 
-        const std::vector<PieceBitset>& GetPieceShapeBitsets() const;
+        const std::vector<PieceBitmask>& GetPieceShapeBitmasks() const;
 
-        const std::vector<PieceBitset>& GetPieceCornerBitsets() const;
+        const std::vector<PieceBitmask>& GetPieceCornerBitmasks() const;
 
-        const std::vector<PieceBitset>& GetPieceEdgeBitsets() const;
+        const std::vector<PieceBitmask>& GetPieceEdgeBitmasks() const;
 
     private:
-        std::vector<PieceBitset> FilterDuplicateBitsets(const std::vector<PieceBitset>& pieceBitsets) const;
+        std::vector<PieceBitmask> FilterDuplicateBitmasks(const std::vector<PieceBitmask>& pieceBitmask) const;
     };
 }

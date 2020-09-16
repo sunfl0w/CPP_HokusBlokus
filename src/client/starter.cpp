@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-#include "piecebitset.hpp"
+#include "piecebitmask.hpp"
 #include "pbmimage.hpp"
 #include "pbmloader.hpp"
 #include "piecemanager.hpp"
@@ -18,10 +18,10 @@ int main() {
 
     HokusBlokus::Blokus::PieceShape shape = HokusBlokus::Blokus::PieceShape::PENTO_S;
     HokusBlokus::Blokus::Piece piece = HokusBlokus::Blokus::PieceManager::GetPiece(shape);
-    for (HokusBlokus::Blokus::PieceBitset pieceBitset : piece.GetPieceCornerBitsets()) {
-        std::bitset<484> bitset = pieceBitset.GetBitset();
+    for (HokusBlokus::Blokus::PieceBitmask pieceBitmask : piece.GetPieceCornerBitmasks()) {
+        std::bitset<484> bitset = pieceBitmask.GetBitmask();
         std::cout << "----------\n";
-        std::cout << "DimX: " << pieceBitset.GetMaskDimensions().x << " || DimY: " << pieceBitset.GetMaskDimensions().y << "\n";
+        std::cout << "DimX: " << pieceBitmask.GetMaskDimensions().x << " || DimY: " << pieceBitmask.GetMaskDimensions().y << "\n";
         std::cout << "----------\n";
         for (int y = 0; y < 22; y++) {
             std::string line;

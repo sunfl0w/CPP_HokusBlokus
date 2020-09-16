@@ -6,24 +6,24 @@
 #include "masktype.hpp"
 
 namespace HokusBlokus::Blokus {
-    class PieceBitset {
+    class PieceBitmask {
     private:
-        std::bitset<484> bitset;
+        std::bitset<484> bitmask;
         Vec2ui maskDimensions;
         MaskType maskType;
 
     public:
-        PieceBitset(std::bitset<484> bitset, MaskType maskType);
+        PieceBitmask(std::bitset<484> bitmask, MaskType maskType);
 
-        const std::bitset<484>& GetBitset() const;
+        const std::bitset<484>& GetBitmask() const;
 
         const Vec2ui& GetMaskDimensions() const;
         
         MaskType GetMaskType() const;
 
-        bool operator==(const PieceBitset& other);
+        bool operator==(const PieceBitmask& other);
 
     private:
-        Vec2ui ComputeMaskDimensions(const std::bitset<484>& bitset) const;
+        Vec2ui ComputeMaskDimensions(const std::bitset<484>& bitmask) const;
     };
 }

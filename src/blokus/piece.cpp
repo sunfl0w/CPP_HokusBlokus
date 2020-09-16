@@ -1,42 +1,42 @@
 #include "piece.hpp"
 
 namespace HokusBlokus::Blokus {
-    Piece::Piece(std::vector<PieceBitset> pieceBitsets) {
-        for (PieceBitset pieceBitset : pieceBitsets) {
-            if(pieceBitset.GetMaskType() == MaskType::Shape) {
-                pieceShapeBitsets.push_back(pieceBitset);
-            } else if(pieceBitset.GetMaskType() == MaskType::Corner) {
-                pieceCornerBitsets.push_back(pieceBitset);
+    Piece::Piece(std::vector<PieceBitmask> pieceBitmasks) {
+        for (PieceBitmask pieceBitmask : pieceBitmasks) {
+            if(pieceBitmask.GetMaskType() == MaskType::Shape) {
+                pieceShapeBitmasks.push_back(pieceBitmask);
+            } else if(pieceBitmask.GetMaskType() == MaskType::Corner) {
+                pieceCornerBitmasks.push_back(pieceBitmask);
             } else {
-                pieceEdgeBitsets.push_back(pieceBitset);
+                pieceEdgeBitmasks.push_back(pieceBitmask);
             }
         }
 
-        pieceShapeBitsets = FilterDuplicateBitsets(pieceShapeBitsets);
-        pieceCornerBitsets = FilterDuplicateBitsets(pieceCornerBitsets);
-        pieceEdgeBitsets = FilterDuplicateBitsets(pieceEdgeBitsets);
+        pieceShapeBitmasks = FilterDuplicateBitmasks(pieceShapeBitmasks);
+        pieceCornerBitmasks = FilterDuplicateBitmasks(pieceCornerBitmasks);
+        pieceEdgeBitmasks = FilterDuplicateBitmasks(pieceEdgeBitmasks);
     }
 
-    const std::vector<PieceBitset>& Piece::GetPieceShapeBitsets() const {
-        return pieceShapeBitsets;
+    const std::vector<PieceBitmask>& Piece::GetPieceShapeBitmasks() const {
+        return pieceShapeBitmasks;
     }
 
-    const std::vector<PieceBitset>& Piece::GetPieceCornerBitsets() const {
-        return pieceCornerBitsets;
+    const std::vector<PieceBitmask>& Piece::GetPieceCornerBitmasks() const {
+        return pieceCornerBitmasks;
     }
 
-    const std::vector<PieceBitset>& Piece::GetPieceEdgeBitsets() const {
-        return pieceEdgeBitsets;
+    const std::vector<PieceBitmask>& Piece::GetPieceEdgeBitmasks() const {
+        return pieceEdgeBitmasks;
     }
 
-    std::vector<PieceBitset> Piece::FilterDuplicateBitsets(const std::vector<PieceBitset>& pieceBitsets) const {
-        std::vector<PieceBitset> nonDuplicatePieceBitsets = std::vector<PieceBitset>();
+    std::vector<PieceBitmask> Piece::FilterDuplicateBitmasks(const std::vector<PieceBitmask>& pieceBitmasks) const {
+        std::vector<PieceBitmask> nonDuplicatePieceBitmasks = std::vector<PieceBitmask>();
 
-        for (PieceBitset pieceBitset : pieceBitsets) {
-            if (std::find(nonDuplicatePieceBitsets.begin(), nonDuplicatePieceBitsets.end(), pieceBitset) == nonDuplicatePieceBitsets.end()) {
-                nonDuplicatePieceBitsets.push_back(pieceBitset);
+        for (PieceBitmask pieceBitmask : pieceBitmasks) {
+            if (std::find(nonDuplicatePieceBitmasks.begin(), nonDuplicatePieceBitmasks.end(), pieceBitmask) == nonDuplicatePieceBitmasks.end()) {
+                nonDuplicatePieceBitmasks.push_back(pieceBitmask);
             }
         }
-        return nonDuplicatePieceBitsets;
+        return nonDuplicatePieceBitmasks;
     }
 }  // namespace HokusBlokus::Blokus
