@@ -4,11 +4,10 @@ namespace HokusBlokus::Blokus {
     std::vector<Piece> PieceManager::pieces = std::vector<Piece>();
 
     void PieceManager::Init() {
-        std::array<std::array<std::vector<std::bitset<484>>, 3>, 21> pieceBitsets = LoadBitsets();
-        std::vector<Vec2ui> pieceDimensions = LoadPieceDimensions();
+        std::array<std::vector<PieceBitset>, 21> pieceBitsets = LoadBitsets();
 
         for(unsigned int i = 0; i < 21; i++) {
-            pieces.push_back(Piece(pieceBitsets[i][0], pieceBitsets[i][1], pieceBitsets[i][2], pieceDimensions[i]));
+            pieces.push_back(Piece(pieceBitsets[i]));
         }
     }
 
@@ -18,7 +17,7 @@ namespace HokusBlokus::Blokus {
 
     //PRIVATE
 
-    std::array<std::array<std::vector<std::bitset<484>>, 3>, 21> PieceManager::LoadBitsets() {
+    std::array<std::vector<PieceBitset>, 21> PieceManager::LoadBitsets() {
         std::string pathToResources = "generatedResources/";
         if (!std::filesystem::exists(pathToResources)) {
             std::cout << "Path to generated resources does not exist. Were the resources generated?\n";
@@ -26,7 +25,7 @@ namespace HokusBlokus::Blokus {
         }
 
         std::vector<PBM::PBMImage> pieceBitmaps = std::vector<PBM::PBMImage>();
-        std::vector<unsigned int> pieceBitmapTypes = std::vector<unsigned int>();
+        std::vector<MaskType> pieceBitmapMaskTypes = std::vector<MaskType>();
 
         for (std::filesystem::directory_entry entry : std::filesystem::directory_iterator(pathToResources)) {
             if (entry.is_regular_file() && entry.path().extension() == ".pbm") {
@@ -34,16 +33,16 @@ namespace HokusBlokus::Blokus {
 
                 std::string filename = entry.path().filename().string();
                 if(filename[16] == 'C' || filename[17] == 'C') {
-                    pieceBitmapTypes.push_back(1);
+                    pieceBitmapMaskTypes.push_back(MaskType::Corner);
                 } else if(filename[16] == 'E' || filename[17] == 'E') {
-                    pieceBitmapTypes.push_back(2);
+                    pieceBitmapMaskTypes.push_back(MaskType::Edge);
                 } else {
-                    pieceBitmapTypes.push_back(0);
+                    pieceBitmapMaskTypes.push_back(MaskType::Shape);
                 }
             }
         }
 
-        std::array<std::array<std::vector<std::bitset<484>>, 3>, 21> pieceBitsets = std::array<std::array<std::vector<std::bitset<484>>, 3>, 21>();
+        std::array<std::vector<PieceBitset>, 21> pieceBitsets = std::array<std::vector<PieceBitset>, 21>();
 
         for(unsigned int i = 0; i < pieceBitmaps.size(); i++) {
             std::vector<std::bitset<484>> tempBitsets = std::vector<std::bitset<484>>();
@@ -55,7 +54,7 @@ namespace HokusBlokus::Blokus {
             }
 
             for (unsigned int k = 0; k < 21; k++) {
-                pieceBitsets[k][pieceBitmapTypes[i]].push_back(tempBitsets[k]);
+                pieceBitsets[k].push_back(PieceBitset(tempBitsets[k], pieceBitmapMaskTypes[i]));
             }
         }
 

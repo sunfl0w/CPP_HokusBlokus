@@ -8,6 +8,7 @@
 #include <filesystem>
 
 #include "pieceshape.hpp"
+#include "piecebitset.hpp"
 #include "vec2ui.hpp"
 #include "pbmimage.hpp"
 #include "pbmloader.hpp"
@@ -25,7 +26,7 @@ namespace HokusBlokus::Blokus {
     private:
         PieceManager();
 
-        static std::array<std::array<std::vector<std::bitset<484>>, 3>, 21> LoadBitsets();
+        static std::array<std::vector<PieceBitset>, 21> LoadBitsets();
 
         static std::vector<Vec2ui> LoadPieceDimensions();
 

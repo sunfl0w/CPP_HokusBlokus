@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 
+#include "piecebitset.hpp"
 #include "pbmimage.hpp"
 #include "pbmloader.hpp"
 #include "piecemanager.hpp"
@@ -15,9 +16,12 @@ int main() {
     //Test bitset manager
     HokusBlokus::Blokus::PieceManager::Init();
 
-    HokusBlokus::Blokus::PieceShape shape = HokusBlokus::Blokus::PieceShape::DOMINO;
+    HokusBlokus::Blokus::PieceShape shape = HokusBlokus::Blokus::PieceShape::PENTO_S;
     HokusBlokus::Blokus::Piece piece = HokusBlokus::Blokus::PieceManager::GetPiece(shape);
-    for (std::bitset<484> bitset : piece.GetPieceEdgeBitsets()) {
+    for (HokusBlokus::Blokus::PieceBitset pieceBitset : piece.GetPieceCornerBitsets()) {
+        std::bitset<484> bitset = pieceBitset.GetBitset();
+        std::cout << "----------\n";
+        std::cout << "DimX: " << pieceBitset.GetMaskDimensions().x << " || DimY: " << pieceBitset.GetMaskDimensions().y << "\n";
         std::cout << "----------\n";
         for (int y = 0; y < 22; y++) {
             std::string line;

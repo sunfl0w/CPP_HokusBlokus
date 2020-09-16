@@ -5,30 +5,25 @@
 #include <algorithm>
 
 #include "vec2ui.hpp"
+#include "piecebitset.hpp"
 
 namespace HokusBlokus::Blokus {
     class Piece {
     private:
-        std::vector<std::bitset<484>> pieceShapeBitsets;
-        std::vector<std::bitset<484>> pieceCornerBitsets;
-        std::vector<std::bitset<484>> pieceEdgeBitsets;
-        Vec2ui pieceShapeDimensions;
-        Vec2ui pieceEdgeCornerDimensions;
+        std::vector<PieceBitset> pieceShapeBitsets;
+        std::vector<PieceBitset> pieceCornerBitsets;
+        std::vector<PieceBitset> pieceEdgeBitsets;
 
     public:
-        Piece(std::vector<std::bitset<484>> pieceShapeBitsets, std::vector<std::bitset<484>> pieceCornerBitsets, std::vector<std::bitset<484>> pieceEdgeBitsets, Vec2ui pieceShapeDimensions);
+        Piece(std::vector<PieceBitset> pieceBitsets);
 
-        const std::vector<std::bitset<484>>& GetPieceShapeBitsets() const;
+        const std::vector<PieceBitset>& GetPieceShapeBitsets() const;
 
-        const std::vector<std::bitset<484>>& GetPieceCornerBitsets() const;
+        const std::vector<PieceBitset>& GetPieceCornerBitsets() const;
 
-        const std::vector<std::bitset<484>>& GetPieceEdgeBitsets() const;
-
-        const Vec2ui& GetPieceShapeDimensions() const;
-
-        const Vec2ui& GetPieceEdgeCornerDimensions() const;
+        const std::vector<PieceBitset>& GetPieceEdgeBitsets() const;
 
     private:
-        std::vector<std::bitset<484>> FilterDuplicateBitsets(const std::vector<std::bitset<484>>& pieceBitsets) const;
+        std::vector<PieceBitset> FilterDuplicateBitsets(const std::vector<PieceBitset>& pieceBitsets) const;
     };
 }
