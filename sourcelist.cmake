@@ -1,4 +1,5 @@
 src/blokus/board.cpp
+src/blokus/debugging.cpp
 src/blokus/gamestate.cpp
 src/blokus/helpers.cpp
 src/blokus/move.cpp

@@ -28,4 +28,8 @@ namespace HokusBlokus::Blokus {
     static unsigned int PieceShapeToUInt(PieceShape pieceShape) {
         return static_cast<unsigned int>(pieceShape);
     }
+
+    static PieceShape UIntToPieceShape(unsigned int value) {
+        return static_cast<PieceShape>(value);
+    }
 }

@@ -2,31 +2,32 @@
 
 namespace HokusBlokus::Blokus {
     Piece::Piece(std::vector<PieceBitmask> pieceBitmasks) {
+        std::vector<PieceBitmask> shapeBitmasks = std::vector<PieceBitmask>();
+        std::vector<PieceBitmask> cornerBitmasks = std::vector<PieceBitmask>();
+        std::vector<PieceBitmask> edgeBitmasks = std::vector<PieceBitmask>();
+
         for (PieceBitmask pieceBitmask : pieceBitmasks) {
             if(pieceBitmask.GetMaskType() == MaskType::Shape) {
-                pieceShapeBitmasks.push_back(pieceBitmask);
+                shapeBitmasks.push_back(pieceBitmask);
             } else if(pieceBitmask.GetMaskType() == MaskType::Corner) {
-                pieceCornerBitmasks.push_back(pieceBitmask);
+                cornerBitmasks.push_back(pieceBitmask);
             } else {
-                pieceEdgeBitmasks.push_back(pieceBitmask);
+                edgeBitmasks.push_back(pieceBitmask);
             }
         }
 
-        pieceShapeBitmasks = FilterDuplicateBitmasks(pieceShapeBitmasks);
-        pieceCornerBitmasks = FilterDuplicateBitmasks(pieceCornerBitmasks);
-        pieceEdgeBitmasks = FilterDuplicateBitmasks(pieceEdgeBitmasks);
+        shapeBitmasks = FilterDuplicateBitmasks(shapeBitmasks);
+        cornerBitmasks = FilterDuplicateBitmasks(cornerBitmasks);
+        edgeBitmasks = FilterDuplicateBitmasks(edgeBitmasks);
+
+        for(unsigned int i = 0; i < shapeBitmasks.size(); i++) {
+            std::array<PieceBitmask, 3> bitmaskComplement = {shapeBitmasks[i], cornerBitmasks[i], edgeBitmasks[i]};
+            pieceBitmaskComplements.push_back(bitmaskComplement);
+        }
     }
 
-    const std::vector<PieceBitmask>& Piece::GetPieceShapeBitmasks() const {
-        return pieceShapeBitmasks;
-    }
-
-    const std::vector<PieceBitmask>& Piece::GetPieceCornerBitmasks() const {
-        return pieceCornerBitmasks;
-    }
-
-    const std::vector<PieceBitmask>& Piece::GetPieceEdgeBitmasks() const {
-        return pieceEdgeBitmasks;
+    const std::vector<std::array<PieceBitmask, 3>>& Piece::GetPieceBitmaskComplements() const {
+        return pieceBitmaskComplements;
     }
 
     std::vector<PieceBitmask> Piece::FilterDuplicateBitmasks(const std::vector<PieceBitmask>& pieceBitmasks) const {

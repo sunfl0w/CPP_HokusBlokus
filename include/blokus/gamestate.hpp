@@ -2,9 +2,16 @@
 
 #include <vector>
 
+#include "vec2ui.hpp"
+#include "moveType.hpp"
 #include "board.hpp"
 #include "move.hpp"
 #include "player.hpp"
+#include "piece.hpp"
+#include "pieceshape.hpp"
+#include "piecemanager.hpp"
+#include "piecebitmask.hpp"
+#include "debugging.hpp"
 
 namespace HokusBlokus::Blokus {
     class Gamestate {
@@ -12,7 +19,7 @@ namespace HokusBlokus::Blokus {
         Board board;
         Player player0;
         Player player1;
-        Color currentPlayerColor;
+        Color currentColor;
         std::vector<Move> performedMoves;
         unsigned int turn;
         unsigned int startingPieceShapeID;
@@ -24,7 +31,9 @@ namespace HokusBlokus::Blokus {
 
         Board& GetBoard();
 
-        Color GetCurrentPlayerColor();
+        Color GetCurrentColor();
+
+        const Player& GetCurrentPlayer();
 
         std::vector<Move> GetPossibleMoves();
 
