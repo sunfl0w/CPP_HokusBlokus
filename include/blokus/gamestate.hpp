@@ -38,5 +38,7 @@ namespace HokusBlokus::Blokus {
         std::vector<Move> GetPossibleMoves();
 
         void PerformMove(const Move& move);
+
+        void UndoLastMove();
     };
 }  // namespace Blokus

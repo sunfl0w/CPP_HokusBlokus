@@ -10,18 +10,21 @@ namespace HokusBlokus::Blokus {
     private:
         Vec2ui destination;
         PieceShape pieceShape;
+        unsigned int complementNumber;
         Color color;
         MoveType moveType;
 
     public:
-        Move(Vec2ui destination, PieceShape pieceShape, Color color, MoveType moveType);
+        Move(Vec2ui destination, PieceShape pieceShape, unsigned int complementNumber, Color color, MoveType moveType);
 
-        const Vec2ui& GetDestination();
+        const Vec2ui& GetDestination() const;
 
-        const PieceShape GetPieceShape();
+        PieceShape GetPieceShape() const;
 
-        const Color GetColor();
+        unsigned int GetComplementNumber() const;
+
+        Color GetColor() const;
         
-        const MoveType GetMoveType();
+        MoveType GetMoveType() const;
     };
 }  // namespace Blokus

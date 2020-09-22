@@ -10,6 +10,9 @@ Acknowledgements and license notices may be found in the Acknowledgements.md.
 CPP_HokusBlokus is a implementation of the game Blokus for the Software-Challange Germany 2020/2021. The software will make extensive use of bitsets and bit operators.
 There is a chance that parallel processing might be implemented to boost performance using a multi core processor or a GPU. This will not help on the server of the SCG but will make life a lot easier for people wanting a fast software for rapid testing and training of computer clients. Either way the software will as always be optimized to the limit and as far as my programming knowledge will take me :D
 
+#### Setup
+Before using this implementation the script '''PieceSetGenerator.py''' must be run. This will create several binary images in a generatedResources directory for later use. The software will need these files later for initialization so they should be always shipped with a client.
+
 #### Suggestions and cooperation
 I will gladly take any bugreports or feedback on the software. If you want to help improve the code, then feel free to do so.
 

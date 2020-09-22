@@ -1,22 +1,26 @@
 #include "move.hpp"
 
 namespace HokusBlokus::Blokus {
-    Move::Move(Vec2ui destination, PieceShape pieceShape, Color color, MoveType moveType) : destination(destination), pieceShape(pieceShape), color(color), moveType(moveType) {
+    Move::Move(Vec2ui destination, PieceShape pieceShape, unsigned int complementNumber, Color color, MoveType moveType) : destination(destination), pieceShape(pieceShape), complementNumber(complementNumber), color(color), moveType(moveType) {
     }
 
-    const Vec2ui& Move::GetDestination() {
+    const Vec2ui& Move::GetDestination() const {
         return destination;
     }
 
-    const PieceShape Move::GetPieceShape() {
+    PieceShape Move::GetPieceShape() const {
         return pieceShape;
     }
 
-    const Color Move::GetColor() {
+    unsigned int Move::GetComplementNumber() const {
+        return complementNumber;
+    }
+
+    Color Move::GetColor() const {
         return color;
     }
 
-    const MoveType Move::GetMoveType() {
+    MoveType Move::GetMoveType() const {
         return moveType;
     }
 }
