@@ -27,7 +27,7 @@ namespace HokusBlokus::Blokus {
     public:
         Gamestate();
 
-        void InitStartingGameState();
+        void InitStartingGamestate();
 
         Board& GetBoard();
 

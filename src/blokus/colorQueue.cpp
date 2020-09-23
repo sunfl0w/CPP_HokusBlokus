@@ -18,9 +18,11 @@ namespace HokusBlokus::Blokus {
     }
 
     void ColorQueue::Advance() {
-        do {
-            currentColor = UIntToColor((ColorToUInt(currentColor) + 1) % 4);
-        } while (removedColors.find(currentColor) != removedColors.end());
+        if (removedColors.size() < 4) {
+            do {
+                currentColor = UIntToColor((ColorToUInt(currentColor) + 1) % 4);
+            } while (removedColors.find(currentColor) != removedColors.end());
+        }
     }
 
     void ColorQueue::Revert() {
@@ -30,7 +32,7 @@ namespace HokusBlokus::Blokus {
     }
 
     bool ColorQueue::HasActivePlayers() const {
-        if(removedColors.size() < 4) {
+        if (removedColors.size() < 4) {
             return true;
         }
         return false;

@@ -9,6 +9,7 @@ src/blokus/piecebitmask.cpp
 src/blokus/piecemanager.cpp
 src/blokus/player.cpp
 src/blokus/vec2ui.cpp
+src/blokus/benchmarking/benchmark.cpp
 src/client/starter.cpp
 src/pbm/pbmimage.cpp
 src/pbm/pbmloader.cpp

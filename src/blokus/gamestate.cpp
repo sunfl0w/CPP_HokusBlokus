@@ -8,7 +8,7 @@ namespace HokusBlokus::Blokus {
         turn = 0;
     }
 
-    void Gamestate::InitStartingGameState() {
+    void Gamestate::InitStartingGamestate() {
         board = Board();
         board.InitStartingBoard();
         player0 = Player(Color::BLUE, Color::RED);
@@ -80,9 +80,10 @@ namespace HokusBlokus::Blokus {
 
                 for (unsigned int y = 0; y <= maxShiftY; y++) {
                     for (unsigned int x = 0; x <= maxShiftX; x++) {
-                        // Shape test -> corner test -> edge test
-                        if ((pieceBitmaskComplements[complementNumber][0].GetBitmask() << (x + y * 22) & occupiedMask).none() &&
-                            (pieceBitmaskComplements[complementNumber][1].GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).any() &&
+                        // corner test -> Shape test -> edge test
+
+                        if ((pieceBitmaskComplements[complementNumber][1].GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).any() &&
+                            (pieceBitmaskComplements[complementNumber][0].GetBitmask() << (x + y * 22) & occupiedMask).none() &&
                             (pieceBitmaskComplements[complementNumber][2].GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).none()) {
                             possibleMoves.push_back(Move(Vec2ui(x, y), UIntToPieceShape(pieceID), complementNumber, GetCurrentColor(), MoveType::SetMove));
                         }
