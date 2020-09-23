@@ -53,8 +53,10 @@ namespace HokusBlokus::Blokus {
                 std::cout << "LastMoveType: SetMove" << "\n";
                 std::cout << "LastMovePieceID: " << PieceShapeToUInt(gamestate.GetLastPerfromedMove().GetPieceShape()) << "\n";
                 std::cout << "LastMoveDestPos: " << "X " << gamestate.GetLastPerfromedMove().GetDestination().x << " Y " << gamestate.GetLastPerfromedMove().GetDestination().y << "\n";
-            } else {
+            } else if(gamestate.GetLastPerfromedMove().GetMoveType() == MoveType::SkipMove) {
                 std::cout << "LastMoveType: SkipMove" << "\n";
+            } else {
+                std::cout << "LastMoveType: PassMove" << "\n";
             }
         }
         DrawBoard(gamestate.GetBoard());

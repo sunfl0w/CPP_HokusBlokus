@@ -15,6 +15,7 @@ namespace HokusBlokus::Blokus {
 
     const std::vector<unsigned int>& Player::GetUndeployedPieceShapeIDs(Color color) const {
         //TODO: Make this brancheless. Should be possible with edits to the class
+
         if (color == color0) {
             return undeployedPieceShapeIDs0;
         } else if (color == color1) {
@@ -25,10 +26,24 @@ namespace HokusBlokus::Blokus {
         }
     }
 
-    void Player::RemovePieceShapeID0(Color color, unsigned int id) {
+    void Player::AddUndeployedPieceShape(Color color, PieceShape pieceShape) {
         //TODO: Make this brancheless. Should be possible with edits to the class
+
         if(color == color0) {
-            std::vector<unsigned int>::iterator iterator = std::find(undeployedPieceShapeIDs0.begin(), undeployedPieceShapeIDs0.end(), id);
+            undeployedPieceShapeIDs0.push_back(PieceShapeToUInt(pieceShape));
+        } else if(color == color1) {
+            undeployedPieceShapeIDs1.push_back(PieceShapeToUInt(pieceShape));
+        } else {
+            std::cout << "Player does not play with the given color.\n";
+            exit(1);
+        }
+    }
+
+    void Player::RemoveUndeployedPieceShape(Color color, PieceShape pieceShape) {
+        //TODO: Make this brancheless. Should be possible with edits to the class
+
+        if(color == color0) {
+            std::vector<unsigned int>::iterator iterator = std::find(undeployedPieceShapeIDs0.begin(), undeployedPieceShapeIDs0.end(), PieceShapeToUInt(pieceShape));
             if(iterator != undeployedPieceShapeIDs0.end()) {
                 undeployedPieceShapeIDs0.erase(iterator);
             } else {
@@ -36,7 +51,7 @@ namespace HokusBlokus::Blokus {
                 exit(1);
             }
         } else if(color == color1) {
-            std::vector<unsigned int>::iterator iterator = std::find(undeployedPieceShapeIDs1.begin(), undeployedPieceShapeIDs1.end(), id);
+            std::vector<unsigned int>::iterator iterator = std::find(undeployedPieceShapeIDs1.begin(), undeployedPieceShapeIDs1.end(), PieceShapeToUInt(pieceShape));
             if(iterator != undeployedPieceShapeIDs1.end()) {
                 undeployedPieceShapeIDs1.erase(iterator);
             } else {

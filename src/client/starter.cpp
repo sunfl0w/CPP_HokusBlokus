@@ -34,7 +34,10 @@ int main() {
         std::vector<Move> possibleMoves = gamestate.GetPossibleMoves();
         gamestate.PerformMove(possibleMoves[rand() % possibleMoves.size()]);
         Debugging::DrawGamestate(gamestate);
-        int i = 0;
+
+        if(gamestate.GetTurn() > 96) {
+            int i = 0;
+        }
     }
 
     /*HokusBlokus::Blokus::PieceShape shape = HokusBlokus::Blokus::PieceShape::PENTO_S;

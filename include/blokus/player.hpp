@@ -5,6 +5,7 @@
 #include <algorithm>
 
 #include "color.hpp"
+#include "pieceshape.hpp"
 
 namespace HokusBlokus::Blokus {
     class Player {
@@ -21,6 +22,8 @@ namespace HokusBlokus::Blokus {
 
         const std::vector<unsigned int>& GetUndeployedPieceShapeIDs(Color color) const;
 
-        void RemovePieceShapeID0(Color color,unsigned int id);
+        void AddUndeployedPieceShape(Color color, PieceShape pieceShape);
+
+        void RemoveUndeployedPieceShape(Color color, PieceShape pieceShape);
     };
 }  // namespace HokusBlokus::Blokus

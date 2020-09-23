@@ -3,7 +3,7 @@
 namespace HokusBlokus::Blokus {
     Gamestate::Gamestate() : player0(Color::BLUE, Color::RED), player1(Color::YELLOW, Color::GREEN) {
         board = Board();
-        currentColor = Color::BLUE;
+        colorQueue = ColorQueue();
         performedMoves = std::vector<Move>();
         turn = 0;
     }
@@ -15,7 +15,7 @@ namespace HokusBlokus::Blokus {
         player0.PopulateUndeployedPieces();
         player1 = Player(Color::YELLOW, Color::GREEN);
         player1.PopulateUndeployedPieces();
-        currentColor = Color::BLUE;
+        colorQueue = ColorQueue();
         performedMoves = std::vector<Move>();
         turn = 0;
 
@@ -31,22 +31,22 @@ namespace HokusBlokus::Blokus {
     }
 
     Color Gamestate::GetCurrentColor() const {
-        return currentColor;
+        return colorQueue.GetCurrentColor();
     }
 
-    const Player& Gamestate::GetCurrentPlayer() const {
-        if (currentColor == Color::BLUE || currentColor == Color::RED) {
+    Player& Gamestate::GetCurrentPlayer() {
+        if (GetCurrentColor() == Color::BLUE || GetCurrentColor() == Color::RED) {
             return player0;
         } else {
             return player1;
         }
     }
 
-    const std::vector<Move>& Gamestate::GetPerformedMoves() const {
+    std::vector<Move>& Gamestate::GetPerformedMoves() {
         return performedMoves;
     }
 
-    const Move& Gamestate::GetLastPerfromedMove() const {
+    Move& Gamestate::GetLastPerfromedMove() {
         return performedMoves[performedMoves.size() - 1];
     }
 
@@ -61,18 +61,13 @@ namespace HokusBlokus::Blokus {
     std::vector<Move> Gamestate::GetPossibleMoves() {
         std::vector<Move> possibleMoves = std::vector<Move>();
 
-        if(turn >= 4) {
-            possibleMoves.push_back(Move(Vec2ui(0, 0), PieceShape::MONOMINO, 0, Color::BLUE, MoveType::SkipMove));
-        }
-
         std::bitset<484> occupiedMask = board.GetBitmask(Color::BLUE) | board.GetBitmask(Color::YELLOW) | board.GetBitmask(Color::RED) | board.GetBitmask(Color::GREEN);
 
         std::vector<unsigned int> playablePieces;
         if (turn < 4) {
-            // playablePieces = {PieceShapeToUInt(startingPieceShape)};
-            playablePieces = {12};
+            playablePieces = {PieceShapeToUInt(startingPieceShape)};
         } else {
-            playablePieces = GetCurrentPlayer().GetUndeployedPieceShapeIDs(currentColor);
+            playablePieces = GetCurrentPlayer().GetUndeployedPieceShapeIDs(GetCurrentColor());
         }
 
         for (unsigned int pieceID : playablePieces) {
@@ -87,14 +82,23 @@ namespace HokusBlokus::Blokus {
                     for (unsigned int x = 0; x <= maxShiftX; x++) {
                         // Shape test -> corner test -> edge test
                         if ((pieceBitmaskComplements[complementNumber][0].GetBitmask() << (x + y * 22) & occupiedMask).none() &&
-                            (pieceBitmaskComplements[complementNumber][1].GetBitmask() << (x + y * 22) & board.GetBitmask(currentColor)).any() &&
-                            (pieceBitmaskComplements[complementNumber][2].GetBitmask() << (x + y * 22) & board.GetBitmask(currentColor)).none()) {
-                            possibleMoves.push_back(Move(Vec2ui(x, y), UIntToPieceShape(pieceID), complementNumber, currentColor, MoveType::SetMove));
+                            (pieceBitmaskComplements[complementNumber][1].GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).any() &&
+                            (pieceBitmaskComplements[complementNumber][2].GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).none()) {
+                            possibleMoves.push_back(Move(Vec2ui(x, y), UIntToPieceShape(pieceID), complementNumber, GetCurrentColor(), MoveType::SetMove));
                         }
                     }
                 }
             }
         }
+
+        if (turn >= 4 && possibleMoves.size() > 0) {
+            possibleMoves.push_back(Move(Vec2ui(0, 0), PieceShape::MONOMINO, 0, GetCurrentColor(), MoveType::SkipMove));
+        }
+
+        if (possibleMoves.empty()) {
+            possibleMoves.push_back(Move(Vec2ui(0, 0), PieceShape::MONOMINO, 0, GetCurrentColor(), MoveType::PassMove));
+        }
+
         return possibleMoves;
     }
 
@@ -102,32 +106,42 @@ namespace HokusBlokus::Blokus {
         // Moves will not be checked for validity to improve perfromance
 
         if (move.GetMoveType() == MoveType::SetMove) {
-            board.GetBitmask(currentColor) |=
+            board.GetBitmask(GetCurrentColor()) |=
                 (PieceManager::GetPiece(move.GetPieceShape()).GetPieceBitmaskComplements()[move.GetComplementNumber()][0].GetBitmask() << (move.GetDestination().x + move.GetDestination().y * 22));
+            GetCurrentPlayer().RemoveUndeployedPieceShape(move.GetColor(), move.GetPieceShape());
         }
+
+        if (move.GetMoveType() == MoveType::PassMove) {
+            colorQueue.RemoveColor(move.GetColor());
+        }
+
         turn++;
         performedMoves.push_back(move);
-        currentColor = UIntToColor((ColorToUInt(currentColor) + 1) % 4);
+        colorQueue.Advance();
     }
 
     void Gamestate::UndoLastMove() {
         // Last perfromed move will not be checked for validity to improve perfromance
 
         Move lastMove = performedMoves[performedMoves.size() - 1];
-        Color lastColor = UIntToColor((ColorToUInt(currentColor) - 1) % 4);
 
         if (lastMove.GetMoveType() == MoveType::SetMove) {
             std::bitset<484> bitmask = PieceManager::GetPiece(lastMove.GetPieceShape()).GetPieceBitmaskComplements()[lastMove.GetComplementNumber()][0].GetBitmask();
-            board.GetBitmask(lastColor) &= (bitmask << (lastMove.GetDestination().x + lastMove.GetDestination().y * 22)).flip();
+            board.GetBitmask(lastMove.GetColor()) &= (bitmask << (lastMove.GetDestination().x + lastMove.GetDestination().y * 22)).flip();
+            GetCurrentPlayer().AddUndeployedPieceShape(lastMove.GetColor(), lastMove.GetPieceShape());
+        }
+
+        if (lastMove.GetMoveType() == MoveType::PassMove) {
+            colorQueue.AddColor(lastMove.GetColor());
         }
 
         turn--;
         performedMoves.pop_back();
-        currentColor = lastColor;
+        colorQueue.Revert();
     }
 
     bool Gamestate::IsGameOver() const {
-        if (turn >= 100) {
+        if (turn >= 100 || !colorQueue.HasActivePlayers()) {
             return true;
         }
         return false;
