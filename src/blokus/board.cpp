@@ -6,7 +6,7 @@ namespace HokusBlokus::Blokus {
     }
 
     void Board::InitStartingBoard() {
-        for(int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             colorBitmasks[i][0] = 1;
             colorBitmasks[i][21] = 1;
             colorBitmasks[i][462] = 1;

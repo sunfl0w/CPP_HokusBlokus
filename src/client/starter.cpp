@@ -12,6 +12,7 @@
 #include "piecemanager.hpp"
 #include "pieceshape.hpp"
 #include "vec2ui.hpp"
+#include "debugging.hpp"
 
 using namespace HokusBlokus::Blokus;
 
@@ -23,9 +24,18 @@ int main() {
     Gamestate gamestate = Gamestate();
     gamestate.InitStartingGameState();
 
-    std::vector<Move> possibleMoves = gamestate.GetPossibleMoves();
+    srand(time(NULL));
 
-    std::cout << "Possible moves: " << possibleMoves.size() << "\n";
+    //std::vector<Move> possibleMoves = gamestate.GetPossibleMoves();
+
+    //std::cout << "Possible moves: " << possibleMoves.size() << "\n";
+
+    while(!gamestate.IsGameOver()) {
+        std::vector<Move> possibleMoves = gamestate.GetPossibleMoves();
+        gamestate.PerformMove(possibleMoves[rand() % possibleMoves.size()]);
+        Debugging::DrawGamestate(gamestate);
+        int i = 0;
+    }
 
     /*HokusBlokus::Blokus::PieceShape shape = HokusBlokus::Blokus::PieceShape::PENTO_S;
     HokusBlokus::Blokus::Piece piece = HokusBlokus::Blokus::PieceManager::GetPiece(shape);

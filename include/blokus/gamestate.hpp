@@ -11,7 +11,6 @@
 #include "pieceshape.hpp"
 #include "piecemanager.hpp"
 #include "piecebitmask.hpp"
-#include "debugging.hpp"
 
 namespace HokusBlokus::Blokus {
     class Gamestate {
@@ -22,7 +21,7 @@ namespace HokusBlokus::Blokus {
         Color currentColor;
         std::vector<Move> performedMoves;
         unsigned int turn;
-        unsigned int startingPieceShapeID;
+        PieceShape startingPieceShape;
 
     public:
         Gamestate();
@@ -31,14 +30,24 @@ namespace HokusBlokus::Blokus {
 
         Board& GetBoard();
 
-        Color GetCurrentColor();
+        Color GetCurrentColor() const;
 
-        const Player& GetCurrentPlayer();
+        const Player& GetCurrentPlayer() const;
+
+        const std::vector<Move>& GetPerformedMoves() const;
+
+        const Move& GetLastPerfromedMove() const;
+
+        unsigned int GetTurn() const;
+
+        PieceShape GetStartingPieceShape() const;
 
         std::vector<Move> GetPossibleMoves();
 
         void PerformMove(const Move& move);
 
         void UndoLastMove();
+
+        bool IsGameOver() const;
     };
 }  // namespace Blokus

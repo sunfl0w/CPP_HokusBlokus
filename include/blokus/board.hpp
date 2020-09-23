@@ -8,7 +8,7 @@
 namespace HokusBlokus::Blokus {
     class Board {
     private:
-        //Order: Blue, Yellow, Red, Green
+        // Order: Blue, Yellow, Red, Green
         std::array<std::bitset<484>, 4> colorBitmasks;
 
     public:
