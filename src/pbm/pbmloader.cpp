@@ -50,7 +50,7 @@ namespace HokusBlokus::PBM {
     std::vector<std::string> PBMLoader::SplitStringIntoWords(std::string string, char delimiter) {
         std::vector<std::string> words = std::vector<std::string>();
         while (!string.empty()) {
-            int pos = string.find(delimiter);
+            unsigned int pos = string.find(delimiter);
             if (pos != std::string::npos) {
                 std::string word = string.substr(0, pos);
                 words.push_back(word);

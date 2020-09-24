@@ -4,7 +4,7 @@ import subprocess
 import shutil
 import os
 import glob
-from datetime import datetime
+import time
 
 
 def generateSourceList():
@@ -73,7 +73,7 @@ def generateIncludeList():
 
 def build(argv):
     print("Starting CPPBuildAid")
-    startTime = datetime.now()
+    startTime = time.time_ns()
 
     argumentParser = argparse.ArgumentParser()
     argumentParser.add_argument("-b", "--buildType")
@@ -111,7 +111,9 @@ def build(argv):
     if(resultBuildType != 0 or resultBuild != 0):
         print("Build failed with errors")
         exit(1)
-    print("Build completed successfully in {} ms.".format(datetime.now() - startTime))
+
+    buildTime = round((time.time_ns() - startTime) / pow(10, 9), 2)
+    print("Build completed successfully in {}s.".format(buildTime))
 
 
 def main():

@@ -4,19 +4,19 @@
 #include <string>
 
 #include "board.hpp"
-#include "gamestate.hpp"
+#include "gameState.hpp"
 #include "move.hpp"
 #include "pbmimage.hpp"
 #include "pbmloader.hpp"
-#include "piecebitmask.hpp"
-#include "piecemanager.hpp"
+#include "pieceBitmask.hpp"
+#include "pieceManager.hpp"
 #include "pieceshape.hpp"
 #include "vec2ui.hpp"
-#include "debugging.hpp"
+#include "debug.hpp"
 #include "benchmark.hpp"
 
 using namespace HokusBlokus::Blokus;
-using namespace HokusBlokus::Blokus::Benchmarking;
+using namespace HokusBlokus::Blokus::Benchmark;
 
 int main() {
     std::cout << "Hello There\n";
@@ -24,7 +24,7 @@ int main() {
 
     HokusBlokus::Blokus::PieceManager::Init();
 
-    BenchmarkGPM(10000);
+    BenchmarkGPM(10);
 
     /*HokusBlokus::Blokus::PieceManager::Init();
     Gamestate gamestate = Gamestate();

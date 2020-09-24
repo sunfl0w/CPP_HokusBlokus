@@ -8,11 +8,7 @@ namespace HokusBlokus::Blokus {
         GREEN = 3,
     };
 
-    static unsigned int ColorToUInt(Color color) {
-        return static_cast<unsigned int>(color);
-    }
+    unsigned int ColorToUInt(Color color);
 
-    static Color UIntToColor(unsigned int value) {
-        return static_cast<Color>(value);
-    }
+    Color UIntToColor(unsigned int value);
 }

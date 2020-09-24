@@ -25,11 +25,7 @@ namespace HokusBlokus::Blokus {
         PENTO_S = 20
     };
 
-    static unsigned int PieceShapeToUInt(PieceShape pieceShape) {
-        return static_cast<unsigned int>(pieceShape);
-    }
+    unsigned int PieceShapeToUInt(PieceShape pieceShape);
 
-    static PieceShape UIntToPieceShape(unsigned int value) {
-        return static_cast<PieceShape>(value);
-    }
+    PieceShape UIntToPieceShape(unsigned int value);
 }

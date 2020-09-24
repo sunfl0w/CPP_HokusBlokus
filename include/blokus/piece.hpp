@@ -6,7 +6,7 @@
 #include <algorithm>
 
 #include "vec2ui.hpp"
-#include "piecebitmask.hpp"
+#include "pieceBitmask.hpp"
 
 namespace HokusBlokus::Blokus {
     class Piece {
