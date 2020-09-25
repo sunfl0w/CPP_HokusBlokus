@@ -1,11 +1,11 @@
 #include "color.hpp"
 
 namespace HokusBlokus::Blokus {
-    unsigned int ColorToUInt(Color color) {
-        return static_cast<unsigned int>(color);
+    int ColorToInt(Color color) {
+        return static_cast<int>(color);
     }
 
-    Color UIntToColor(unsigned int value) {
+    Color IntToColor(int value) {
         return static_cast<Color>(value);
     }
 }

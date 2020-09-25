@@ -8,11 +8,13 @@ src/blokus/move.cpp
 src/blokus/piece.cpp
 src/blokus/pieceBitmask.cpp
 src/blokus/pieceManager.cpp
-src/blokus/pieceshape.cpp
+src/blokus/pieceShape.cpp
 src/blokus/player.cpp
-src/blokus/vec2ui.cpp
+src/blokus/vec2i.cpp
 src/blokus/benchmark/benchmark.cpp
 src/blokus/debug/debug.cpp
+src/blokus/optimization/boundingRect.cpp
+src/blokus/optimization/boundingRectOptimizer.cpp
 src/client/starter.cpp
 src/pbm/pbmimage.cpp
 src/pbm/pbmloader.cpp

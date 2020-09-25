@@ -8,7 +8,7 @@ namespace HokusBlokus::Blokus {
         GREEN = 3,
     };
 
-    unsigned int ColorToUInt(Color color);
+    int ColorToInt(Color color);
 
-    Color UIntToColor(unsigned int value);
+    Color IntToColor(int value);
 }

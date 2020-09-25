@@ -1,23 +1,27 @@
 #pragma once
 
 #include "color.hpp"
-#include "pieceshape.hpp"
-#include "vec2ui.hpp"
+#include "pieceShape.hpp"
+#include "vec2i.hpp"
 #include "moveType.hpp"
 
 namespace HokusBlokus::Blokus {
     class Move {
     private:
-        Vec2ui destination;
+        Vec2i destination;
         PieceShape pieceShape;
         unsigned int complementNumber;
         Color color;
         MoveType moveType;
 
     public:
-        Move(Vec2ui destination, PieceShape pieceShape, unsigned int complementNumber, Color color, MoveType moveType);
+        Move(Vec2i destination, PieceShape pieceShape, unsigned int complementNumber, Color color, MoveType moveType);
 
-        const Vec2ui& GetDestination() const;
+        bool operator==(const Move& other);
+
+        bool operator!=(const Move& other);
+
+        const Vec2i& GetDestination() const;
 
         PieceShape GetPieceShape() const;
 

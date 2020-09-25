@@ -21,8 +21,8 @@ namespace HokusBlokus::Blokus {
 
         srand(time(NULL));
         startingPieceShape = PieceShape::MONOMINO;
-        while (PieceShapeToUInt(startingPieceShape) == 0 || PieceShapeToUInt(startingPieceShape) == 16) {
-            startingPieceShape = UIntToPieceShape(rand() % 12 + 9);
+        while (PieceShapeToInt(startingPieceShape) == 0 || PieceShapeToInt(startingPieceShape) == 16) {
+            startingPieceShape = IntToPieceShape(rand() % 12 + 9);
         }
     }
 
@@ -50,7 +50,7 @@ namespace HokusBlokus::Blokus {
         return performedMoves[performedMoves.size() - 1];
     }
 
-    unsigned int GameState::GetTurn() const {
+    int GameState::GetTurn() const {
         return turn;
     }
 
@@ -63,59 +63,50 @@ namespace HokusBlokus::Blokus {
 
         std::bitset<484> occupiedMask = board.GetBitmask(Color::BLUE) | board.GetBitmask(Color::YELLOW) | board.GetBitmask(Color::RED) | board.GetBitmask(Color::GREEN);
 
-        std::vector<unsigned int> playablePieces;
+        std::vector<int> playablePieces;
         if (turn < 4) {
-            playablePieces = {PieceShapeToUInt(startingPieceShape)};
+            playablePieces = {PieceShapeToInt(startingPieceShape)};
         } else {
             playablePieces = GetCurrentPlayer().GetUndeployedPieceShapeIDs(GetCurrentColor());
         }
 
-        for (unsigned int pieceID : playablePieces) {
-            Piece piece = PieceManager::GetPiece(UIntToPieceShape(pieceID));
-            unsigned int complementNumber = 0;
+        int minShiftX = 0;
+        int minShiftY = 0;
+        int maxShiftX = 0;
+        int maxShiftY = 0;
+
+        for (int pieceID : playablePieces) {
+            Piece piece = PieceManager::GetPiece(IntToPieceShape(pieceID));
             std::vector<std::array<PieceBitmask, 3>> pieceBitmaskComplements = piece.GetPieceBitmaskComplements();
             for (int complementNumber = 0; complementNumber < pieceBitmaskComplements.size(); complementNumber++) {
-                unsigned int maxShiftX = 20 - pieceBitmaskComplements[complementNumber][0].GetMaskDimensions().x;
-                unsigned int maxShiftY = 20 - pieceBitmaskComplements[complementNumber][0].GetMaskDimensions().y;
+                
+                // Bounding rect search optimization
+                BoundingRect moveSearchRect = boundingRectOptimizer.GetBoundingRect(GetCurrentColor());
 
-                #ifdef BOUNDING_BOX_OPTIMIZATION
+                minShiftX = std::max(moveSearchRect.GetMinBounds().x - pieceBitmaskComplements[complementNumber][0].GetMaskDimensions().x - 1, 0);
+                minShiftY = std::max(moveSearchRect.GetMinBounds().y - pieceBitmaskComplements[complementNumber][0].GetMaskDimensions().y - 1, 0);
+                maxShiftX = std::min(moveSearchRect.GetMaxBounds().x + 1, 20 - pieceBitmaskComplements[complementNumber][0].GetMaskDimensions().x);
+                maxShiftY = std::min(moveSearchRect.GetMaxBounds().y + 1, 20 - pieceBitmaskComplements[complementNumber][0].GetMaskDimensions().y);
 
-                // Bounding box optimized method
-                for (unsigned int y = 0; y <= maxShiftY; y++) {
-                    for (unsigned int x = 0; x <= maxShiftX; x++) {
+                for (int y = minShiftY; y <= maxShiftY; y++) {
+                    for (int x = minShiftX; x <= maxShiftX; x++) {
                         // corner test -> Shape test -> edge test
-
                         if ((pieceBitmaskComplements[complementNumber][1].GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).any() &&
                             (pieceBitmaskComplements[complementNumber][0].GetBitmask() << (x + y * 22) & occupiedMask).none() &&
                             (pieceBitmaskComplements[complementNumber][2].GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).none()) {
-                            possibleMoves.push_back(Move(Vec2ui(x, y), UIntToPieceShape(pieceID), complementNumber, GetCurrentColor(), MoveType::SetMove));
+                            possibleMoves.push_back(Move(Vec2i(x, y), IntToPieceShape(pieceID), complementNumber, GetCurrentColor(), MoveType::SetMove));
                         }
                     }
                 }
-                #else
-
-                // Brute Force method
-                for (unsigned int y = 0; y <= maxShiftY; y++) {
-                    for (unsigned int x = 0; x <= maxShiftX; x++) {
-                        // corner test -> Shape test -> edge test
-
-                        if ((pieceBitmaskComplements[complementNumber][1].GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).any() &&
-                            (pieceBitmaskComplements[complementNumber][0].GetBitmask() << (x + y * 22) & occupiedMask).none() &&
-                            (pieceBitmaskComplements[complementNumber][2].GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).none()) {
-                            possibleMoves.push_back(Move(Vec2ui(x, y), UIntToPieceShape(pieceID), complementNumber, GetCurrentColor(), MoveType::SetMove));
-                        }
-                    }
-                }
-                #endif
             }
         }
 
         if (turn >= 4 && possibleMoves.size() > 0) {
-            possibleMoves.push_back(Move(Vec2ui(0, 0), PieceShape::MONOMINO, 0, GetCurrentColor(), MoveType::SkipMove));
+            possibleMoves.push_back(Move(Vec2i(0, 0), PieceShape::MONOMINO, 0, GetCurrentColor(), MoveType::SkipMove));
         }
 
         if (possibleMoves.empty()) {
-            possibleMoves.push_back(Move(Vec2ui(0, 0), PieceShape::MONOMINO, 0, GetCurrentColor(), MoveType::PassMove));
+            possibleMoves.push_back(Move(Vec2i(0, 0), PieceShape::MONOMINO, 0, GetCurrentColor(), MoveType::PassMove));
         }
 
         return possibleMoves;
@@ -133,6 +124,9 @@ namespace HokusBlokus::Blokus {
         if (move.GetMoveType() == MoveType::PassMove) {
             colorQueue.RemoveColor(move.GetColor());
         }
+
+        // Optimize bounding rects for the move search
+        boundingRectOptimizer.OptimizeBoundingRectOfColor(GetCurrentColor(), GetBoard());
 
         turn++;
         performedMoves.push_back(move);

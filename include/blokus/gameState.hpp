@@ -2,16 +2,19 @@
 
 #include <vector>
 
-#include "vec2ui.hpp"
+#include "vec2i.hpp"
 #include "moveType.hpp"
 #include "board.hpp"
 #include "move.hpp"
 #include "player.hpp"
 #include "piece.hpp"
-#include "pieceshape.hpp"
+#include "pieceShape.hpp"
 #include "pieceManager.hpp"
 #include "pieceBitmask.hpp"
 #include "colorQueue.hpp"
+#include "boundingRectOptimizer.hpp"
+
+using namespace HokusBlokus::Blokus::Optimization;
 
 namespace HokusBlokus::Blokus {
     class GameState {
@@ -21,8 +24,9 @@ namespace HokusBlokus::Blokus {
         Player player1;
         ColorQueue colorQueue;
         std::vector<Move> performedMoves;
-        unsigned int turn;
+        int turn;
         PieceShape startingPieceShape;
+        BoundingRectOptimizer boundingRectOptimizer;
 
     public:
         GameState();
@@ -39,7 +43,7 @@ namespace HokusBlokus::Blokus {
 
         Move& GetLastPerfromedMove();
 
-        unsigned int GetTurn() const;
+        int GetTurn() const;
 
         PieceShape GetStartingPieceShape() const;
 

@@ -11,7 +11,7 @@ namespace HokusBlokus::Blokus {
         return bitmask;
     }
 
-    const Vec2ui& PieceBitmask::GetMaskDimensions() const {
+    const Vec2i& PieceBitmask::GetMaskDimensions() const {
         return maskDimensions;
     }
 
@@ -25,7 +25,7 @@ namespace HokusBlokus::Blokus {
 
     //PRIVATE
 
-    Vec2ui PieceBitmask::ComputeMaskDimensions(const std::bitset<484>& bitmask) const {
+    Vec2i PieceBitmask::ComputeMaskDimensions(const std::bitset<484>& bitmask) const {
         unsigned int minX = 21;
         unsigned int maxX = 0;
         unsigned int minY = 21;
@@ -42,6 +42,6 @@ namespace HokusBlokus::Blokus {
             }
         }
 
-        return Vec2ui(maxX - minX, maxY - minY);
+        return Vec2i(maxX - minX, maxY - minY);
     }
 }  // namespace HokusBlokus::Blokus

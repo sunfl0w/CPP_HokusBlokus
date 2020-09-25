@@ -25,7 +25,7 @@ namespace HokusBlokus::Blokus {
         PENTO_S = 20
     };
 
-    unsigned int PieceShapeToUInt(PieceShape pieceShape);
+    int PieceShapeToInt(PieceShape pieceShape);
 
-    PieceShape UIntToPieceShape(unsigned int value);
+    PieceShape IntToPieceShape(int value);
 }

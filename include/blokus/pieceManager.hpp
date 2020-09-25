@@ -7,9 +7,9 @@
 #include <fstream>
 #include <filesystem>
 
-#include "pieceshape.hpp"
+#include "pieceShape.hpp"
 #include "pieceBitmask.hpp"
-#include "vec2ui.hpp"
+#include "vec2i.hpp"
 #include "pbmimage.hpp"
 #include "pbmloader.hpp"
 #include "piece.hpp"
@@ -28,10 +28,10 @@ namespace HokusBlokus::Blokus {
 
         static std::array<std::vector<PieceBitmask>, 21> LoadBitmasks();
 
-        static std::vector<Vec2ui> LoadPieceDimensions();
+        static std::vector<Vec2i> LoadPieceDimensions();
 
-        static std::vector<std::bitset<484>> PBMPieceDataToFullScaleBitsets(const PBM::PBMImage& bitmap, unsigned int pieceSize, const Vec2ui& offset);
+        static std::vector<std::bitset<484>> PBMPieceDataToFullScaleBitsets(const PBM::PBMImage& bitmap, unsigned int pieceSize, const Vec2i& offset);
 
-        static std::vector<Vec2ui> LoadPieceDataDimensionsFromFile(std::string path);
+        static std::vector<Vec2i> LoadPieceDataDimensionsFromFile(std::string path);
     };
 }  // namespace HokusBlokus::Blokus

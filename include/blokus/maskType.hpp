@@ -7,7 +7,7 @@ namespace HokusBlokus::Blokus {
         Edge,
     };
 
-    unsigned int MaskTypeToUInt(MaskType maskType);
+    int MaskTypeToInt(MaskType maskType);
 
-    MaskType UIntToMaskType(unsigned int value);
+    MaskType IntToMaskType(int value);
 }

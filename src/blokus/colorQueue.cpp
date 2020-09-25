@@ -20,14 +20,14 @@ namespace HokusBlokus::Blokus {
     void ColorQueue::Advance() {
         if (removedColors.size() < 4) {
             do {
-                currentColor = UIntToColor((ColorToUInt(currentColor) + 1) % 4);
+                currentColor = IntToColor((ColorToInt(currentColor) + 1) % 4);
             } while (removedColors.find(currentColor) != removedColors.end());
         }
     }
 
     void ColorQueue::Revert() {
         do {
-            currentColor = UIntToColor((ColorToUInt(currentColor) - 1) % 4);
+            currentColor = IntToColor((ColorToInt(currentColor) - 1) % 4);
         } while (removedColors.find(currentColor) != removedColors.end());
     }
 

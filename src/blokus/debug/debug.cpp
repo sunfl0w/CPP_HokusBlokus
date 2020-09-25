@@ -46,12 +46,12 @@ namespace HokusBlokus::Blokus::Debug {
     void DrawGameState(GameState& gameState) {
         std::cout << "Gamestate----------\n";
         std::cout << "Turn: " << gameState.GetTurn() << "\n";
-        std::cout << "CurrentColorID: " << ColorToUInt(gameState.GetCurrentColor()) << "\n";
-        std::cout << "StartPieceID: " << PieceShapeToUInt(gameState.GetStartingPieceShape()) << "\n";
+        std::cout << "CurrentColorID: " << ColorToInt(gameState.GetCurrentColor()) << "\n";
+        std::cout << "StartPieceID: " << PieceShapeToInt(gameState.GetStartingPieceShape()) << "\n";
         if(gameState.GetTurn() >= 1) {
             if(gameState.GetLastPerfromedMove().GetMoveType() == MoveType::SetMove) {
                 std::cout << "LastMoveType: SetMove" << "\n";
-                std::cout << "LastMovePieceID: " << PieceShapeToUInt(gameState.GetLastPerfromedMove().GetPieceShape()) << "\n";
+                std::cout << "LastMovePieceID: " << PieceShapeToInt(gameState.GetLastPerfromedMove().GetPieceShape()) << "\n";
                 std::cout << "LastMoveDestPos: " << "X " << gameState.GetLastPerfromedMove().GetDestination().x << " Y " << gameState.GetLastPerfromedMove().GetDestination().y << "\n";
             } else if(gameState.GetLastPerfromedMove().GetMoveType() == MoveType::SkipMove) {
                 std::cout << "LastMoveType: SkipMove" << "\n";

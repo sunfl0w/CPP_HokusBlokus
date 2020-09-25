@@ -5,15 +5,15 @@ namespace HokusBlokus::Blokus {
     }
 
     void Player::PopulateUndeployedPieces() {
-        undeployedPieceShapeIDs0 = std::vector<unsigned int>();
-        undeployedPieceShapeIDs1 = std::vector<unsigned int>();
+        undeployedPieceShapeIDs0 = std::vector<int>();
+        undeployedPieceShapeIDs1 = std::vector<int>();
         for (int i = 0; i < 21; i++) {
             undeployedPieceShapeIDs0.push_back(i);
             undeployedPieceShapeIDs1.push_back(i);
         }
     }
 
-    const std::vector<unsigned int>& Player::GetUndeployedPieceShapeIDs(Color color) const {
+    const std::vector<int>& Player::GetUndeployedPieceShapeIDs(Color color) const {
         //TODO: Make this brancheless. Should be possible with edits to the class
 
         if (color == color0) {
@@ -30,9 +30,9 @@ namespace HokusBlokus::Blokus {
         //TODO: Make this brancheless. Should be possible with edits to the class
 
         if(color == color0) {
-            undeployedPieceShapeIDs0.push_back(PieceShapeToUInt(pieceShape));
+            undeployedPieceShapeIDs0.push_back(PieceShapeToInt(pieceShape));
         } else if(color == color1) {
-            undeployedPieceShapeIDs1.push_back(PieceShapeToUInt(pieceShape));
+            undeployedPieceShapeIDs1.push_back(PieceShapeToInt(pieceShape));
         } else {
             std::cout << "Player does not play with the given color.\n";
             exit(1);
@@ -43,7 +43,7 @@ namespace HokusBlokus::Blokus {
         //TODO: Make this brancheless. Should be possible with edits to the class
 
         if(color == color0) {
-            std::vector<unsigned int>::iterator iterator = std::find(undeployedPieceShapeIDs0.begin(), undeployedPieceShapeIDs0.end(), PieceShapeToUInt(pieceShape));
+            std::vector<int>::iterator iterator = std::find(undeployedPieceShapeIDs0.begin(), undeployedPieceShapeIDs0.end(), PieceShapeToInt(pieceShape));
             if(iterator != undeployedPieceShapeIDs0.end()) {
                 undeployedPieceShapeIDs0.erase(iterator);
             } else {
@@ -51,7 +51,7 @@ namespace HokusBlokus::Blokus {
                 exit(1);
             }
         } else if(color == color1) {
-            std::vector<unsigned int>::iterator iterator = std::find(undeployedPieceShapeIDs1.begin(), undeployedPieceShapeIDs1.end(), PieceShapeToUInt(pieceShape));
+            std::vector<int>::iterator iterator = std::find(undeployedPieceShapeIDs1.begin(), undeployedPieceShapeIDs1.end(), PieceShapeToInt(pieceShape));
             if(iterator != undeployedPieceShapeIDs1.end()) {
                 undeployedPieceShapeIDs1.erase(iterator);
             } else {

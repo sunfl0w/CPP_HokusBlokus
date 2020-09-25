@@ -12,7 +12,7 @@ namespace HokusBlokus::Blokus {
     }
 
     Piece& PieceManager::GetPiece(PieceShape pieceShape) {
-        return pieces[PieceShapeToUInt(pieceShape)];
+        return pieces[PieceShapeToInt(pieceShape)];
     }
 
     //PRIVATE
@@ -48,9 +48,9 @@ namespace HokusBlokus::Blokus {
             std::vector<std::bitset<484>> tempBitsets = std::vector<std::bitset<484>>();
 
             if (pieceBitmaps[i].GetWidth() == 25) {
-                tempBitsets = PBMPieceDataToFullScaleBitsets(pieceBitmaps[i], 5, Vec2ui(1, 1));
+                tempBitsets = PBMPieceDataToFullScaleBitsets(pieceBitmaps[i], 5, Vec2i(1, 1));
             } else {
-                tempBitsets = PBMPieceDataToFullScaleBitsets(pieceBitmaps[i], 7, Vec2ui(0, 0));
+                tempBitsets = PBMPieceDataToFullScaleBitsets(pieceBitmaps[i], 7, Vec2i(0, 0));
             }
 
             for (unsigned int k = 0; k < 21; k++) {
@@ -61,11 +61,11 @@ namespace HokusBlokus::Blokus {
         return pieceBitmasks;
     }
 
-    std::vector<Vec2ui> PieceManager::LoadPieceDimensions() {
+    std::vector<Vec2i> PieceManager::LoadPieceDimensions() {
         return LoadPieceDataDimensionsFromFile("resources/BlokusPieceShapeDimensions.txt");
     }
 
-    std::vector<std::bitset<484>> PieceManager::PBMPieceDataToFullScaleBitsets(const PBM::PBMImage& bitmap, unsigned int pieceSize, const Vec2ui& offset) {
+    std::vector<std::bitset<484>> PieceManager::PBMPieceDataToFullScaleBitsets(const PBM::PBMImage& bitmap, unsigned int pieceSize, const Vec2i& offset) {
         std::vector<std::bitset<484>> bitsets = std::vector<std::bitset<484>>();
         unsigned int minX = 0;
         unsigned int minY = 0;
@@ -76,7 +76,7 @@ namespace HokusBlokus::Blokus {
             std::bitset<484> bitset = std::bitset<484>();
             for (unsigned int x = minX; x < maxX; x++) {
                 for (unsigned int y = minY; y < maxY; y++) {
-                    bitset[(x + offset.x) % pieceSize + ((y + offset.y) % pieceSize) * 22] = !bitmap.GetData()[x + y * bitmap.GetWidth()];
+                    bitset[(x % pieceSize) + offset.x + ((y % pieceSize) + offset.y) * 22] = !bitmap.GetData()[x + y * bitmap.GetWidth()];
                 }
             }
             bitsets.push_back(bitset);
@@ -92,7 +92,7 @@ namespace HokusBlokus::Blokus {
         return bitsets;
     }
 
-    std::vector<Vec2ui> PieceManager::LoadPieceDataDimensionsFromFile(std::string path) {
+    std::vector<Vec2i> PieceManager::LoadPieceDataDimensionsFromFile(std::string path) {
         std::ifstream inputStream(path);
         if (!inputStream) {
             std::cout << "Unable to open txt file with piece dimensions at: " << path << "\n";
@@ -103,9 +103,9 @@ namespace HokusBlokus::Blokus {
         std::getline(inputStream, line);
         inputStream.close();
 
-        std::vector<Vec2ui> pieceDimensions = std::vector<Vec2ui>();
+        std::vector<Vec2i> pieceDimensions = std::vector<Vec2i>();
         for (int i = 0; i < 21; i++) {
-            pieceDimensions.push_back(Vec2ui(line[i * 2] - 48, line[i * 2 + 1] - 48));
+            pieceDimensions.push_back(Vec2i(line[i * 2] - 48, line[i * 2 + 1] - 48));
         }
         return pieceDimensions;
     }

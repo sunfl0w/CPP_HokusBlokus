@@ -5,7 +5,6 @@
 #include <bitset>
 #include <algorithm>
 
-#include "vec2ui.hpp"
 #include "pieceBitmask.hpp"
 
 namespace HokusBlokus::Blokus {

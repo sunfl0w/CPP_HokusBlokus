@@ -15,6 +15,6 @@ namespace HokusBlokus::Blokus {
     }
 
     std::bitset<484>& Board::GetBitmask(Color color) {
-        return colorBitmasks[ColorToUInt(color)];
+        return colorBitmasks[ColorToInt(color)];
     }
 }  // namespace HokusBlokus::Blokus

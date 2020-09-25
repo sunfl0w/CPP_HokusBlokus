@@ -5,22 +5,22 @@
 #include <algorithm>
 
 #include "color.hpp"
-#include "pieceshape.hpp"
+#include "pieceShape.hpp"
 
 namespace HokusBlokus::Blokus {
     class Player {
         Color color0;
         Color color1;
 
-        std::vector<unsigned int> undeployedPieceShapeIDs0;
-        std::vector<unsigned int> undeployedPieceShapeIDs1;
+        std::vector<int> undeployedPieceShapeIDs0;
+        std::vector<int> undeployedPieceShapeIDs1;
 
     public:
         Player(Color color0, Color color1);
 
         void PopulateUndeployedPieces();
 
-        const std::vector<unsigned int>& GetUndeployedPieceShapeIDs(Color color) const;
+        const std::vector<int>& GetUndeployedPieceShapeIDs(Color color) const;
 
         void AddUndeployedPieceShape(Color color, PieceShape pieceShape);
 

@@ -3,17 +3,17 @@
 #include <iostream>
 #include <string>
 
+#include "benchmark.hpp"
 #include "board.hpp"
+#include "debug.hpp"
 #include "gameState.hpp"
 #include "move.hpp"
 #include "pbmimage.hpp"
 #include "pbmloader.hpp"
 #include "pieceBitmask.hpp"
 #include "pieceManager.hpp"
-#include "pieceshape.hpp"
-#include "vec2ui.hpp"
-#include "debug.hpp"
-#include "benchmark.hpp"
+#include "pieceShape.hpp"
+#include "vec2i.hpp"
 
 using namespace HokusBlokus::Blokus;
 using namespace HokusBlokus::Blokus::Benchmark;
@@ -24,7 +24,7 @@ int main() {
 
     HokusBlokus::Blokus::PieceManager::Init();
 
-    BenchmarkGPM(10);
+    BenchmarkGPM(10000);
 
     /*HokusBlokus::Blokus::PieceManager::Init();
     Gamestate gamestate = Gamestate();
