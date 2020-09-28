@@ -35,11 +35,23 @@ namespace HokusBlokus::Blokus {
     }
 
     Player& GameState::GetCurrentPlayer() {
-        if (GetCurrentColor() == Color::BLUE || GetCurrentColor() == Color::RED) {
+        if (player0.GetColors()[0] == GetCurrentColor() || player0.GetColors()[1] == GetCurrentColor()) {
             return player0;
         } else {
             return player1;
         }
+    }
+
+    Player& GameState::GetPlayerWithColor(Color color) {
+        if (player0.GetColors()[0] == color || player0.GetColors()[1] == color) {
+            return player0;
+        } else {
+            return player1;
+        }
+    }
+
+    ColorQueue& GameState::GetColorQueue() {
+        return colorQueue;
     }
 
     std::vector<Move>& GameState::GetPerformedMoves() {
@@ -50,12 +62,28 @@ namespace HokusBlokus::Blokus {
         return performedMoves[performedMoves.size() - 1];
     }
 
+    void GameState::SetLastPerformedMove(Move move) {
+        if (performedMoves.empty()) {
+            performedMoves.push_back(move);
+        } else {
+            performedMoves[performedMoves.size() - 1] = move;
+        }
+    }
+
     int GameState::GetTurn() const {
         return turn;
     }
 
+    void GameState::SetTurn(int turn) {
+        this->turn = turn;
+    }
+
     PieceShape GameState::GetStartingPieceShape() const {
         return startingPieceShape;
+    }
+
+    void GameState::SetStartingPieceShape(PieceShape pieceShape) {
+        startingPieceShape = pieceShape;
     }
 
     std::vector<Move> GameState::GetPossibleMoves() {
@@ -79,7 +107,6 @@ namespace HokusBlokus::Blokus {
             Piece piece = PieceManager::GetPiece(IntToPieceShape(pieceID));
             std::vector<std::array<PieceBitmask, 3>> pieceBitmaskComplements = piece.GetPieceBitmaskComplements();
             for (int complementNumber = 0; complementNumber < pieceBitmaskComplements.size(); complementNumber++) {
-                
                 // Bounding rect search optimization
                 BoundingRect moveSearchRect = boundingRectOptimizer.GetBoundingRect(GetCurrentColor());
 
@@ -119,6 +146,10 @@ namespace HokusBlokus::Blokus {
             board.GetBitmask(GetCurrentColor()) |=
                 (PieceManager::GetPiece(move.GetPieceShape()).GetPieceBitmaskComplements()[move.GetComplementNumber()][0].GetBitmask() << (move.GetDestination().x + move.GetDestination().y * 22));
             GetCurrentPlayer().RemoveUndeployedPieceShape(move.GetColor(), move.GetPieceShape());
+
+            if(GetCurrentPlayer().GetUndeployedPieceShapeIDs(move.GetColor()).empty()) {
+                colorQueue.RemoveColor(move.GetColor());
+            }
         }
 
         if (move.GetMoveType() == MoveType::PassMove) {
@@ -141,7 +172,11 @@ namespace HokusBlokus::Blokus {
         if (lastMove.GetMoveType() == MoveType::SetMove) {
             std::bitset<484> bitmask = PieceManager::GetPiece(lastMove.GetPieceShape()).GetPieceBitmaskComplements()[lastMove.GetComplementNumber()][0].GetBitmask();
             board.GetBitmask(lastMove.GetColor()) &= (bitmask << (lastMove.GetDestination().x + lastMove.GetDestination().y * 22)).flip();
-            GetCurrentPlayer().AddUndeployedPieceShape(lastMove.GetColor(), lastMove.GetPieceShape());
+            GetPlayerWithColor(lastMove.GetColor()).AddUndeployedPieceShape(lastMove.GetColor(), lastMove.GetPieceShape());
+
+            if(colorQueue.WasColorRemoved(lastMove.GetColor())) {
+                colorQueue.AddColor(lastMove.GetColor());
+            }
         }
 
         if (lastMove.GetMoveType() == MoveType::PassMove) {

@@ -108,7 +108,7 @@ namespace HokusBlokus::Blokus::Client {
     }
 
     HokusBlokus::Blokus::Move BlokusClient::GetNextMove(HokusBlokus::Blokus::GameState currentGameState, int ownPlayerID) {
-        return logic->GetNextMove(currentGameState, ownPlayerColor);
+        return logic->GetNextMove(currentGameState, ownPlayerID);
     }
 
     void BlokusClient::StartConnection(const std::string &address, const unsigned short &port) {

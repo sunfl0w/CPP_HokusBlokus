@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <array>
 #include <iostream>
 #include <algorithm>
 
@@ -19,6 +20,8 @@ namespace HokusBlokus::Blokus {
         Player(Color color0, Color color1);
 
         void PopulateUndeployedPieces();
+
+        std::array<Color, 2> GetColors();
 
         const std::vector<int>& GetUndeployedPieceShapeIDs(Color color) const;
 

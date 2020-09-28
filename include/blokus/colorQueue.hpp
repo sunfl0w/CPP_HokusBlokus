@@ -24,5 +24,7 @@ namespace HokusBlokus::Blokus {
         void Revert();
 
         bool HasActivePlayers() const;
+
+        bool WasColorRemoved(Color color) const;
     };
 }  // namespace HokusBlokus::Blokus

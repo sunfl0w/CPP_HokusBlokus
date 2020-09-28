@@ -38,14 +38,24 @@ namespace HokusBlokus::Blokus {
         Color GetCurrentColor() const;
 
         Player& GetCurrentPlayer();
+        
+        Player& GetPlayerWithColor(Color color);
+
+        ColorQueue& GetColorQueue();
 
         std::vector<Move>& GetPerformedMoves();
 
         Move& GetLastPerfromedMove();
 
+        void SetLastPerformedMove(Move move);
+
         int GetTurn() const;
 
+        void SetTurn(int turn);
+
         PieceShape GetStartingPieceShape() const;
+
+        void SetStartingPieceShape(PieceShape pieceShape);
 
         std::vector<Move> GetPossibleMoves();
 

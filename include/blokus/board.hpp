@@ -17,5 +17,7 @@ namespace HokusBlokus::Blokus {
         void InitStartingBoard();
 
         std::bitset<484>& GetBitmask(Color color);
+
+        void SetBitmask(Color color, std::bitset<484> bitmask);
     };
 }  // namespace HokusBlokus::Blokus

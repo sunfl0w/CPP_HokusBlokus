@@ -13,6 +13,10 @@ namespace HokusBlokus::Blokus {
         }
     }
 
+    std::array<Color, 2> Player::GetColors() {
+        return std::array<Color, 2>({color0, color1});
+    }
+
     const std::vector<int>& Player::GetUndeployedPieceShapeIDs(Color color) const {
         //TODO: Make this brancheless. Should be possible with edits to the class
 

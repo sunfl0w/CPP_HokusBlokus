@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+#include <iostream>
+
 namespace HokusBlokus::Blokus {
     enum class PieceShape {
         MONOMINO = 0,
@@ -28,4 +31,6 @@ namespace HokusBlokus::Blokus {
     int PieceShapeToInt(PieceShape pieceShape);
 
     PieceShape IntToPieceShape(int value);
+
+    PieceShape StringToPieceShape(std::string pieceShapeString);
 }

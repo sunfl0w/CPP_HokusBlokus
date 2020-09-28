@@ -13,6 +13,8 @@ namespace HokusBlokus::Blokus {
         MaskType maskType;
 
     public:
+        PieceBitmask();
+        
         PieceBitmask(std::bitset<484> bitmask, MaskType maskType);
 
         const std::bitset<484>& GetBitmask() const;

@@ -37,4 +37,8 @@ namespace HokusBlokus::Blokus {
         }
         return false;
     }
+
+    bool ColorQueue::WasColorRemoved(Color color) const {
+        return removedColors.find(color) != removedColors.end();
+    }
 }  // namespace HokusBlokus::Blokus

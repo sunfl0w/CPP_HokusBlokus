@@ -28,10 +28,6 @@ namespace HokusBlokus::Blokus {
 
         static std::array<std::vector<PieceBitmask>, 21> LoadBitmasks();
 
-        static std::vector<Vec2i> LoadPieceDimensions();
-
         static std::vector<std::bitset<484>> PBMPieceDataToFullScaleBitsets(const PBM::PBMImage& bitmap, unsigned int pieceSize, const Vec2i& offset);
-
-        static std::vector<Vec2i> LoadPieceDataDimensionsFromFile(std::string path);
     };
 }  // namespace HokusBlokus::Blokus

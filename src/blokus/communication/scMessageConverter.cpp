@@ -8,7 +8,7 @@ namespace HokusBlokus::Blokus::Communication {
     std::vector<SC_Message> SC_MessageConverter::FilterProtocolMessages(std::string &inputStream) {
         std::vector<SC_Message> protocolMessages;
 
-        //Removing non xml-compliant messages. Duhhh!
+        // Removing non xml-compliant messages. Duhhh!
         std::size_t protocolPos = inputStream.find("<protocol>");
         if (protocolPos != std::string::npos) {
             std::string protocolMessage = inputStream.substr(protocolPos, 10);
@@ -32,7 +32,7 @@ namespace HokusBlokus::Blokus::Communication {
         std::vector<SC_Message> protocolMessages = FilterProtocolMessages(inputStream);
         messages.insert(std::end(messages), std::begin(protocolMessages), std::end(protocolMessages));
 
-        //Wrapping xml-compliant messages for easy parsing
+        // Wrapping xml-compliant messages for easy parsing
         inputStream.insert(0, "<SC_Message>");
         inputStream.append("</SC_Message>");
 
@@ -41,7 +41,7 @@ namespace HokusBlokus::Blokus::Communication {
         for (pugi::xml_node scMessageNode : scMessageDoc.children()) {
             for (pugi::xml_node childNode : scMessageNode.children()) {
                 SC_MessageType scMessageType = SC_MessageType::Undefined;
-                
+
                 std::string childNodeName(childNode.name());
 
                 if (childNodeName == "join") {
@@ -96,18 +96,19 @@ namespace HokusBlokus::Blokus::Communication {
 
         pugi::xml_node roomNode = moveMessageDoc.append_child("room");
         roomNode.append_attribute("roomId").set_value(roomID.c_str());
+        pugi::xml_node dataNode = roomNode.append_child("data");
         if (move.GetMoveType() == MoveType::SetMove) {
-            pugi::xml_node dataNode = roomNode.append_child("data");
-            dataNode.append_attribute("class").set_value("setmove");
+            dataNode.append_attribute("class").set_value("sc.plugin2021.SetMove");
 
             pugi::xml_node pieceNode = dataNode.append_child("piece");
-            pieceNode.append_attribute("owner").set_value(Hive::ColorToString(move.GetColor()).c_str());
-            pieceNode.append_attribute("type").set_value(Hive::PieceTypeToString(move.GetMovedPieceType()).c_str());
+            pieceNode.append_attribute("colors").set_value(Hive::ColorToString(move.GetColor()).c_str());
+            pieceNode.append_attribute("kind").set_value(Hive::PieceTypeToString(move.GetMovedPieceType()).c_str());
+            pieceNode.append_attribute("rotation").set_value(Hive::PieceTypeToString(move.GetMovedPieceType()).c_str());
+            pieceNode.append_attribute("isFlipped").set_value(Hive::PieceTypeToString(move.GetMovedPieceType()).c_str());
 
-            pugi::xml_node destinationNode = dataNode.append_child("destination");
-            destinationNode.append_attribute("x").set_value(move.GetDestinationPosition().GetX());
-            destinationNode.append_attribute("y").set_value(move.GetDestinationPosition().GetY());
-            destinationNode.append_attribute("z").set_value(move.GetDestinationPosition().GetZ());
+            pugi::xml_node destinationNode = pieceNode.append_child("position");
+            destinationNode.append_attribute("x").set_value(move.GetDestination().x);
+            destinationNode.append_attribute("y").set_value(move.GetDestination().x);
         } else if (move.GetMoveType() == MoveType::SkipMove) {
             pugi::xml_node dataNode = roomNode.append_child("data");
             dataNode.append_attribute("class").set_value("sc.plugin2021.SkipMove");
@@ -140,33 +141,28 @@ namespace HokusBlokus::Blokus::Communication {
         return roomID;
     }
     HokusBlokus::Blokus::GameState SC_MessageConverter::GetGameStateFromGameStateMessage(const SC_Message &message) {
-        GameState gameState;
         pugi::xml_document scMessageDoc;
         scMessageDoc.load_string(message.GetContent().data());
         pugi::xml_node roomNode = scMessageDoc.child("room");
+
+        GameState gameState;
 
         for (pugi::xml_attribute stateAttribute : roomNode.child("data").child("state").attributes()) {
             std::string stateAttributeName(stateAttribute.name());
             if (stateAttributeName == "currentColorIndex") {
                 int currentColorID = std::stoi(stateAttribute.value());
             } else if (stateAttributeName == "turn") {
-                gameState.
-            } else if (stateAttributeName == "currentPlayerColor") {
-                std::string currentPlayerColor = std::string(stateAttribute.value());
-                std::string pausedPlayerColor = "UNDEFINED";
-                if (currentPlayerColor == "RED") {
-                    pausedPlayerColor = "BLUE";
-                } else if (currentPlayerColor == "BLUE") {
-                    pausedPlayerColor = "RED";
-                }
-
-                if(currentPlayerColor == "RED") {
-                    gameState.SetCurrentPlayerColor(Hive::Color::Red);
-                } else {
-                    gameState.SetCurrentPlayerColor(Hive::Color::Blue);
-                }
+                gameState.SetTurn(std::stoi(stateAttribute.value()));
+            } else if (stateAttributeName == "startPiece") {
+                std::string startPieceString = stateAttribute.value();
+                gameState.SetStartingPieceShape(StringToPieceShape(startPieceString));
             }
         }
+
+        std::bitset<484> blueSet = std::bitset<484>();
+        std::bitset<484> yellowSet = std::bitset<484>();
+        std::bitset<484> redSet = std::bitset<484>();
+        std::bitset<484> greenSet = std::bitset<484>();
 
         for (pugi::xml_node fieldsNode : roomNode.child("data").child("state").child("board").children()) {
             for (pugi::xml_node fieldNode : fieldsNode.children("field")) {
@@ -175,40 +171,83 @@ namespace HokusBlokus::Blokus::Communication {
                 for (pugi::xml_attribute fieldAttribute : fieldNode.attributes()) {
                     std::string fieldAttributeName(fieldAttribute.name());
                     if (fieldAttributeName == "x") {
-                        std::string xString = std::string(fieldAttribute.value());
-                        x = std::stoi(xString);
+                        x = std::stoi(fieldAttribute.value());
                     } else if (fieldAttributeName == "y") {
-                        std::string yString = std::string(fieldAttribute.value());
-                        y = std::stoi(yString);
-                    } else if(fieldAttributeName == "isObstructed") {
-                        if(std::strcmp(fieldAttribute.value(), "true") == 0) {
-                            gameState.GetBoard().AddPieceOnTop(Hive::Piece(Hive::PieceType::Obstacle, Hive::Color::Undefined), Hive::AxialPosition(x, y));
+                        y = std::stoi(fieldAttribute.value());
+                    } else if (fieldAttributeName == "content") {
+                        if (fieldAttribute.value() == "BLUE") {
+                            blueSet[(x + 1) * (y + 1) * 22] = true;
+                        } else if (fieldAttribute.value() == "YELLOW") {
+                            yellowSet[(x + 1) * (y + 1) * 22] = true;
+                        } else if (fieldAttribute.value() == "RED") {
+                            redSet[(x + 1) * (y + 1) * 22] = true;
+                        } else {
+                            greenSet[(x + 1) * (y + 1) * 22] = true;
                         }
                     }
                 }
+            }
+        }
+        gameState.GetBoard().SetBitmask(Color::BLUE, blueSet);
+        gameState.GetBoard().SetBitmask(Color::YELLOW, yellowSet);
+        gameState.GetBoard().SetBitmask(Color::RED, redSet);
+        gameState.GetBoard().SetBitmask(Color::GREEN, greenSet);
 
-                for (pugi::xml_node pieceNode : fieldNode.children("piece")) {
-                    std::string pieceColor = pieceNode.attribute("owner").value();
-                    std::string pieceType = pieceNode.attribute("type").value();
 
-                    gameState.GetBoard().AddPieceOnTop(Hive::Piece(Hive::PieceTypeFromString(pieceType), Hive::ColorFromString(pieceColor)), Hive::AxialPosition(x, y));
-                }
+        for (pugi::xml_node blueShapeNode : roomNode.child("data").child("state").child("blueShapes").children("shape")) {
+            gameState.GetPlayerWithColor(Color::BLUE).AddUndeployedPieceShape(Color::BLUE, StringToPieceShape(blueShapeNode.value()));
+        }
+
+        for (pugi::xml_node yellowShapeNode : roomNode.child("data").child("state").child("yellowShapes").children("shape")) {
+            gameState.GetPlayerWithColor(Color::YELLOW).AddUndeployedPieceShape(Color::YELLOW, StringToPieceShape(yellowShapeNode.value()));
+        }
+
+        for (pugi::xml_node redShapeNode : roomNode.child("data").child("state").child("redShapes").children("shape")) {
+            gameState.GetPlayerWithColor(Color::RED).AddUndeployedPieceShape(Color::RED, StringToPieceShape(redShapeNode.value()));
+        }
+
+        for (pugi::xml_node greenShapeNode : roomNode.child("data").child("state").child("greenShapes").children("shape")) {
+            gameState.GetPlayerWithColor(Color::GREEN).AddUndeployedPieceShape(Color::GREEN, StringToPieceShape(greenShapeNode.value()));
+        }
+
+        for (pugi::xml_node colorNode : roomNode.child("data").child("state").child("orderedColors").children("color")) {
+            std::vector<Color> colorsInGame = std::vector<Color>();
+            if(colorNode.value() == "BLUE") {
+                colorsInGame.push_back(Color::BLUE);
+            } else if(colorNode.value() == "YELLOW") {
+                colorsInGame.push_back(Color::YELLOW);
+            } else if(colorNode.value() == "RED") {
+                colorsInGame.push_back(Color::RED);
+            } else if(colorNode.value() == "GREEN") {
+                colorsInGame.push_back(Color::GREEN);
+            }
+
+            if(std::find(colorsInGame.begin(), colorsInGame.end(), Color::BLUE) == colorsInGame.end()) {
+                gameState.GetColorQueue().RemoveColor(Color::BLUE);
+            }
+
+            if(std::find(colorsInGame.begin(), colorsInGame.end(), Color::YELLOW) == colorsInGame.end()) {
+                gameState.GetColorQueue().RemoveColor(Color::YELLOW);
+            }
+
+            if(std::find(colorsInGame.begin(), colorsInGame.end(), Color::RED) == colorsInGame.end()) {
+                gameState.GetColorQueue().RemoveColor(Color::RED);
+            }
+
+            if(std::find(colorsInGame.begin(), colorsInGame.end(), Color::GREEN) == colorsInGame.end()) {
+                gameState.GetColorQueue().RemoveColor(Color::GREEN);
             }
         }
 
-        for (pugi::xml_node pieceNode : roomNode.child("data").child("state").child("undeployedRedPieces").children("piece")) {
-            std::string pieceColor = pieceNode.attribute("owner").value();
-            std::string pieceType = pieceNode.attribute("type").value();
+        Vec2i lastMoveDestination = Vec2i(0,0);
+        PieceShape lastMovePieceShape = PieceShape::MONOMINO;
+        int lastMoveComplementNumber = 0;
+        Color lastMoveColor = Color::BLUE;
+        MoveType lastMoveType = MoveType::SkipMove;
 
-            gameState.GetPlayer(Hive::Color::Red).AddUndeployedPieceType(Hive::PieceTypeFromString(pieceType));
-        }
+        Move lastMove = Move(lastMoveDestination, lastMovePieceShape, lastMoveComplementNumber, lastMoveColor, lastMoveType);
 
-        for (pugi::xml_node pieceNode : roomNode.child("data").child("state").child("undeployedBluePieces").children("piece")) {
-            std::string pieceColor = pieceNode.attribute("owner").value();
-            std::string pieceType = pieceNode.attribute("type").value();
-
-            gameState.GetPlayer(Hive::Color::Blue).AddUndeployedPieceType(Hive::PieceTypeFromString(pieceType));
-        }
+        gameState.SetLastPerformedMove(lastMove);
 
         return gameState;
     }
@@ -221,4 +260,4 @@ namespace HokusBlokus::Blokus::Communication {
         idOfWinningPlayer = std::stoi(roomNode.child("data").child("winner").child("color").value());
         return idOfWinningPlayer;
     }
-}  // namespace Communication
+}  // namespace HokusBlokus::Blokus::Communication
