@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 namespace HokusBlokus::Blokus {
     enum class Color {
         BLUE = 0,
@@ -9,6 +11,8 @@ namespace HokusBlokus::Blokus {
     };
 
     int ColorToInt(Color color);
+
+    std::string ColorToString(Color color);
 
     Color IntToColor(int value);
 }
