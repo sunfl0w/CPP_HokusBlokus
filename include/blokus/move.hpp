@@ -4,18 +4,21 @@
 #include "pieceShape.hpp"
 #include "vec2i.hpp"
 #include "moveType.hpp"
+#include "pieceRotation.hpp"
 
 namespace HokusBlokus::Blokus {
     class Move {
     private:
         Vec2i destination;
         PieceShape pieceShape;
-        unsigned int complementNumber;
         Color color;
         MoveType moveType;
+        PieceRotation pieceRotation;
+        bool mirrored;
+        int complementNumber;
 
     public:
-        Move(Vec2i destination, PieceShape pieceShape, unsigned int complementNumber, Color color, MoveType moveType);
+        Move(Vec2i destination, PieceShape pieceShape, Color color, MoveType moveType, int complementNumber);
 
         bool operator==(const Move& other);
 
@@ -25,10 +28,10 @@ namespace HokusBlokus::Blokus {
 
         PieceShape GetPieceShape() const;
 
-        unsigned int GetComplementNumber() const;
-
         Color GetColor() const;
         
         MoveType GetMoveType() const;
+
+        int GetComplementNumber() const;
     };
 }  // namespace Blokus

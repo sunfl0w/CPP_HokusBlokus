@@ -11,6 +11,7 @@
 #include "pieceShape.hpp"
 #include "pieceManager.hpp"
 #include "pieceBitmask.hpp"
+#include "pieceBitmaskComplement.hpp"
 #include "colorQueue.hpp"
 #include "boundingRectOptimizer.hpp"
 

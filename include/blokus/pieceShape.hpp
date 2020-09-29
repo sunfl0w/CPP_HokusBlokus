@@ -30,6 +30,8 @@ namespace HokusBlokus::Blokus {
 
     int PieceShapeToInt(PieceShape pieceShape);
 
+    std::string PieceShapeToString(PieceShape pieceShape);
+
     PieceShape IntToPieceShape(int value);
 
     PieceShape StringToPieceShape(std::string pieceShapeString);

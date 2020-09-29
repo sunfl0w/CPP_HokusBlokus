@@ -5,6 +5,52 @@ namespace HokusBlokus::Blokus {
         return static_cast<int>(pieceShape);
     }
 
+    std::string PieceShapeToString(PieceShape pieceShape) {
+        if(pieceShape == PieceShape::MONOMINO) {
+            return "MONO";
+        } else if(pieceShape == PieceShape::DOMINO) {
+            return "DOMINO";
+        } else if(pieceShape == PieceShape::TRIO_L) {
+            return "TRIO_L";
+        } else if(pieceShape == PieceShape::TRIO_I) {
+            return "TRIO_I";
+        } else if(pieceShape == PieceShape::TETRO_I) {
+            return "TETRO_I";
+        } else if(pieceShape == PieceShape::TETRO_L) {
+            return "TETRO_L";
+        } else if(pieceShape == PieceShape::TETRO_O) {
+            return "TETRO_O";
+        } else if(pieceShape == PieceShape::TETRO_T) {
+            return "TETRO_T";
+        } else if(pieceShape == PieceShape::TETRO_Z) {
+            return "TETRO_Z";
+        } else if(pieceShape == PieceShape::PENTO_I) {
+            return "PENTO_I";
+        } else if(pieceShape == PieceShape::PENTO_U) {
+            return "PENTO_U";
+        } else if(pieceShape == PieceShape::PENTO_L) {
+            return "PENTO_L";
+        } else if(pieceShape == PieceShape::PENTO_V) {
+            return "PENTO_V";
+        } else if(pieceShape == PieceShape::PENTO_P) {
+            return "PENTO_P";
+        } else if(pieceShape == PieceShape::PENTO_W) {
+            return "PENTO_W";
+        } else if(pieceShape == PieceShape::PENTO_R) {
+            return "PENTO_R";
+        } else if(pieceShape == PieceShape::PENTO_X) {
+            return "PENTO_X";
+        } else if(pieceShape == PieceShape::PENTO_Z) {
+            return "PENTO_Z";
+        } else if(pieceShape == PieceShape::PENTO_Y) {
+            return "PENTO_Y";
+        } else if(pieceShape == PieceShape::PENTO_T) {
+            return "PENTO_T";
+        } else {
+            return "PENTO_S";
+        }
+    }
+
     PieceShape IntToPieceShape(int value) {
         return static_cast<PieceShape>(value);
     }

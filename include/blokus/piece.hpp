@@ -6,18 +6,19 @@
 #include <algorithm>
 
 #include "pieceBitmask.hpp"
+#include "pieceBitmaskComplement.hpp"
 
 namespace HokusBlokus::Blokus {
     class Piece {
     private:
-        std::vector<std::array<PieceBitmask, 3>> pieceBitmaskComplements;
+        std::vector<PieceBitmaskComplement> pieceBitmaskComplements;
 
     public:
-        Piece(std::vector<PieceBitmask> pieceBitmasks);
+        Piece(std::vector<PieceBitmaskComplement> pieceBitmaskComplements);
 
-        const std::vector<std::array<PieceBitmask, 3>>& GetPieceBitmaskComplements() const;
+        const std::vector<PieceBitmaskComplement>& GetPieceBitmaskComplements() const;
 
     private:
-        std::vector<PieceBitmask> FilterDuplicateBitmasks(const std::vector<PieceBitmask>& pieceBitmask) const;
+        std::vector<PieceBitmaskComplement> FilterDuplicateBitmaskComplements(const std::vector<PieceBitmaskComplement>& pieceBitmaskComplements) const;
     };
 }

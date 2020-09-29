@@ -101,9 +101,9 @@ namespace HokusBlokus::Blokus::Communication {
             dataNode.append_attribute("class").set_value("sc.plugin2021.SetMove");
 
             pugi::xml_node pieceNode = dataNode.append_child("piece");
-            pieceNode.append_attribute("colors").set_value(Hive::ColorToString(move.GetColor()).c_str());
-            pieceNode.append_attribute("kind").set_value(Hive::PieceTypeToString(move.GetMovedPieceType()).c_str());
-            pieceNode.append_attribute("rotation").set_value(Hive::PieceTypeToString(move.GetMovedPieceType()).c_str());
+            pieceNode.append_attribute("color").set_value(ColorToString(move.GetColor()).c_str());
+            pieceNode.append_attribute("kind").set_value(PieceShapeToString(move.GetPieceShape()).c_str());
+            pieceNode.append_attribute("rotation").set_value(move.);
             pieceNode.append_attribute("isFlipped").set_value(Hive::PieceTypeToString(move.GetMovedPieceType()).c_str());
 
             pugi::xml_node destinationNode = pieceNode.append_child("position");
