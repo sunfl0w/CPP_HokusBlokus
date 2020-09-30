@@ -9,6 +9,10 @@ namespace HokusBlokus::Blokus {
         this->maskDimensions = ComputeMaskDimensions(this->bitmask);
     }
 
+    bool PieceBitmask::operator==(const PieceBitmask& other) const {
+        return bitmask == other.bitmask && maskType == other.maskType && maskDimensions == other.maskDimensions;
+    }
+
     const std::bitset<484>& PieceBitmask::GetBitmask() const {
         return bitmask;
     }
@@ -19,10 +23,6 @@ namespace HokusBlokus::Blokus {
 
     MaskType PieceBitmask::GetMaskType() const {
         return maskType;
-    }
-
-    bool PieceBitmask::operator==(const PieceBitmask& other) {
-        return bitmask == other.bitmask;
     }
 
     // PRIVATE

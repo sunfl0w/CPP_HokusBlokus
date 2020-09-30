@@ -15,6 +15,8 @@ namespace HokusBlokus::Blokus {
 
         Color GetCurrentColor() const;
 
+        void SetCurrentColor(Color color);
+
         void RemoveColor(Color color);
 
         void AddColor(Color color);

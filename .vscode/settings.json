@@ -93,6 +93,7 @@
         "queue": "cpp",
         "stack": "cpp",
         "forward_list": "cpp",
-        "coroutine": "cpp"
+        "coroutine": "cpp",
+        "*.ipp": "cpp"
     }
 }

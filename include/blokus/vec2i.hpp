@@ -7,6 +7,6 @@ namespace HokusBlokus::Blokus {
 
         Vec2i(int x, int y);
 
-        bool operator==(const Vec2i& other);
+        bool operator==(const Vec2i& other) const;
     };
 }  // namespace Blokus

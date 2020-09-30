@@ -17,13 +17,13 @@ namespace HokusBlokus::Blokus {
         
         PieceBitmask(std::bitset<484> bitmask, MaskType maskType);
 
+        bool operator==(const PieceBitmask& other) const;
+
         const std::bitset<484>& GetBitmask() const;
 
         const Vec2i& GetMaskDimensions() const;
         
         MaskType GetMaskType() const;
-
-        bool operator==(const PieceBitmask& other);
 
     private:
         Vec2i ComputeMaskDimensions(const std::bitset<484>& bitmask) const;

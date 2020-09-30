@@ -4,10 +4,10 @@ namespace HokusBlokus::Blokus {
     std::vector<Piece> PieceManager::pieces = std::vector<Piece>();
 
     void PieceManager::Init() {
-        std::array<std::vector<PieceBitmask>, 21> pieceBitmasks = LoadBitmasks();
+        std::array<std::array<PieceBitmaskComplement, 8>, 21> complementsPerPiece = LoadBitmasks();
 
-        for(unsigned int i = 0; i < 21; i++) {
-            pieces.push_back(Piece(pieceBitmasks[i]));
+        for (unsigned int i = 0; i < 21; i++) {
+            pieces.push_back(Piece(std::vector<PieceBitmaskComplement>(complementsPerPiece[i].begin(), complementsPerPiece[i].end())));
         }
     }
 
@@ -15,54 +15,103 @@ namespace HokusBlokus::Blokus {
         return pieces[PieceShapeToInt(pieceShape)];
     }
 
-    //PRIVATE
+    // PRIVATE
 
-    std::array<std::vector<PieceBitmask>, 21> PieceManager::LoadBitmasks() {
+    std::array<std::array<PieceBitmaskComplement, 8>, 21> PieceManager::LoadBitmasks() {
+        std::array<std::array<PieceBitmaskComplement, 8>, 21> complementsPerPiece = std::array<std::array<PieceBitmaskComplement, 8>, 21>();
+
         std::string pathToResources = "generatedResources/";
         if (!std::filesystem::exists(pathToResources)) {
             std::cout << "Path to generated resources does not exist. Were the resources generated?\n";
             exit(1);
         }
 
-        std::vector<PBM::PBMImage> pieceBitmaps = std::vector<PBM::PBMImage>();
-        std::vector<MaskType> pieceBitmapMaskTypes = std::vector<MaskType>();
+        for (int i = 0; i < 8; i++) {
+            std::string pathToComplement = pathToResources + "Complement_" + std::to_string(i) + "/";
+            if (!std::filesystem::exists(pathToComplement)) {
+                std::cout << "Path to complement" << i << " was not found. Were the resources generated?\n";
+                exit(1);
+            }
 
-        for (std::filesystem::directory_entry entry : std::filesystem::directory_iterator(pathToResources)) {
-            if (entry.is_regular_file() && entry.path().extension() == ".pbm") {
-                pieceBitmaps.push_back(PBM::PBMLoader::LoadPBM(entry.path()));
+            std::array<std::array<PieceBitmask, 3>, 21> complementaryBitmasks = std::array<std::array<PieceBitmask, 3>, 21>();
+            char orientation = ' ';
+            bool flipped = false;
 
-                std::string filename = entry.path().filename().string();
-                if(filename[16] == 'C' || filename[17] == 'C') {
-                    pieceBitmapMaskTypes.push_back(MaskType::Corner);
-                } else if(filename[16] == 'E' || filename[17] == 'E') {
-                    pieceBitmapMaskTypes.push_back(MaskType::Edge);
-                } else {
-                    pieceBitmapMaskTypes.push_back(MaskType::Shape);
+            for (std::filesystem::directory_entry entry : std::filesystem::directory_iterator(pathToComplement)) {
+                if (entry.is_regular_file() && entry.path().extension() == ".pbm") {
+                    PBM::PBMImage complementBitmap = PBM::PBMLoader::LoadPBM(entry.path());
+
+                    std::string filename = entry.path().filename().string();
+                    std::string fileDescribtor = filename.substr(filename.find("_"));
+                    char type = 'S';
+
+                    // Orientation
+                    if (fileDescribtor.find("N") != std::string::npos) {
+                        orientation = 'N';
+                    } else if (fileDescribtor.find("E") != std::string::npos) {
+                        orientation = 'E';
+                    } else if (fileDescribtor.find("S") != std::string::npos) {
+                        orientation = 'S';
+                    } else if (fileDescribtor.find("W") != std::string::npos) {
+                        orientation = 'W';
+                    }
+
+                    // Type
+                    if (fileDescribtor.find("C") != std::string::npos) {
+                        type = 'C';
+                    } else if (fileDescribtor.find("B") != std::string::npos) {
+                        type = 'B';
+                    }
+
+                    // Flipped
+                    if (fileDescribtor.find("F") != std::string::npos) {
+                        flipped = true;
+                    }
+
+                    if (type == 'S') {
+                        std::array<std::bitset<484>, 21> temporaryBitmaps = PBMPieceDataToFullScaleBitsets(complementBitmap, 5, Vec2i(1, 1));
+                        for (int k = 0; k < 21; k++) {
+                            complementaryBitmasks[k][0] = PieceBitmask(temporaryBitmaps[k], MaskType::Shape);
+                        }
+                    }
+
+                    if (type == 'C') {
+                        std::array<std::bitset<484>, 21> temporaryBitmaps = PBMPieceDataToFullScaleBitsets(complementBitmap, 7, Vec2i(0, 0));
+                        for (int k = 0; k < 21; k++) {
+                            complementaryBitmasks[k][1] = PieceBitmask(temporaryBitmaps[k], MaskType::Corner);
+                        }
+                    }
+
+                    if (type == 'B') {
+                        std::array<std::bitset<484>, 21> temporaryBitmaps = PBMPieceDataToFullScaleBitsets(complementBitmap, 7, Vec2i(0, 0));
+                        for (int k = 0; k < 21; k++) {
+                            complementaryBitmasks[k][2] = PieceBitmask(temporaryBitmaps[k], MaskType::Edge);
+                        }
+                    }
                 }
             }
-        }
 
-        std::array<std::vector<PieceBitmask>, 21> pieceBitmasks = std::array<std::vector<PieceBitmask>, 21>();
+            // Creating complements from loaded data
+            for (int k = 0; k < 21; k++) {
+                PieceRotation rotation = PieceRotation::NONE;
+                if (orientation == 'N') {
+                    rotation = PieceRotation::NONE;
+                } else if (orientation == 'E') {
+                    rotation = PieceRotation::RIGHT;
+                } else if (orientation == 'S') {
+                    rotation = PieceRotation::MIRROR;
+                } else if (orientation == 'W') {
+                    rotation = PieceRotation::LEFT;
+                }
 
-        for(unsigned int i = 0; i < pieceBitmaps.size(); i++) {
-            std::vector<std::bitset<484>> tempBitsets = std::vector<std::bitset<484>>();
-
-            if (pieceBitmaps[i].GetWidth() == 25) {
-                tempBitsets = PBMPieceDataToFullScaleBitsets(pieceBitmaps[i], 5, Vec2i(1, 1));
-            } else {
-                tempBitsets = PBMPieceDataToFullScaleBitsets(pieceBitmaps[i], 7, Vec2i(0, 0));
+                complementsPerPiece[k][i] = PieceBitmaskComplement(complementaryBitmasks[k], rotation, flipped);
             }
-
-            for (unsigned int k = 0; k < 21; k++) {
-                pieceBitmasks[k].push_back(PieceBitmask(tempBitsets[k], pieceBitmapMaskTypes[i]));
-            }
         }
-
-        return pieceBitmasks;
+        return complementsPerPiece;
     }
 
-    std::vector<std::bitset<484>> PieceManager::PBMPieceDataToFullScaleBitsets(const PBM::PBMImage& bitmap, unsigned int pieceSize, const Vec2i& offset) {
-        std::vector<std::bitset<484>> bitsets = std::vector<std::bitset<484>>();
+    std::array<std::bitset<484>, 21> PieceManager::PBMPieceDataToFullScaleBitsets(const PBM::PBMImage& bitmap, unsigned int pieceSize, const Vec2i& offset) {
+        std::array<std::bitset<484>, 21> bitsets = std::array<std::bitset<484>, 21>();
         unsigned int minX = 0;
         unsigned int minY = 0;
         unsigned int maxX = pieceSize;
@@ -75,7 +124,7 @@ namespace HokusBlokus::Blokus {
                     bitset[(x % pieceSize) + offset.x + ((y % pieceSize) + offset.y) * 22] = !bitmap.GetData()[x + y * bitmap.GetWidth()];
                 }
             }
-            bitsets.push_back(bitset);
+            bitsets[i] = bitset;
 
             minX = maxX % bitmap.GetWidth();
             maxX = minX + pieceSize;

@@ -32,7 +32,7 @@ def main():
     # Populate edge piece sets
     for baseSet in basePieceSets:
         pieceSetIdentifier = baseSet.name.split('_')[1]
-        name = "BlokusPieceSet_" + pieceSetIdentifier + "E"
+        name = "BlokusPieceSet_" + pieceSetIdentifier + "B"
         edgePieceSets.append(PieceSet(name, generateEdgePieceSetImage(baseSet.pieceSetImage, 5)))
 
     print("Starting to generate corner piece sets")
@@ -43,25 +43,25 @@ def main():
         name = "BlokusPieceSet_" + pieceSetIdentifier + "C"
         cornerPieceSets.append(PieceSet(name, generateCornerPieceSetImage(baseSet.pieceSetImage, 5)))
 
-    # Create directory for saving if none was found
+    # Create directory for saving generated resources
     cwd = os.getcwd()
-    generatedResourcePath = os.path.join(cwd, "generatedResources")
+    generatedResourcesPath = os.path.join(cwd, "generatedResources")
+    if not os.path.exists(generatedResourcesPath):
+        os.mkdir(generatedResourcesPath)
 
-    if not os.path.exists(generatedResourcePath):
-        os.mkdir(generatedResourcePath)
+    complementPaths = []
+    for i in range(8):
+        complementPath = os.path.join(generatedResourcesPath, "Complement_" + str(i))
+        complementPaths.append(complementPath)
+        if not os.path.exists(complementPath):
+            os.mkdir(complementPath)
 
     print("Saving generated piece sets")
-    # Save base sets
-    for baseSet in basePieceSets:
-        baseSet.pieceSetImage.save(os.path.join(generatedResourcePath, baseSet.name + ".pbm"))
-
-    # Save edge sets
-    for edgeSet in edgePieceSets:
-        edgeSet.pieceSetImage.save(os.path.join(generatedResourcePath, edgeSet.name + ".pbm"))
-
-    # Save corner sets
-    for cornerSet in cornerPieceSets:
-        cornerSet.pieceSetImage.save(os.path.join(generatedResourcePath, cornerSet.name + ".pbm"))
+    # Save all generated bitsets
+    for i in range(8):
+        basePieceSets[i].pieceSetImage.save(os.path.join(complementPaths[i], basePieceSets[i].name + ".pbm"))
+        edgePieceSets[i].pieceSetImage.save(os.path.join(complementPaths[i], edgePieceSets[i].name + ".pbm"))
+        cornerPieceSets[i].pieceSetImage.save(os.path.join(complementPaths[i], cornerPieceSets[i].name + ".pbm"))
 
     print("Piece sets generated successfully in {} ms.".format((time.time_ns() - startTime) / 1000000))
 

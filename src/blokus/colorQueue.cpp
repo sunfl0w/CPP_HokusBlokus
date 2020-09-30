@@ -9,6 +9,10 @@ namespace HokusBlokus::Blokus {
         return currentColor;
     }
 
+    void ColorQueue::SetCurrentColor(Color color) {
+        currentColor = color;
+    }
+
     void ColorQueue::RemoveColor(Color color) {
         removedColors.emplace(color);
     }

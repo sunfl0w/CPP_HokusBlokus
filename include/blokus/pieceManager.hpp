@@ -9,7 +9,7 @@
 
 #include "pieceShape.hpp"
 #include "pieceBitmask.hpp"
-#include "vec2i.hpp"
+#include "pieceBitmaskComplement.hpp"
 #include "pbmimage.hpp"
 #include "pbmloader.hpp"
 #include "piece.hpp"
@@ -26,8 +26,8 @@ namespace HokusBlokus::Blokus {
     private:
         PieceManager();
 
-        static std::array<std::vector<PieceBitmask>, 21> LoadBitmasks();
+        static std::array<std::array<PieceBitmaskComplement, 8>, 21> LoadBitmasks();
 
-        static std::vector<std::bitset<484>> PBMPieceDataToFullScaleBitsets(const PBM::PBMImage& bitmap, unsigned int pieceSize, const Vec2i& offset);
+        static std::array<std::bitset<484>, 21> PBMPieceDataToFullScaleBitsets(const PBM::PBMImage& bitmap, unsigned int pieceSize, const Vec2i& offset);
     };
 }  // namespace HokusBlokus::Blokus

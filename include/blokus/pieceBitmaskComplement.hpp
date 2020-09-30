@@ -11,15 +11,19 @@ namespace HokusBlokus::Blokus {
     class PieceBitmaskComplement {
         std::array<PieceBitmask, 3> bitmasks;
         PieceRotation rotation;
-        bool mirrored;
+        bool flipped;
 
     public:
-        PieceBitmaskComplement(std::array<PieceBitmask, 3> bitmasks, PieceRotation rotation, bool mirrored);
+        PieceBitmaskComplement();
 
-        PieceBitmask& GetBitmask(MaskType maskType);
+        PieceBitmaskComplement(std::array<PieceBitmask, 3> bitmasks, PieceRotation rotation, bool flipped);
 
-        PieceRotation GetRotation();
+        bool operator==(const PieceBitmaskComplement& other);
 
-        bool IsMirrored();
+        const PieceBitmask& GetBitmask(MaskType maskType) const;
+
+        PieceRotation GetRotation() const;
+
+        bool IsFlipped() const;
     };
 }  // namespace HokusBlokus::Blokus

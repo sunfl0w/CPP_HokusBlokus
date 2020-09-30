@@ -103,8 +103,13 @@ namespace HokusBlokus::Blokus::Communication {
             pugi::xml_node pieceNode = dataNode.append_child("piece");
             pieceNode.append_attribute("color").set_value(ColorToString(move.GetColor()).c_str());
             pieceNode.append_attribute("kind").set_value(PieceShapeToString(move.GetPieceShape()).c_str());
-            pieceNode.append_attribute("rotation").set_value(move.);
-            pieceNode.append_attribute("isFlipped").set_value(Hive::PieceTypeToString(move.GetMovedPieceType()).c_str());
+            Piece movedPiece = PieceManager::GetPiece(move.GetPieceShape());
+            pieceNode.append_attribute("rotation").set_value(PieceRotationToString(movedPiece.GetPieceBitmaskComplements()[move.GetComplementNumber()].GetRotation()).c_str());
+            if(movedPiece.GetPieceBitmaskComplements()[move.GetComplementNumber()].IsFlipped()) {
+                pieceNode.append_attribute("isFlipped").set_value("true");
+            } else {
+                pieceNode.append_attribute("isFlipped").set_value("false");
+            }
 
             pugi::xml_node destinationNode = pieceNode.append_child("position");
             destinationNode.append_attribute("x").set_value(move.GetDestination().x);
@@ -147,10 +152,13 @@ namespace HokusBlokus::Blokus::Communication {
 
         GameState gameState;
 
+        //Read metadata of game state
+
         for (pugi::xml_attribute stateAttribute : roomNode.child("data").child("state").attributes()) {
             std::string stateAttributeName(stateAttribute.name());
             if (stateAttributeName == "currentColorIndex") {
                 int currentColorID = std::stoi(stateAttribute.value());
+                gameState.GetColorQueue().SetCurrentColor(IntToColor(currentColorID - 1));
             } else if (stateAttributeName == "turn") {
                 gameState.SetTurn(std::stoi(stateAttribute.value()));
             } else if (stateAttributeName == "startPiece") {
@@ -158,6 +166,8 @@ namespace HokusBlokus::Blokus::Communication {
                 gameState.SetStartingPieceShape(StringToPieceShape(startPieceString));
             }
         }
+
+        //Read board positions
 
         std::bitset<484> blueSet = std::bitset<484>();
         std::bitset<484> yellowSet = std::bitset<484>();
@@ -175,11 +185,11 @@ namespace HokusBlokus::Blokus::Communication {
                     } else if (fieldAttributeName == "y") {
                         y = std::stoi(fieldAttribute.value());
                     } else if (fieldAttributeName == "content") {
-                        if (fieldAttribute.value() == "BLUE") {
+                        if (std::string(fieldAttribute.value()) == "BLUE") {
                             blueSet[(x + 1) * (y + 1) * 22] = true;
-                        } else if (fieldAttribute.value() == "YELLOW") {
+                        } else if (std::string(fieldAttribute.value()) == "YELLOW") {
                             yellowSet[(x + 1) * (y + 1) * 22] = true;
-                        } else if (fieldAttribute.value() == "RED") {
+                        } else if (std::string(fieldAttribute.value()) == "RED") {
                             redSet[(x + 1) * (y + 1) * 22] = true;
                         } else {
                             greenSet[(x + 1) * (y + 1) * 22] = true;
@@ -188,6 +198,9 @@ namespace HokusBlokus::Blokus::Communication {
                 }
             }
         }
+
+        //Read undeployed pieces
+
         gameState.GetBoard().SetBitmask(Color::BLUE, blueSet);
         gameState.GetBoard().SetBitmask(Color::YELLOW, yellowSet);
         gameState.GetBoard().SetBitmask(Color::RED, redSet);
@@ -210,15 +223,17 @@ namespace HokusBlokus::Blokus::Communication {
             gameState.GetPlayerWithColor(Color::GREEN).AddUndeployedPieceShape(Color::GREEN, StringToPieceShape(greenShapeNode.value()));
         }
 
+        //Reding color move order
+
         for (pugi::xml_node colorNode : roomNode.child("data").child("state").child("orderedColors").children("color")) {
             std::vector<Color> colorsInGame = std::vector<Color>();
-            if(colorNode.value() == "BLUE") {
+            if(std::string(colorNode.value()) == "BLUE") {
                 colorsInGame.push_back(Color::BLUE);
-            } else if(colorNode.value() == "YELLOW") {
+            } else if(std::string(colorNode.value()) == "YELLOW") {
                 colorsInGame.push_back(Color::YELLOW);
-            } else if(colorNode.value() == "RED") {
+            } else if(std::string(colorNode.value()) == "RED") {
                 colorsInGame.push_back(Color::RED);
-            } else if(colorNode.value() == "GREEN") {
+            } else if(std::string(colorNode.value()) == "GREEN") {
                 colorsInGame.push_back(Color::GREEN);
             }
 
@@ -239,13 +254,15 @@ namespace HokusBlokus::Blokus::Communication {
             }
         }
 
+        //LastMove : TODO
+
         Vec2i lastMoveDestination = Vec2i(0,0);
         PieceShape lastMovePieceShape = PieceShape::MONOMINO;
         int lastMoveComplementNumber = 0;
         Color lastMoveColor = Color::BLUE;
         MoveType lastMoveType = MoveType::SkipMove;
 
-        Move lastMove = Move(lastMoveDestination, lastMovePieceShape, lastMoveComplementNumber, lastMoveColor, lastMoveType);
+        Move lastMove = Move(lastMoveDestination, lastMovePieceShape, lastMoveColor, lastMoveType, lastMoveComplementNumber);
 
         gameState.SetLastPerformedMove(lastMove);
 

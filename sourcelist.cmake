@@ -7,6 +7,7 @@ src/blokus/maskType.cpp
 src/blokus/move.cpp
 src/blokus/piece.cpp
 src/blokus/pieceBitmask.cpp
+src/blokus/pieceBitmaskComplement.cpp
 src/blokus/pieceManager.cpp
 src/blokus/pieceRotation.cpp
 src/blokus/pieceShape.cpp

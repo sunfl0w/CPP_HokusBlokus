@@ -106,7 +106,7 @@ namespace HokusBlokus::Blokus {
         for (int pieceID : playablePieces) {
             Piece piece = PieceManager::GetPiece(IntToPieceShape(pieceID));
             std::vector<PieceBitmaskComplement> pieceBitmaskComplements = piece.GetPieceBitmaskComplements();
-            for (int complementNumber = 0; complementNumber < pieceBitmaskComplements.size(); complementNumber++) {
+            for (unsigned int complementNumber = 0; complementNumber < pieceBitmaskComplements.size(); complementNumber++) {
                 // Bounding rect search optimization
                 BoundingRect moveSearchRect = boundingRectOptimizer.GetBoundingRect(GetCurrentColor());
 

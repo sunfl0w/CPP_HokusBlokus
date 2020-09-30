@@ -2,7 +2,7 @@
 
 namespace HokusBlokus::Blokus {
     Board::Board() {
-        std::array<std::bitset<484>, 4> colorBitmasks = std::array<std::bitset<484>, 4>();
+        std::array<std::bitset<484>, 4> colorBitmasks;
     }
 
     void Board::InitStartingBoard() {
