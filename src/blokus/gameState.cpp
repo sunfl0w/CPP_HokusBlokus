@@ -105,35 +105,71 @@ namespace HokusBlokus::Blokus {
 
         for (int pieceID : playablePieces) {
             Piece piece = PieceManager::GetPiece(IntToPieceShape(pieceID));
-            std::vector<PieceBitmaskComplement> pieceBitmaskComplements = piece.GetPieceBitmaskComplements();
-            for (unsigned int complementNumber = 0; complementNumber < pieceBitmaskComplements.size(); complementNumber++) {
+            for (unsigned int complementNumber = 0; complementNumber < piece.GetPieceBitmaskComplements().size(); complementNumber++) {
                 // Bounding rect search optimization
                 BoundingRect moveSearchRect = boundingRectOptimizer.GetBoundingRect(GetCurrentColor());
 
-                minShiftX = std::max(moveSearchRect.GetMinBounds().x - pieceBitmaskComplements[complementNumber].GetBitmask(MaskType::Shape).GetMaskDimensions().x - 1, 0);
-                minShiftY = std::max(moveSearchRect.GetMinBounds().y - pieceBitmaskComplements[complementNumber].GetBitmask(MaskType::Shape).GetMaskDimensions().y - 1, 0);
-                maxShiftX = std::min(moveSearchRect.GetMaxBounds().x + 1, 20 - pieceBitmaskComplements[complementNumber].GetBitmask(MaskType::Shape).GetMaskDimensions().x);
-                maxShiftY = std::min(moveSearchRect.GetMaxBounds().y + 1, 20 - pieceBitmaskComplements[complementNumber].GetBitmask(MaskType::Shape).GetMaskDimensions().y);
+                minShiftX = std::max(moveSearchRect.GetMinBounds().x - piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Shape).GetMaskDimensions().x - 1, 0);
+                minShiftY = std::max(moveSearchRect.GetMinBounds().y - piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Shape).GetMaskDimensions().y - 1, 0);
+                maxShiftX = std::min(moveSearchRect.GetMaxBounds().x + 1, 20 - piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Shape).GetMaskDimensions().x);
+                maxShiftY = std::min(moveSearchRect.GetMaxBounds().y + 1, 20 - piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Shape).GetMaskDimensions().y);
 
                 for (int y = minShiftY; y <= maxShiftY; y++) {
                     for (int x = minShiftX; x <= maxShiftX; x++) {
                         // corner test -> Shape test -> edge test
-                        if ((pieceBitmaskComplements[complementNumber].GetBitmask(MaskType::Corner).GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).any() &&
-                            (pieceBitmaskComplements[complementNumber].GetBitmask(MaskType::Shape).GetBitmask() << (x + y * 22) & occupiedMask).none() &&
-                            (pieceBitmaskComplements[complementNumber].GetBitmask(MaskType::Edge).GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).none()) {
-                            possibleMoves.push_back(Move(Vec2i(x, y), IntToPieceShape(pieceID), GetCurrentColor(), MoveType::SetMove, complementNumber));
+                        // 1
+                        if ((piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Corner).GetBitmask() & board.GetBitmask(GetCurrentColor())).any() &&
+                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Shape).GetBitmask() & occupiedMask).none() &&
+                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Edge).GetBitmask() & board.GetBitmask(GetCurrentColor())).none()) {
+                            possibleMoves.emplace_back(Move(Vec2i(x, y), IntToPieceShape(pieceID), GetCurrentColor(), MoveType::SetMove, complementNumber));
                         }
+
+                        //Other versions for testing. Hard to test as the code might include bugs
+                        // 2
+                        /*if ((piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Corner).GetBitmask() & board.GetBitmask(GetCurrentColor())).any() &&
+                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Edge).GetBitmask() & board.GetBitmask(GetCurrentColor())).none() &&
+                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Shape).GetBitmask() & occupiedMask).none()) {
+                            possibleMoves.emplace_back(Move(Vec2i(x, y), IntToPieceShape(pieceID), GetCurrentColor(), MoveType::SetMove, complementNumber));
+                        }*/
+
+                        // 3
+                        /*if ((piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Shape).GetBitmask() & occupiedMask).none() &&
+                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Edge).GetBitmask() & board.GetBitmask(GetCurrentColor())).none() &&
+                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Corner).GetBitmask() & board.GetBitmask(GetCurrentColor())).any()) {
+                            possibleMoves.emplace_back(Move(Vec2i(x, y), IntToPieceShape(pieceID), GetCurrentColor(), MoveType::SetMove, complementNumber));
+                        }*/
+
+                        // 4
+                        /*if ((piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Shape).GetBitmask() & occupiedMask).none() &&
+                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Corner).GetBitmask() & board.GetBitmask(GetCurrentColor())).any() &&
+                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Edge).GetBitmask() & board.GetBitmask(GetCurrentColor())).none()) {
+                            possibleMoves.emplace_back(Move(Vec2i(x, y), IntToPieceShape(pieceID), GetCurrentColor(), MoveType::SetMove, complementNumber));
+                        }*/
+
+                        // 5
+                        /*if ((piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Edge).GetBitmask() & board.GetBitmask(GetCurrentColor())).none() &&
+                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Shape).GetBitmask() & occupiedMask).none() &&
+                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Corner).GetBitmask() & board.GetBitmask(GetCurrentColor())).any()) {
+                            possibleMoves.emplace_back(Move(Vec2i(x, y), IntToPieceShape(pieceID), GetCurrentColor(), MoveType::SetMove, complementNumber));
+                        }*/
+
+                        // 6
+                        /*if ((piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Edge).GetBitmask() & board.GetBitmask(GetCurrentColor())).none() &&
+                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Corner).GetBitmask() & board.GetBitmask(GetCurrentColor())).any() &&
+                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Shape).GetBitmask() & occupiedMask).none()) {
+                            possibleMoves.emplace_back(Move(Vec2i(x, y), IntToPieceShape(pieceID), GetCurrentColor(), MoveType::SetMove, complementNumber));
+                        }*/
                     }
                 }
             }
         }
 
         if (turn >= 4 && possibleMoves.size() > 0) {
-            possibleMoves.push_back(Move(Vec2i(0, 0), PieceShape::MONOMINO, GetCurrentColor(), MoveType::SkipMove, 0));
+            possibleMoves.emplace_back(Move(Vec2i(0, 0), PieceShape::MONOMINO, GetCurrentColor(), MoveType::SkipMove, 0));
         }
 
         if (possibleMoves.empty()) {
-            possibleMoves.push_back(Move(Vec2i(0, 0), PieceShape::MONOMINO, GetCurrentColor(), MoveType::PassMove, 0));
+            possibleMoves.emplace_back(Move(Vec2i(0, 0), PieceShape::MONOMINO, GetCurrentColor(), MoveType::PassMove, 0));
         }
 
         return possibleMoves;
@@ -143,11 +179,11 @@ namespace HokusBlokus::Blokus {
         // Moves will not be checked for validity to improve perfromance
 
         if (move.GetMoveType() == MoveType::SetMove) {
-            board.GetBitmask(GetCurrentColor()) |=
-                (PieceManager::GetPiece(move.GetPieceShape()).GetPieceBitmaskComplements()[move.GetComplementNumber()].GetBitmask(MaskType::Shape).GetBitmask() << (move.GetDestination().x + move.GetDestination().y * 22));
+            board.GetBitmask(GetCurrentColor()) |= (PieceManager::GetPiece(move.GetPieceShape()).GetPieceBitmaskComplements()[move.GetComplementNumber()].GetBitmask(MaskType::Shape).GetBitmask()
+                                                    << (move.GetDestination().x + move.GetDestination().y * 22));
             GetCurrentPlayer().RemoveUndeployedPieceShape(move.GetColor(), move.GetPieceShape());
 
-            if(GetCurrentPlayer().GetUndeployedPieceShapeIDs(move.GetColor()).empty()) {
+            if (GetCurrentPlayer().GetUndeployedPieceShapeIDs(move.GetColor()).empty()) {
                 colorQueue.RemoveColor(move.GetColor());
             }
         }
@@ -174,7 +210,7 @@ namespace HokusBlokus::Blokus {
             board.GetBitmask(lastMove.GetColor()) &= (bitmask << (lastMove.GetDestination().x + lastMove.GetDestination().y * 22)).flip();
             GetPlayerWithColor(lastMove.GetColor()).AddUndeployedPieceShape(lastMove.GetColor(), lastMove.GetPieceShape());
 
-            if(colorQueue.WasColorRemoved(lastMove.GetColor())) {
+            if (colorQueue.WasColorRemoved(lastMove.GetColor())) {
                 colorQueue.AddColor(lastMove.GetColor());
             }
         }

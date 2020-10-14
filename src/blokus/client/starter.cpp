@@ -25,11 +25,11 @@ using namespace HokusBlokus::Blokus::Client;
 
 int main(int argc, char *argv[]) {
     std::cout << "Hello There\n";
-    std::cout << "Current path is " << std::filesystem::current_path() << '\n';
 
     HokusBlokus::Blokus::PieceManager::Init();
 
-    /*Logic logic = Logic();
+    /*std::cout << "Starting client\n";
+    Logic logic = Logic();
     BlokusClient blokusClient = BlokusClient(&logic);
     blokusClient.Start(argc, argv);*/
 

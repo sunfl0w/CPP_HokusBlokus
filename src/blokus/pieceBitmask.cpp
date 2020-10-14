@@ -6,7 +6,7 @@ namespace HokusBlokus::Blokus {
     PieceBitmask::PieceBitmask(std::bitset<484> bitmask, MaskType maskType) : maskDimensions(0, 0) {
         this->bitmask = bitmask;
         this->maskType = maskType;
-        this->maskDimensions = ComputeMaskDimensions(this->bitmask);
+        this->maskDimensions = ComputeMaskDimensions(bitmask);
     }
 
     bool PieceBitmask::operator==(const PieceBitmask& other) const {
@@ -28,13 +28,13 @@ namespace HokusBlokus::Blokus {
     // PRIVATE
 
     Vec2i PieceBitmask::ComputeMaskDimensions(const std::bitset<484>& bitmask) const {
-        unsigned int minX = 21;
-        unsigned int maxX = 0;
-        unsigned int minY = 21;
-        unsigned int maxY = 0;
+        int minX = 21;
+        int maxX = 0;
+        int minY = 21;
+        int maxY = 0;
 
-        for (unsigned int y = 0; y < 22; y++) {
-            for (unsigned int x = 0; x < 22; x++) {
+        for (int y = 0; y < 22; y++) {
+            for (int x = 0; x < 22; x++) {
                 if (bitmask[x + y * 22]) {
                     minX = std::min(minX, x);
                     maxX = std::max(maxX, x + 1);
