@@ -1,6 +1,6 @@
 #include "pugixml.hpp"
 
-namespace Util {
+namespace HokusBlokus::Util {
     /**
      * @brief This a utility struct that expands pugi functionality. Used for converting XMLs to a string.
      * 

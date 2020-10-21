@@ -94,6 +94,8 @@
         "stack": "cpp",
         "forward_list": "cpp",
         "coroutine": "cpp",
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "__memory": "cpp",
+        "filesystem": "cpp"
     }
 }

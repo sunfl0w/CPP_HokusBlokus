@@ -25,4 +25,5 @@ src/blokus/optimization/boundingRect.cpp
 src/blokus/optimization/boundingRectOptimizer.cpp
 src/pbm/pbmimage.cpp
 src/pbm/pbmloader.cpp
+src/util/logger.cpp
 deps/src/pugiXML/pugixml.cpp
