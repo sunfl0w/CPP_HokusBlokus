@@ -33,24 +33,23 @@ int main(int argc, char *argv[]) {
 
     HokusBlokus::Blokus::PieceManager::Init();
 
-    std::cout << "Starting client\n";
+    /**std::cout << "Starting client\n";
     Logic logic = Logic();
     BlokusClient blokusClient = BlokusClient(&logic, &logger);
-    blokusClient.Start(argc, argv);
+    blokusClient.Start(argc, argv);**/
 
-    //BenchmarkGPM(1000);
+    BenchmarkGPM(100000);
 
     /*GameState gameState = GameState();
     gameState.InitStartingGameState();
+    Debug::DrawGameState(gameState);
     srand(time(NULL));
     while(!gameState.IsGameOver()) {
-        Debug::DrawGameState(gameState);
         std::vector<Move> possibleMoves = gameState.GetPossibleMoves();
         gameState.PerformMove(possibleMoves[rand() % possibleMoves.size()]);
 
-        if(gameState.GetTurn() > 12) {
-            int i = 0;
-        }
+        Debug::DrawGameState(gameState);
+        int x = 0;
     }*/
     return 0;
 }
