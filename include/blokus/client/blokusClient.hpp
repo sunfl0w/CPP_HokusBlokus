@@ -31,12 +31,6 @@ namespace HokusBlokus::Blokus::Client {
 		Client::TCP_Client tcpClient;
 
 		/**
-         * @brief The logger for logging messages.
-         * 
-         */
-		HokusBlokus::Util::Logger *logger;
-
-		/**
          * @brief The MessageConverter of the Client.
          * 
          */
@@ -84,7 +78,7 @@ namespace HokusBlokus::Blokus::Client {
          * 
          * @param logic The Logic that implements behaviour of the AI.
          */
-		BlokusClient(HokusBlokus::Blokus::AI::Logic *logic, HokusBlokus::Util::Logger *logger);
+		BlokusClient(HokusBlokus::Blokus::AI::Logic *logic);
 
 		/**
          * @brief Starts the Client.

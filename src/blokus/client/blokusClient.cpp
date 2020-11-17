@@ -1,17 +1,15 @@
 #include "blokusClient.hpp"
 
-#include "scMessageType.hpp"
-
 using namespace boost::program_options;
+using namespace HokusBlokus::Util;
 
 namespace HokusBlokus::Blokus::Client {
-	BlokusClient::BlokusClient(AI::Logic *logic, HokusBlokus::Util::Logger *logger) {
-		this->logger = logger;
+	BlokusClient::BlokusClient(AI::Logic *logic) {
 		this->logic = logic;
 	}
 
 	void BlokusClient::Start(int argc, char *argv[]) {
-		*logger << "Parsing arguments.\n";
+		Logger::getInstance() << "Parsing arguments.\n";
 
 		options_description optionsDesribtion("C++ client");
 		optionsDesribtion.add_options()("host,h", value<std::string>()->default_value("localhost"), "Host")("port,p", value<unsigned short>()->default_value(13050), "Port")("reservation,r", value<std::string>()->default_value(""), "ReservationCode")("verbose,v", "Verbosity");
@@ -36,16 +34,16 @@ namespace HokusBlokus::Blokus::Client {
 			verboseOutputEnabled = true;
 		}
 
-		*logger << "Parsing complete. Arguments are:\n";
-		*logger << "HostName: " + hostname + "\n";
-		*logger << "HostPort: " + std::to_string(hostPort) + "\n";
-		*logger << "ReservationCode: " + reservationCode + "\n";
+		Logger::getInstance() << "Parsing complete. Arguments are:\n";
+		Logger::getInstance() << "HostName: " + hostname + "\n";
+		Logger::getInstance() << "HostPort: " + std::to_string(hostPort) + "\n";
+		Logger::getInstance() << "ReservationCode: " + reservationCode + "\n";
 
 		if (reservationCode.size() == 0) {
-			*logger << "Starting a connection.\n";
+			Logger::getInstance() << "Starting a connection.\n";
 			StartConnection("127.0.0.1", hostPort);
 		} else {
-			*logger << "Starting a reserved connection.\n";
+			Logger::getInstance() << "Starting a reserved connection.\n";
 			StartReservedConnection(hostname, hostPort, reservationCode);
 		}
 	}
@@ -53,7 +51,7 @@ namespace HokusBlokus::Blokus::Client {
 	void BlokusClient::ClientLoop() {
 		while (!gameOver) {
 			if (verboseOutputEnabled) {
-				*logger << "Listening.\n";
+				Logger::getInstance() << "Listening.\n";
 			}
 
 			std::string inputStream = tcpClient.ReadMessage();
@@ -61,13 +59,13 @@ namespace HokusBlokus::Blokus::Client {
 			std::vector<HokusBlokus::Blokus::Communication::SC_Message> messages = scMessageConverter.SplitInputMessagesIntoValidSC_Messages(inputStream);
 			for (HokusBlokus::Blokus::Communication::SC_Message message : messages) {
 				if (verboseOutputEnabled) {
-					*logger << "RECV: " << message.GetContent() + "\n";
+					Logger::getInstance() << "RECV: " << message.GetContent() + "\n";
 				}
 			}
 			std::vector<HokusBlokus::Blokus::Communication::SC_Message> responses = HandleIncomingMessagesAndGenerateRespones(messages);
 			for (HokusBlokus::Blokus::Communication::SC_Message response : responses) {
 				if (verboseOutputEnabled) {
-					*logger << "SEND: " << response.GetContent() + "\n";
+					Logger::getInstance() << "SEND: " << response.GetContent() + "\n";
 				}
 				tcpClient.SendMessage(response.GetContent());
 			}
@@ -119,7 +117,7 @@ namespace HokusBlokus::Blokus::Client {
 		tcpClient.SendMessage(scMessageConverter.CreateJoinRequestMessage().GetContent());
 		ClientLoop();
 		Shutdown();
-		*logger << "Disconnected. Bye.\n";
+		Logger::getInstance() << "Disconnected. Bye.\n";
 	}
 
 	void BlokusClient::StartReservedConnection(const std::string &hostname, const unsigned short &port, const std::string &reservationCode) {
@@ -132,6 +130,6 @@ namespace HokusBlokus::Blokus::Client {
 		tcpClient.SendMessage(scMessageConverter.CreateJoinReservedRequestMessage(reservationCode).GetContent());
 		ClientLoop();
 		Shutdown();
-		*logger << "Disconnected. Bye.\n";
+		Logger::getInstance() << "Disconnected. Bye.\n";
 	}
 }  // namespace HokusBlokus::Blokus::Client

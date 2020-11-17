@@ -26,19 +26,16 @@ using namespace HokusBlokus::Blokus::Client;
 using namespace HokusBlokus::Util;
 
 int main(int argc, char *argv[]) {
-    //Logger logger = Logger(std::filesystem::current_path().string());
-    Logger logger = Logger("/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus");
+    Logger::getInstance() << "Hello There\n";
 
-    logger << "Hello There\n";
+    HokusBlokus::Blokus::PieceManager::Init(std::filesystem::path(argv[0]).parent_path());
 
-    HokusBlokus::Blokus::PieceManager::Init();
-
-    /**std::cout << "Starting client\n";
+    Logger::getInstance() << "Starting client\n";
     Logic logic = Logic();
-    BlokusClient blokusClient = BlokusClient(&logic, &logger);
-    blokusClient.Start(argc, argv);**/
+    BlokusClient blokusClient = BlokusClient(&logic);
+    blokusClient.Start(argc, argv);
 
-    BenchmarkGPM(100000);
+    //BenchmarkGPM(100000);
 
     /*GameState gameState = GameState();
     gameState.InitStartingGameState();

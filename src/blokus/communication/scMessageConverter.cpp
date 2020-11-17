@@ -1,6 +1,7 @@
 #include "scMessageConverter.hpp"
 
 using namespace HokusBlokus::Blokus;
+using namespace HokusBlokus::Util;
 
 namespace HokusBlokus::Blokus::Communication {
     SC_MessageConverter::SC_MessageConverter() {}
@@ -152,7 +153,7 @@ namespace HokusBlokus::Blokus::Communication {
 
         GameState gameState;
 
-        //Read metadata of game state
+        //Read metadata from game state
 
         for (pugi::xml_attribute stateAttribute : roomNode.child("data").child("state").attributes()) {
             std::string stateAttributeName(stateAttribute.name());

@@ -16,6 +16,7 @@
 #include "scMessage.hpp"
 #include "vec2i.hpp"
 #include "xmlStringWriter.hpp"
+#include "logger.hpp"
 
 namespace HokusBlokus::Blokus::Communication {
     /**

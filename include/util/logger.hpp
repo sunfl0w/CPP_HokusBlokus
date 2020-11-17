@@ -8,19 +8,16 @@
 
 namespace HokusBlokus::Util {
 	class Logger {
-		std::string logFileDestination;
-		std::stringstream stringstream;
+		static Logger* loggerInstance;
 
 	public:
-		Logger(const std::string& logFileDestination);
+		static Logger& getInstance();
 
 		template <typename T>
 		friend Logger& operator<<(Logger& logger, T const& value) {
-			logger.stringstream << value;
-			std::ofstream logFile = std::ofstream(logger.logFileDestination + "/HokusBlokus.log");
-			logFile << logger.stringstream.str();
+			std::ofstream logFile = std::ofstream(std::filesystem::current_path().string() + "/HokusBlokus.log", std::ios::app);
+			logFile << value;
 			logFile.close();
-
 			std::cout << value;
 
 			return logger;
