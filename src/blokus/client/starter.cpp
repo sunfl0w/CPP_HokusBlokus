@@ -33,7 +33,12 @@ int main(int argc, char *argv[]) {
     Logger::getInstance() << "Starting client\n";
     Logic logic = Logic();
     BlokusClient blokusClient = BlokusClient(&logic);
+
+    try {
     blokusClient.Start(argc, argv);
+    } catch(...) {
+        Logger::getInstance() << "How could this happen. We are better than this\n";
+    }
 
     //BenchmarkGPM(100000);
 

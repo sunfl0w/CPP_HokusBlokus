@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <sstream>
 
 #include "vec2i.hpp"
 #include "moveType.hpp"
@@ -14,6 +15,7 @@
 #include "pieceBitmaskComplement.hpp"
 #include "colorQueue.hpp"
 #include "boundingRectOptimizer.hpp"
+#include "logger.hpp"
 
 using namespace HokusBlokus::Blokus::Optimization;
 
@@ -65,5 +67,7 @@ namespace HokusBlokus::Blokus {
         void UndoLastMove();
 
         bool IsGameOver() const;
+
+        std::string Draw();
     };
 }  // namespace Blokus

@@ -2,6 +2,7 @@
 
 #include <array>
 #include <bitset>
+#include <sstream>
 
 #include "color.hpp"
 
@@ -19,5 +20,7 @@ namespace HokusBlokus::Blokus {
         std::bitset<484>& GetBitmask(Color color);
 
         void SetBitmask(Color color, std::bitset<484> bitmask);
+
+        std::string Draw();
     };
 }  // namespace HokusBlokus::Blokus

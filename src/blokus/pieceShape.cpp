@@ -1,5 +1,7 @@
 #include "pieceShape.hpp"
 
+using namespace HokusBlokus::Util;
+
 namespace HokusBlokus::Blokus {
     int PieceShapeToInt(PieceShape pieceShape) {
         return static_cast<int>(pieceShape);
@@ -99,7 +101,7 @@ namespace HokusBlokus::Blokus {
         } else if(pieceShapeString == "PENTO_S") {
             return PieceShape::PENTO_S;
         } else {
-            std::cout << "Unable to convert: " << pieceShapeString << " to a valid PieceShape.\n";
+            Logger::getInstance() << "Unable to convert: " << pieceShapeString << " to a valid PieceShape.\n";
             exit(1);
         }
     }

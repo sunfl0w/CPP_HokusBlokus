@@ -3,6 +3,8 @@
 #include <string>
 #include <iostream>
 
+#include "logger.hpp"
+
 namespace HokusBlokus::Blokus {
     enum class PieceShape {
         MONOMINO = 0,

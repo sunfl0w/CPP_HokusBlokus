@@ -56,6 +56,8 @@ namespace HokusBlokus::Blokus::Client {
 
 			std::string inputStream = tcpClient.ReadMessage();
 
+			//Logger::getInstance() << "RAW: " << inputStream << "\n";
+
 			std::vector<HokusBlokus::Blokus::Communication::SC_Message> messages = scMessageConverter.SplitInputMessagesIntoValidSC_Messages(inputStream);
 			for (HokusBlokus::Blokus::Communication::SC_Message message : messages) {
 				if (verboseOutputEnabled) {

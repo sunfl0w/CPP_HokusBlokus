@@ -34,7 +34,7 @@ namespace HokusBlokus::Blokus::Client {
             std::cout << "Receiving failed: " << errorCode.message() << "\n";
             throw "Receiving failed";
         } else {
-            std::string message{boost::asio::buffers_begin(receiveBuffer.data()), boost::asio::buffers_begin(receiveBuffer.data()) + bytes_transferred - 7};
+            std::string message{boost::asio::buffers_begin(receiveBuffer.data()), boost::asio::buffers_begin(receiveBuffer.data()) + bytes_transferred};
             receiveBuffer.consume(bytes_transferred);
             return message;
         }

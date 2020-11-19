@@ -93,12 +93,19 @@ namespace HokusBlokus::Blokus::Communication {
     }
 
     SC_Message SC_MessageConverter::CreateMoveMessage(const HokusBlokus::Blokus::Move &move, const std::string &roomID) {
+        Logger::getInstance() << "Creating move\n";
+
         pugi::xml_document moveMessageDoc;
 
         pugi::xml_node roomNode = moveMessageDoc.append_child("room");
         roomNode.append_attribute("roomId").set_value(roomID.c_str());
         pugi::xml_node dataNode = roomNode.append_child("data");
+
+        Logger::getInstance() << "CHECK1\n";
+
         if (move.GetMoveType() == MoveType::SetMove) {
+            Logger::getInstance() << "Set move\n";
+
             dataNode.append_attribute("class").set_value("sc.plugin2021.SetMove");
 
             pugi::xml_node pieceNode = dataNode.append_child("piece");
@@ -116,10 +123,12 @@ namespace HokusBlokus::Blokus::Communication {
             destinationNode.append_attribute("x").set_value(move.GetDestination().x);
             destinationNode.append_attribute("y").set_value(move.GetDestination().x);
         } else if (move.GetMoveType() == MoveType::SkipMove) {
+            Logger::getInstance() << "Skip move\n";
+
             pugi::xml_node dataNode = roomNode.append_child("data");
             dataNode.append_attribute("class").set_value("sc.plugin2021.SkipMove");
         } else {
-            std::cout << "It is not allowed to send pass moves. This should never happen anyways :C\n";
+            Logger::getInstance() << "It is not allowed to send pass moves. This should never happen anyways :C\n";
             exit(1);
         }
 
@@ -140,13 +149,16 @@ namespace HokusBlokus::Blokus::Communication {
             return 1;
         }
     }
+
     std::string SC_MessageConverter::GetRoomIDFromJoinedMessage(const SC_Message &message) {
         pugi::xml_document scMessageDoc;
         scMessageDoc.load_string(message.GetContent().data());
         std::string roomID(scMessageDoc.child("joined").attribute("roomId").value());
         return roomID;
     }
+
     HokusBlokus::Blokus::GameState SC_MessageConverter::GetGameStateFromGameStateMessage(const SC_Message &message) {
+
         pugi::xml_document scMessageDoc;
         scMessageDoc.load_string(message.GetContent().data());
         pugi::xml_node roomNode = scMessageDoc.child("room");
@@ -159,7 +171,7 @@ namespace HokusBlokus::Blokus::Communication {
             std::string stateAttributeName(stateAttribute.name());
             if (stateAttributeName == "currentColorIndex") {
                 int currentColorID = std::stoi(stateAttribute.value());
-                gameState.GetColorQueue().SetCurrentColor(IntToColor(currentColorID - 1));
+                gameState.GetColorQueue().SetCurrentColor(IntToColor(currentColorID));
             } else if (stateAttributeName == "turn") {
                 gameState.SetTurn(std::stoi(stateAttribute.value()));
             } else if (stateAttributeName == "startPiece") {
@@ -207,21 +219,20 @@ namespace HokusBlokus::Blokus::Communication {
         gameState.GetBoard().SetBitmask(Color::RED, redSet);
         gameState.GetBoard().SetBitmask(Color::GREEN, greenSet);
 
-
         for (pugi::xml_node blueShapeNode : roomNode.child("data").child("state").child("blueShapes").children("shape")) {
-            gameState.GetPlayerWithColor(Color::BLUE).AddUndeployedPieceShape(Color::BLUE, StringToPieceShape(blueShapeNode.value()));
+            gameState.GetPlayerWithColor(Color::BLUE).AddUndeployedPieceShape(Color::BLUE, StringToPieceShape(blueShapeNode.child_value()));
         }
 
         for (pugi::xml_node yellowShapeNode : roomNode.child("data").child("state").child("yellowShapes").children("shape")) {
-            gameState.GetPlayerWithColor(Color::YELLOW).AddUndeployedPieceShape(Color::YELLOW, StringToPieceShape(yellowShapeNode.value()));
+            gameState.GetPlayerWithColor(Color::YELLOW).AddUndeployedPieceShape(Color::YELLOW, StringToPieceShape(yellowShapeNode.child_value()));
         }
 
         for (pugi::xml_node redShapeNode : roomNode.child("data").child("state").child("redShapes").children("shape")) {
-            gameState.GetPlayerWithColor(Color::RED).AddUndeployedPieceShape(Color::RED, StringToPieceShape(redShapeNode.value()));
+            gameState.GetPlayerWithColor(Color::RED).AddUndeployedPieceShape(Color::RED, StringToPieceShape(redShapeNode.child_value()));
         }
 
         for (pugi::xml_node greenShapeNode : roomNode.child("data").child("state").child("greenShapes").children("shape")) {
-            gameState.GetPlayerWithColor(Color::GREEN).AddUndeployedPieceShape(Color::GREEN, StringToPieceShape(greenShapeNode.value()));
+            gameState.GetPlayerWithColor(Color::GREEN).AddUndeployedPieceShape(Color::GREEN, StringToPieceShape(greenShapeNode.child_value()));
         }
 
         //Reding color move order
@@ -266,6 +277,10 @@ namespace HokusBlokus::Blokus::Communication {
         Move lastMove = Move(lastMoveDestination, lastMovePieceShape, lastMoveColor, lastMoveType, lastMoveComplementNumber);
 
         gameState.SetLastPerformedMove(lastMove);
+
+        Logger::getInstance() << "Received game state----\n";
+        Logger::getInstance() << gameState.Draw();
+        Logger::getInstance() << "Received game state----\n";
 
         return gameState;
     }

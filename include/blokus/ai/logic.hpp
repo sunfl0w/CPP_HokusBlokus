@@ -8,6 +8,7 @@
 #include "move.hpp"
 #include "player.hpp"
 #include "color.hpp"
+#include "logger.hpp"
 
 namespace HokusBlokus::Blokus::AI {
     /**
