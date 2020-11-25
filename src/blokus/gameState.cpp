@@ -100,13 +100,6 @@ namespace HokusBlokus::Blokus {
 			playablePieces = GetCurrentPlayer().GetUndeployedPieceShapeIDs(GetCurrentColor());
 		}
 
-		/*for (int id : playablePieces) {
-			Logger::getInstance() << std::to_string(id) << " ";
-		}
-		Logger::getInstance() << "\n";
-
-        Logger::getInstance() << "CurrentColor: " << ColorToString(GetCurrentColor()) << "\n";*/
-
 		int minShiftX = 0;
 		int minShiftY = 0;
 		int maxShiftX = 0;

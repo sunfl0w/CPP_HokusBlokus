@@ -18,7 +18,7 @@ namespace HokusBlokus::Util {
 			std::ofstream logFile = std::ofstream(std::filesystem::current_path().string() + "/HokusBlokus.log", std::ios::app);
 			logFile << value;
 			logFile.close();
-			std::cout << value;
+			//std::cout << value;
 
 			return logger;
 		}

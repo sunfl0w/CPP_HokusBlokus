@@ -117,27 +117,14 @@ namespace HokusBlokus::Blokus::Communication {
 
 			pugi::xml_node destinationNode = pieceNode.append_child("position");
 
-			std::bitset<484> bitset = movedPiece.GetPieceBitmaskComplements()[move.GetComplementNumber()].GetBitmask(MaskType::Shape).GetBitmask() << (move.GetDestination().x + move.GetDestination().y * 22);
-			int minX = 22;
-			int minY = 22;
-			for (int y = 0; y < 22; y++) {
-				for (int x = 0; x < 22; x++) {
-					if (bitset[x + y * 22]) {
-						minX = std::min(minX, x);
-						minY = std::min(minY, y);
-					}
-				}
-			}
-
-            //destinationNode.append_attribute("x").set_value(minX - 1);
-			//destinationNode.append_attribute("y").set_value(minY - 1);
-
 			destinationNode.append_attribute("x").set_value(move.GetDestination().x);
 			destinationNode.append_attribute("y").set_value(move.GetDestination().y);
 
 		} else if (move.GetMoveType() == MoveType::SkipMove) {
 			pugi::xml_node dataNode = roomNode.append_child("data");
 			dataNode.append_attribute("class").set_value("sc.plugin2021.SkipMove");
+			pugi::xml_node pieceNode = dataNode.append_child("piece");
+			pieceNode.append_attribute("color").set_value(ColorToString(move.GetColor()).c_str());
 		} else {
 			Logger::getInstance() << "It is not allowed to send pass moves. This should never happen anyways :C\n";
 			exit(1);
@@ -305,19 +292,19 @@ namespace HokusBlokus::Blokus::Communication {
 
 		gameState.SetLastPerformedMove(lastMove);
 
-		Logger::getInstance() << "Received game state----\n";
-		Logger::getInstance() << gameState.Draw();
-		Logger::getInstance() << "Received game state----\n";
-
 		return gameState;
 	}
 
 	int SC_MessageConverter::GetIDOfWinningPlayerFromResultMessage(const SC_Message &message) {
-		int idOfWinningPlayer;
 		pugi::xml_document scMessageDoc;
 		scMessageDoc.load_string(message.GetContent().data());
 		pugi::xml_node roomNode = scMessageDoc.child("room");
-		idOfWinningPlayer = std::stoi(roomNode.child("data").child("winner").child("color").value());
-		return idOfWinningPlayer;
+		std::string winningColor = roomNode.child("data").child("winner").child("color").child_value();
+		if(winningColor == "ONE") {
+			return 0;
+		} else if(winningColor == "TWO") {
+			return 1;
+		}
+		return -1;
 	}
 }  // namespace HokusBlokus::Blokus::Communication
