@@ -5,7 +5,6 @@
 
 #include "benchmark.hpp"
 #include "board.hpp"
-#include "debug.hpp"
 #include "gameState.hpp"
 #include "move.hpp"
 #include "pbmimage.hpp"
@@ -44,13 +43,13 @@ int main(int argc, char *argv[]) {
 
     /*GameState gameState = GameState();
     gameState.InitStartingGameState();
-    Debug::DrawGameState(gameState);
+    gameState.Draw();
     srand(time(NULL));
     while(!gameState.IsGameOver()) {
         std::vector<Move> possibleMoves = gameState.GetPossibleMoves();
         gameState.PerformMove(possibleMoves[rand() % possibleMoves.size()]);
 
-        Debug::DrawGameState(gameState);
+        gameState.Draw();
         int x = 0;
     }*/
     return 0;

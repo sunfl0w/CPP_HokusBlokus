@@ -25,6 +25,25 @@ namespace HokusBlokus::Blokus {
         return maskType;
     }
 
+    std::string PieceBitmask::Draw() const {
+        std::stringstream stream;
+
+        stream << "----------\n";
+        for (int y = 0; y < 22; y++) {
+            std::string line;
+            for (int x = 0; x < 22; x++) {
+                if (bitmask[x + 22 * y]) {
+                    line += "1";
+                } else {
+                    line += "0";
+                }
+            }
+            stream << line << "\n";
+        }
+        stream << "----------\n";
+        return stream.str();
+    }
+
     // PRIVATE
 
     Vec2i PieceBitmask::ComputeMaskDimensions(const std::bitset<484>& bitmask) const {

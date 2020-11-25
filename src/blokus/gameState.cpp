@@ -100,12 +100,12 @@ namespace HokusBlokus::Blokus {
 			playablePieces = GetCurrentPlayer().GetUndeployedPieceShapeIDs(GetCurrentColor());
 		}
 
-		for (int id : playablePieces) {
+		/*for (int id : playablePieces) {
 			Logger::getInstance() << std::to_string(id) << " ";
 		}
 		Logger::getInstance() << "\n";
 
-        Logger::getInstance() << "CurrentColor: " << ColorToString(GetCurrentColor()) << "\n";
+        Logger::getInstance() << "CurrentColor: " << ColorToString(GetCurrentColor()) << "\n";*/
 
 		int minShiftX = 0;
 		int minShiftY = 0;
@@ -115,10 +115,8 @@ namespace HokusBlokus::Blokus {
 		for (int pieceID : playablePieces) {
 			Piece piece = PieceManager::GetPiece(IntToPieceShape(pieceID));
 			for (unsigned int complementNumber = 0; complementNumber < piece.GetPieceBitmaskComplements().size(); complementNumber++) {
-                Logger::getInstance() << "Complement: " << std::to_string(complementNumber) << "\n";
 				// Bounding rect search optimization
-				//BoundingRect moveSearchRect = boundingRectOptimizer.GetBoundingRect(GetCurrentColor());
-				BoundingRect moveSearchRect = BoundingRect(Vec2i(0, 0), Vec2i(20, 20));
+				BoundingRect moveSearchRect = boundingRectOptimizer.GetBoundingRect(GetCurrentColor());
 
 				minShiftX = std::max(moveSearchRect.GetMinBounds().x - piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Shape).GetMaskDimensions().x - 1, 0);
 				minShiftY = std::max(moveSearchRect.GetMinBounds().y - piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Shape).GetMaskDimensions().y - 1, 0);

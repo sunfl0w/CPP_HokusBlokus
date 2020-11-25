@@ -99,7 +99,7 @@ def generateFlippedPieceSetImage(pieceSetImage, tileSize):
     maxY = tileSize
     for i in range(pieceSetTileCount):
         pieceShape = pieceSetImage.crop((minX, minY, maxX, maxY))
-        pieceShape = pieceShape.transpose(Image.FLIP_TOP_BOTTOM)
+        pieceShape = pieceShape.transpose(Image.FLIP_LEFT_RIGHT)
 
         pieceShape = cropImageToContent(pieceShape)
 

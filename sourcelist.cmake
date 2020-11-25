@@ -20,7 +20,6 @@ src/blokus/client/starter.cpp
 src/blokus/client/tcpClient.cpp
 src/blokus/communication/scMessage.cpp
 src/blokus/communication/scMessageConverter.cpp
-src/blokus/debug/debug.cpp
 src/blokus/optimization/boundingRect.cpp
 src/blokus/optimization/boundingRectOptimizer.cpp
 src/pbm/pbmimage.cpp

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <bitset>
+#include <sstream>
 
 #include "vec2i.hpp"
 #include "maskType.hpp"
@@ -24,6 +25,8 @@ namespace HokusBlokus::Blokus {
         const Vec2i& GetMaskDimensions() const;
         
         MaskType GetMaskType() const;
+
+        std::string Draw() const;
 
     private:
         Vec2i ComputeMaskDimensions(const std::bitset<484>& bitmask) const;
