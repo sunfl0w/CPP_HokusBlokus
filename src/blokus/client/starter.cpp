@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
     BlokusClient blokusClient = BlokusClient(&logic);
 
     try {
-    blokusClient.Start(argc, argv);
+        blokusClient.Start(argc, argv);
     } catch(...) {
         Logger::getInstance() << "How could this happen. We are better than this\n";
     }

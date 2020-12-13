@@ -96,6 +96,9 @@
         "coroutine": "cpp",
         "*.ipp": "cpp",
         "__memory": "cpp",
-        "filesystem": "cpp"
+        "filesystem": "cpp",
+        "hash_set": "cpp",
+        "slist": "cpp",
+        "shared_mutex": "cpp"
     }
 }
