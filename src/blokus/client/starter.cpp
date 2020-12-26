@@ -25,18 +25,19 @@ using namespace HokusBlokus::Blokus::Client;
 using namespace HokusBlokus::Util;
 
 int main(int argc, char *argv[]) {
-    Logger::getInstance() << "Hello There\n";
+    Logging::logger = Logging::Logger("HokusBlokus.log", std::filesystem::current_path().string(), true);
+    Logging::logger << "Hello There\n";
 
     HokusBlokus::Blokus::PieceManager::Init(std::filesystem::path(argv[0]).parent_path());
 
-    Logger::getInstance() << "Starting client\n";
+    Logging::logger << "Starting client\n";
     Logic logic = Logic();
     BlokusClient blokusClient = BlokusClient(&logic);
 
     try {
         blokusClient.Start(argc, argv);
     } catch(...) {
-        Logger::getInstance() << "How could this happen. We are better than this\n";
+        Logging::logger << "How could this happen. We are better than this\n";
     }
 
     //BenchmarkGPM(100000);

@@ -9,5 +9,6 @@ include/client
 include/networking
 include/pbm
 include/util
+include/util/logging
 deps/include
 deps/include/pugiXML

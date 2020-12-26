@@ -5,7 +5,6 @@ using namespace HokusBlokus::Util;
 namespace HokusBlokus::Blokus {
 	GameState::GameState() : player0(Color::BLUE, Color::RED), player1(Color::YELLOW, Color::GREEN) {
 		board = Board();
-		colorQueue = ColorQueue();
 		performedMoves = std::vector<Move>();
 		turn = 0;
 	}
@@ -17,7 +16,6 @@ namespace HokusBlokus::Blokus {
 		player0.PopulateUndeployedPieces();
 		player1 = Player(Color::YELLOW, Color::GREEN);
 		player1.PopulateUndeployedPieces();
-		colorQueue = ColorQueue();
 		performedMoves = std::vector<Move>();
 		turn = 0;
 
@@ -33,7 +31,7 @@ namespace HokusBlokus::Blokus {
 	}
 
 	Color GameState::GetCurrentColor() const {
-		return colorQueue.GetCurrentColor();
+		return IntToColor(turn % 4);;
 	}
 
 	Player& GameState::GetCurrentPlayer() {
@@ -50,10 +48,6 @@ namespace HokusBlokus::Blokus {
 		} else {
 			return player1;
 		}
-	}
-
-	ColorQueue& GameState::GetColorQueue() {
-		return colorQueue;
 	}
 
 	std::vector<Move>& GameState::GetPerformedMoves() {
@@ -118,48 +112,11 @@ namespace HokusBlokus::Blokus {
 
 				for (int y = minShiftY; y <= maxShiftY; y++) {
 					for (int x = minShiftX; x <= maxShiftX; x++) {
-						// corner test -> Shape test -> edge test
-						// 1 - 858.000
-						/*if ((piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Corner).GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).any() &&
-                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Shape).GetBitmask() << (x + y * 22) & occupiedMask).none() &&
-                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Edge).GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).none()) {
-                            possibleMoves.emplace_back(Move(Vec2i(x, y), IntToPieceShape(pieceID), GetCurrentColor(), MoveType::SetMove, complementNumber));
-                        }*/
-
-						// 2 - 900.000
-						/*if ((piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Corner).GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).any() &&
-                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Edge).GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).none() &&
-                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Shape).GetBitmask() << (x + y * 22) & occupiedMask).none()) {
-                            possibleMoves.emplace_back(Move(Vec2i(x, y), IntToPieceShape(pieceID), GetCurrentColor(), MoveType::SetMove, complementNumber));
-                        }*/
-
-						// 3 - 1.100.000
-						/*if ((piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Shape).GetBitmask() << (x + y * 22) & occupiedMask).none() &&
-                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Edge).GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).none() &&
-                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Corner).GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).any()) {
-                            possibleMoves.emplace_back(Move(Vec2i(x, y), IntToPieceShape(pieceID), GetCurrentColor(), MoveType::SetMove, complementNumber));
-                        }*/
-
-						// 4 - 1.150.000
 						if ((piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Shape).GetBitmask() << (x + y * 22) & occupiedMask).none() &&
 							(piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Corner).GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).any() &&
 							(piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Edge).GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).none()) {
 							possibleMoves.emplace_back(Move(Vec2i(x, y), IntToPieceShape(pieceID), GetCurrentColor(), MoveType::SetMove, complementNumber));
 						}
-
-						// 5 - 1.000.000
-						/*if ((piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Edge).GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).none() &&
-                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Shape).GetBitmask() << (x + y * 22) & occupiedMask).none() &&
-                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Corner).GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).any()) {
-                            possibleMoves.emplace_back(Move(Vec2i(x, y), IntToPieceShape(pieceID), GetCurrentColor(), MoveType::SetMove, complementNumber));
-                        }*/
-
-						// 6 - 1.050.000
-						/*if ((piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Edge).GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).none() &&
-                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Corner).GetBitmask() << (x + y * 22) & board.GetBitmask(GetCurrentColor())).any() &&
-                            (piece.GetPieceBitmaskComplements()[complementNumber].GetBitmask(MaskType::Shape).GetBitmask() << (x + y * 22) & occupiedMask).none()) {
-                            possibleMoves.emplace_back(Move(Vec2i(x, y), IntToPieceShape(pieceID), GetCurrentColor(), MoveType::SetMove, complementNumber));
-                        }*/
 					}
 				}
 			}
@@ -177,59 +134,35 @@ namespace HokusBlokus::Blokus {
 	}
 
 	void GameState::PerformMove(const Move& move) {
-		// Moves will not be checked for validity to improve performance
-
 		if (move.GetMoveType() == MoveType::SetMove) {
 			board.GetBitmask(GetCurrentColor()) |= (PieceManager::GetPiece(move.GetPieceShape()).GetPieceBitmaskComplements()[move.GetComplementNumber()].GetBitmask(MaskType::Shape).GetBitmask()
 													<< (move.GetDestination().x + move.GetDestination().y * 22));
 			GetCurrentPlayer().RemoveUndeployedPieceShape(move.GetColor(), move.GetPieceShape());
-
-			if (GetCurrentPlayer().GetUndeployedPieceShapeIDs(move.GetColor()).empty()) {
-				colorQueue.RemoveColor(move.GetColor());
-			}
 		}
 
-		if (move.GetMoveType() == MoveType::PassMove) {
-			colorQueue.RemoveColor(move.GetColor());
-		}
-
-		// Optimize bounding rects for the move search
 		boundingRectOptimizer.OptimizeBoundingRectOfColor(GetCurrentColor(), GetBoard());
 
 		turn++;
 		performedMoves.push_back(move);
-		colorQueue.Advance();
 	}
 
 	void GameState::UndoLastMove() {
-		// Last performed move will not be checked for validity to improve performance
-
 		Move lastMove = performedMoves[performedMoves.size() - 1];
 
 		if (lastMove.GetMoveType() == MoveType::SetMove) {
 			std::bitset<484> bitmask = PieceManager::GetPiece(lastMove.GetPieceShape()).GetPieceBitmaskComplements()[lastMove.GetComplementNumber()].GetBitmask(MaskType::Shape).GetBitmask();
 			board.GetBitmask(lastMove.GetColor()) &= (bitmask << (lastMove.GetDestination().x + lastMove.GetDestination().y * 22)).flip();
 			GetPlayerWithColor(lastMove.GetColor()).AddUndeployedPieceShape(lastMove.GetColor(), lastMove.GetPieceShape());
-
-			if (colorQueue.WasColorRemoved(lastMove.GetColor())) {
-				colorQueue.AddColor(lastMove.GetColor());
-			}
 		}
 
-		if (lastMove.GetMoveType() == MoveType::PassMove) {
-			colorQueue.AddColor(lastMove.GetColor());
-		}
-
-        // Optimize bounding rects for the move search
 		boundingRectOptimizer.OptimizeBoundingRectOfColor(GetCurrentColor(), GetBoard());
 
 		turn--;
 		performedMoves.pop_back();
-		colorQueue.Revert();
 	}
 
 	bool GameState::IsGameOver() const {
-		if (turn >= 100 || !colorQueue.HasActivePlayers()) {
+		if (turn >= 100) {
 			return true;
 		}
 		return false;

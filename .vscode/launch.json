@@ -17,6 +17,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/bin/CPP_HokusBlokus_Starter",
+            "args": ["--verbose"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

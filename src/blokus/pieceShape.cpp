@@ -101,7 +101,7 @@ namespace HokusBlokus::Blokus {
         } else if(pieceShapeString == "PENTO_S") {
             return PieceShape::PENTO_S;
         } else {
-            Logger::getInstance() << "Unable to convert: " << pieceShapeString << " to a valid PieceShape.\n";
+            Logging::logger << "Unable to convert: " << pieceShapeString << " to a valid PieceShape.\n";
             exit(1);
         }
     }

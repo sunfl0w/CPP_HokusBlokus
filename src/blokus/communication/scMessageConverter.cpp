@@ -93,7 +93,7 @@ namespace HokusBlokus::Blokus::Communication {
 	}
 
 	SC_Message SC_MessageConverter::CreateMoveMessage(const HokusBlokus::Blokus::Move &move, const std::string &roomID) {
-		Logger::getInstance() << "Creating move\n";
+		Logging::logger << "Creating move\n";
 
 		pugi::xml_document moveMessageDoc;
 
@@ -121,12 +121,11 @@ namespace HokusBlokus::Blokus::Communication {
 			destinationNode.append_attribute("y").set_value(move.GetDestination().y);
 
 		} else if (move.GetMoveType() == MoveType::SkipMove) {
-			pugi::xml_node dataNode = roomNode.append_child("data");
 			dataNode.append_attribute("class").set_value("sc.plugin2021.SkipMove");
-			pugi::xml_node pieceNode = dataNode.append_child("piece");
-			pieceNode.append_attribute("color").set_value(ColorToString(move.GetColor()).c_str());
+			pugi::xml_node colorNode = dataNode.append_child("color");
+			colorNode.append_child(pugi::node_pcdata).set_value(ColorToString(move.GetColor()).c_str());
 		} else {
-			Logger::getInstance() << "It is not allowed to send pass moves. This should never happen anyways :C\n";
+			Logging::logger << "It is not allowed to send pass moves. This should never happen anyways :C\n";
 			exit(1);
 		}
 
@@ -166,10 +165,7 @@ namespace HokusBlokus::Blokus::Communication {
 
 		for (pugi::xml_attribute stateAttribute : roomNode.child("data").child("state").attributes()) {
 			std::string stateAttributeName(stateAttribute.name());
-			if (stateAttributeName == "currentColorIndex") {
-				int currentColorID = std::stoi(stateAttribute.value());
-				gameState.GetColorQueue().SetCurrentColor(IntToColor(currentColorID));
-			} else if (stateAttributeName == "turn") {
+			if (stateAttributeName == "turn") {
 				gameState.SetTurn(std::stoi(stateAttribute.value()));
 			} else if (stateAttributeName == "startPiece") {
 				std::string startPieceString = stateAttribute.value();
@@ -261,22 +257,6 @@ namespace HokusBlokus::Blokus::Communication {
 				colorsInGame.push_back(Color::RED);
 			} else if (std::string(colorNode.value()) == "GREEN") {
 				colorsInGame.push_back(Color::GREEN);
-			}
-
-			if (std::find(colorsInGame.begin(), colorsInGame.end(), Color::BLUE) == colorsInGame.end()) {
-				gameState.GetColorQueue().RemoveColor(Color::BLUE);
-			}
-
-			if (std::find(colorsInGame.begin(), colorsInGame.end(), Color::YELLOW) == colorsInGame.end()) {
-				gameState.GetColorQueue().RemoveColor(Color::YELLOW);
-			}
-
-			if (std::find(colorsInGame.begin(), colorsInGame.end(), Color::RED) == colorsInGame.end()) {
-				gameState.GetColorQueue().RemoveColor(Color::RED);
-			}
-
-			if (std::find(colorsInGame.begin(), colorsInGame.end(), Color::GREEN) == colorsInGame.end()) {
-				gameState.GetColorQueue().RemoveColor(Color::GREEN);
 			}
 		}
 

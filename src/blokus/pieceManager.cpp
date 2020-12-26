@@ -11,7 +11,7 @@ namespace HokusBlokus::Blokus {
 		for (unsigned int i = 0; i < 21; i++) {
 			pieces.push_back(Piece(std::vector<PieceBitmaskComplement>(complementsPerPiece[i].begin(), complementsPerPiece[i].end())));
 		}
-		Logger::getInstance() << "Piecemanager initialized\n";
+		Logging::logger << "Piecemanager initialized\n";
 	}
 
 	Piece& PieceManager::GetPiece(PieceShape pieceShape) {
@@ -23,16 +23,16 @@ namespace HokusBlokus::Blokus {
 	std::array<std::array<PieceBitmaskComplement, 8>, 21> PieceManager::LoadBitmasks(const std::string& pathToResources) {
 		std::array<std::array<PieceBitmaskComplement, 8>, 21> complementsPerPiece = std::array<std::array<PieceBitmaskComplement, 8>, 21>();
 
-		Logger::getInstance() << "Path to generated resources:" + pathToResources + "\n";
+		Logging::logger << "Path to generated resources:" + pathToResources + "\n";
 		if (!std::filesystem::exists(pathToResources)) {
-			Logger::getInstance() << "Path to generated resources does not exist. Were the resources generated?\n";
+			Logging::logger << "Path to generated resources does not exist. Were the resources generated?\n";
 			exit(1);
 		}
 
 		for (int i = 0; i < 8; i++) {
 			std::string pathToComplement = pathToResources + "/Complement_" + std::to_string(i) + "/";
 			if (!std::filesystem::exists(pathToComplement)) {
-				Logger::getInstance() << "Path to complement" << i << " was not found. Were the resources generated?\n";
+				Logging::logger << "Path to complement" << i << " was not found. Were the resources generated?\n";
 				exit(1);
 			}
 

@@ -1,6 +1,5 @@
 src/blokus/board.cpp
 src/blokus/color.cpp
-src/blokus/colorQueue.cpp
 src/blokus/gameState.cpp
 src/blokus/helpers.cpp
 src/blokus/maskType.cpp
