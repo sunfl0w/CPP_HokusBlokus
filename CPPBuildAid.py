@@ -6,95 +6,31 @@ import os
 import glob
 import time
 
+import xml.etree.ElementTree as ET
 
-def generateSourceList():
-    sourceFileLines = 0
-
-    sourceFiles = []
-    sourcePath = os.path.join(os.getcwd(), "src")
-    sourcePathDependencies = os.path.join(os.getcwd(), "deps/src")
-
-    # Adding source files
-    if (sourcePath):
-        for dirpath, dirs, files in os.walk(sourcePath):
-            for filename in files:
-                if(str(filename).endswith('.c') or str(filename).endswith('.cpp')):
-                    relativeFilePath = os.path.relpath(os.path.join(dirpath, filename), os.getcwd())
-                    sourceFiles.append(relativeFilePath)
-                    with open(os.path.join(dirpath, filename), "r") as sourcefile:
-                        sourceFileLines += len(sourcefile.readlines())
-    else:
-        print("Unable to find src directory. Terminating")
-        exit(1)
-
-    # Adding source files of external dependencies
-    if (sourcePathDependencies):
-        for dirpath, dirs, files in os.walk(sourcePathDependencies):
-            for filename in files:
-                if(str(filename).endswith('.c') or str(filename).endswith('.cpp')):
-                    relativeFilePath = os.path.relpath(os.path.join(dirpath, filename), os.getcwd())
-                    sourceFiles.append(relativeFilePath)
-
-    print("Total source code lines: {}".format(sourceFileLines))
-    return sourceFiles
+# Version 2.0.0
+# Published under MIT license. Copyright (c) 2020 sunfl0w
 
 
-def generateIncludeList():
-    headerFileLines = 0
-
-    headerFileDirectories = []
-    includePath = os.path.join(os.getcwd(), "include")
-    includePathDependencies = os.path.join(os.getcwd(), "deps/include")
-
-    # Adding header files
-    if (includePath):
-        for dirpath, dirs, files in os.walk(includePath):
-            relativeDirectoryPath = os.path.relpath(dirpath, os.getcwd())
-            headerFileDirectories.append(relativeDirectoryPath)
-
-            # Counting headerfile lines of code
-            for filename in files:
-                if(str(filename).endswith('.h') or str(filename).endswith('.hpp')):
-                    with open(os.path.join(dirpath, filename), "r") as headerfile:
-                        headerFileLines += len(headerfile.readlines())
-    else:
-        print("Unable to find include directory. Terminating")
-        exit(1)
-
-    # Adding header files of external dependencies
-    if (includePathDependencies):
-        for dirpath, dirs, files in os.walk(includePathDependencies):
-            relativeDirectoryPath = os.path.relpath(dirpath, os.getcwd())
-            headerFileDirectories.append(relativeDirectoryPath)
-
-    print("Total header code lines: {}".format(headerFileLines))
-    return headerFileDirectories
-
-
-def generateSwigInterface(swigLanguage):
-    if(swigLanguage == "python"):
-        subprocess.call(["swig", "-c++", "-wall", "-doxygen", "-python", "-py3", "-o", "swigInterface.cpp", "-oh", "swigInterface.hpp", "-outdir", "swigOut", "swig.i"])
-    else:
-        print("Swig language not supportet")
-        exit(1)
-    
-    os.replace("swigInterface.hpp", "include/swig/swigInterface.hpp")
-    os.replace("swigInterface.cpp", "src/swig/swigInterface.cpp")
+def main():
+    build(sys.argv)
 
 
 def build(argv):
     print("Starting CPPBuildAid")
     startTime = time.time_ns()
 
+    # Parsing command line arguments
     argumentParser = argparse.ArgumentParser()
     argumentParser.add_argument("-b", "--buildType")
     argumentParser.add_argument("-t", "--threads")
+    argumentParser.add_argument("-i", "--installLocal", action='store_true')
     argumentParser.add_argument("-s", "--useSwig", action='store_true')
     argumentParser.add_argument("-l", "--swigLanguage")
 
     args = argumentParser.parse_args()
 
-    typeOfBuild = args.buildType
+    typeOfBuild = "debug"
     if(args.buildType == "release"):
         typeOfBuild = "release"
 
@@ -108,35 +44,148 @@ def build(argv):
     if(useSwig):
         generateSwigInterface(swigLanguage);
 
-    relativeSourceFilePaths = generateSourceList()
-    sourceListFile = open("sourcelist.cmake", "w")
-    for relativeSourceFilePath in relativeSourceFilePaths:
-        sourceListFile.write(relativeSourceFilePath + "\n")
-    sourceListFile.close()
+    # Read project description
+    projectDescription = readProjectDescriptionFile("projectDescription.xml")
 
-    relativeHeaderFileDirectories = generateIncludeList()
-    includeListFile = open("includelist.cmake", "w")
-    for relativeHeaderFileDirectory in relativeHeaderFileDirectories:
-        includeListFile.write(relativeHeaderFileDirectory + "\n")
-    includeListFile.close()
+    # Generating include list and source list files
+    print("Generating include list")
+    includeSearch = listFilesOfTypeInDirectories(projectDescription[0], (".h", ".hpp"))
+    print("Saving include list")
+    saveStringsInFile(includeSearch[1], "includelist.cmake")
 
+    print("Generating source list")
+    sourceSearch = listFilesOfTypeInDirectories(projectDescription[1], (".c", ".cpp"))
+    print("Saving source list")
+    saveStringsInFile(sourceSearch[0], "sourcelist.cmake")
+
+    # Count lines of code
+    headerCodeLines = countLinesOfCode(includeSearch[0], projectDescription[2])
+    sourceCodeLines = countLinesOfCode(sourceSearch[0], projectDescription[2])
+
+    print("Headers: Total lines of code: " + str(headerCodeLines))
+    print("Sources: Total lines of code: " + str(sourceCodeLines))
+    print("Project: Total lines of code: " + str(headerCodeLines + sourceCodeLines))
+
+    # Running cmake with specified arguments
     print("Running cmake")
     print("Using {} threads to build in {}-mode".format(threads, typeOfBuild))
 
-    subprocess.call(["cmake", "-S.", "-Bbuild"])
-    resultBuildType = subprocess.call(["cmake", "-DCMAKE_BUILD_TYPE={}".format(typeOfBuild.capitalize()), "."], cwd="build")
-    resultBuild = subprocess.call(["cmake", "--build", ".", "-j", str(threads)], cwd="build")
+    resultSetDirs = subprocess.call(["cmake", "-S", ".", "-B", "build"])
+    if resultSetDirs:
+        print("Setting cmake directories failed with errors")
+        exit(1)
 
-    if(resultBuildType != 0 or resultBuild != 0):
+    resultBuildType = subprocess.call(["cmake", "-DCMAKE_BUILD_TYPE={}".format(typeOfBuild.capitalize()), "."], cwd="build")
+    if resultBuildType:
+        print("Build type setting failed with errors")
+        exit(1)
+
+    resultBuild = subprocess.call(["cmake", "--build", ".", "-j", str(threads)], cwd="build")
+    if resultBuild:
         print("Build failed with errors")
         exit(1)
 
+    if args.installLocal:
+        resultInstall = subprocess.call(["cmake", "--install", "."], cwd="build")
+        if resultInstall:
+            print("Installing build software failed with errors")
+            exit(1)
+
     buildTime = round((time.time_ns() - startTime) / pow(10, 9), 2)
-    print("Build completed successfully in {}s.".format(buildTime))
+    print("Build completed successfully in {}s".format(buildTime))
 
 
-def main():
-    build(sys.argv)
+def readProjectDescriptionFile(path):
+    with open(path, "r") as xmlFile:
+        templateDoc = ET.parse(xmlFile)
+        root = templateDoc.getroot()
+
+        includeDirs = []
+        includeDirsNode = root.find("IncludeDirs")
+        if includeDirsNode:
+            includeDirs = readDirectoryPathsFromNode(includeDirsNode)
+
+        sourceDirs = []
+        sourceDirsNode = root.find("SourceDirs")
+        if sourceDirsNode:
+            sourceDirs = readDirectoryPathsFromNode(sourceDirsNode)
+
+        notCountedDirs = []
+        notCountedDirsNode = root.find("NotCountedDirs")
+        if notCountedDirsNode:
+            notCountedDirs = readDirectoryPathsFromNode(notCountedDirsNode)
+
+        return (includeDirs, sourceDirs, notCountedDirs)
+
+
+def readDirectoryPathsFromNode(node):
+    directories = []
+    for directoryNode in node.iter("Dir"):
+        directories.append(directoryNode.attrib.get("path"))
+    return directories
+
+
+def listFilesOfTypeInDirectories(directoryPathsToSearch, fileExtensions):
+    filePaths = []
+    populatedDirectoryPaths = []
+
+    for directoryPath in directoryPathsToSearch:
+        directoryPath = os.path.join(os.getcwd(), directoryPath)
+        if directoryPath:
+            for dirpath, dirs, files in os.walk(directoryPath):
+                relativeDirectoryPath = os.path.relpath(dirpath, os.getcwd())
+                if relativeDirectoryPath not in populatedDirectoryPaths:
+                    populatedDirectoryPaths.append(relativeDirectoryPath)
+                for filename in files:
+                    filePath = os.path.relpath(os.path.join(dirpath, filename), os.getcwd())
+                    if isFileOfType(filename, fileExtensions) and filePath not in filePaths:
+                        filePaths.append(filePath)
+
+    return (filePaths, populatedDirectoryPaths)
+
+
+def isFileOfType(filename, fileExtensions):
+    for fileExtension in fileExtensions:
+        if(str(filename).endswith(fileExtension)):
+            return True
+    return False
+
+
+def saveStringsInFile(strings, filename):
+    file = open(filename, "w")
+    for entry in strings:
+        file.write(entry + "\n")
+    file.close()
+
+
+def countLinesOfCode(filePaths, ignoredDirectories):
+    linesOfCode = 0
+    for filePath in filePaths:
+        if not isFileChildOfDirectories(filePath, ignoredDirectories):
+            with open(filePath, "r") as file:
+                linesOfCode += len(file.readlines())
+    return linesOfCode
+
+
+def isFileChildOfDirectories(filePath, directories):
+    absFilePath = os.path.abspath(filePath)
+    for directory in directories:
+        absDirectoryPath = os.path.abspath(directory)
+        commonPath = os.path.commonpath([absDirectoryPath, absFilePath])
+        if absDirectoryPath == commonPath:
+            return True
+    return False
+
+
+def generateSwigInterface(swigLanguage):
+    if(swigLanguage == "python"):
+        subprocess.call(["swig", "-c++", "-wall", "-doxygen", "-python", "-py3", "-o", "swigInterface.cpp", "-oh", "swigInterface.hpp", "-outdir", "swigOut", "swig.i"])
+    else:
+        print("Swig language not supportet")
+        exit(1)
+    
+    os.replace("swigInterface.hpp", "include/swig/swigInterface.hpp")
+    os.replace("swigInterface.cpp", "src/swig/swigInterface.cpp")
 
 
 if __name__ == "__main__":

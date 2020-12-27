@@ -2,6 +2,7 @@
 /build/*
 /bin/*
 /generatedResources/*
+/swigOut/*
 
 # Prerequisites
 *.d
