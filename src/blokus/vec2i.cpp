@@ -1,6 +1,8 @@
 #include "vec2i.hpp"
 
 namespace HokusBlokus::Blokus {
+    Vec2i::Vec2i() {}
+    
     Vec2i::Vec2i(int x, int y) :x(x), y(y) {
     }
 

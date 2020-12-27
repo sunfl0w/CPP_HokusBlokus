@@ -18,6 +18,8 @@ namespace HokusBlokus::Blokus {
         int complementNumber;
 
     public:
+        Move();
+        
         Move(Vec2i destination, PieceShape pieceShape, Color color, MoveType moveType, int complementNumber);
 
         bool operator==(const Move& other);

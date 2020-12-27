@@ -1,6 +1,8 @@
 #include "move.hpp"
 
 namespace HokusBlokus::Blokus {
+    Move::Move() {}
+    
     Move::Move(Vec2i destination, PieceShape pieceShape, Color color, MoveType moveType, int complementNumber) : destination(destination) {
         this->pieceShape = pieceShape;
         this->color = color;

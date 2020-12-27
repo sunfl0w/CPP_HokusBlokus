@@ -71,6 +71,17 @@ def generateIncludeList():
     return headerFileDirectories
 
 
+def generateSwigInterface(swigLanguage):
+    if(swigLanguage == "python"):
+        subprocess.call(["swig", "-c++", "-wall", "-doxygen", "-python", "-py3", "-o", "swigInterface.cpp", "-oh", "swigInterface.hpp", "-outdir", "swigOut", "swig.i"])
+    else:
+        print("Swig language not supportet")
+        exit(1)
+    
+    os.replace("swigInterface.hpp", "include/swig/swigInterface.hpp")
+    os.replace("swigInterface.cpp", "src/swig/swigInterface.cpp")
+
+
 def build(argv):
     print("Starting CPPBuildAid")
     startTime = time.time_ns()
@@ -78,16 +89,24 @@ def build(argv):
     argumentParser = argparse.ArgumentParser()
     argumentParser.add_argument("-b", "--buildType")
     argumentParser.add_argument("-t", "--threads")
+    argumentParser.add_argument("-s", "--useSwig", action='store_true')
+    argumentParser.add_argument("-l", "--swigLanguage")
 
     args = argumentParser.parse_args()
 
-    typeOfBuild = "debug"
+    typeOfBuild = args.buildType
     if(args.buildType == "release"):
         typeOfBuild = "release"
 
     threads = 1
     if(args.threads is not None and int(args.threads) >= 1):
         threads = args.threads
+
+    useSwig = args.useSwig
+    swigLanguage = args.swigLanguage
+
+    if(useSwig):
+        generateSwigInterface(swigLanguage);
 
     relativeSourceFilePaths = generateSourceList()
     sourceListFile = open("sourcelist.cmake", "w")

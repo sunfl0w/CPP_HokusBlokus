@@ -5,9 +5,8 @@ include/blokus/benchmark
 include/blokus/client
 include/blokus/communication
 include/blokus/optimization
-include/client
-include/networking
 include/pbm
+include/swig
 include/util
 include/util/logging
 deps/include

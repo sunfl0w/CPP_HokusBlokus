@@ -1,7 +1,6 @@
 src/blokus/board.cpp
 src/blokus/color.cpp
 src/blokus/gameState.cpp
-src/blokus/helpers.cpp
 src/blokus/maskType.cpp
 src/blokus/move.cpp
 src/blokus/piece.cpp
@@ -23,5 +22,6 @@ src/blokus/optimization/boundingRect.cpp
 src/blokus/optimization/boundingRectOptimizer.cpp
 src/pbm/pbmimage.cpp
 src/pbm/pbmloader.cpp
+src/swig/swigInterface.cpp
 src/util/logger.cpp
 deps/src/pugiXML/pugixml.cpp
