@@ -13,6 +13,7 @@
 namespace HokusBlokus::Blokus::AI {
     /**
      * @brief This class defines some virtual methods for creating AIs for the game of Blokus.
+     * One can inherit from this class to create a new logic.
      * 
      */
     class Logic {

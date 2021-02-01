@@ -6,15 +6,11 @@ Information about the used license my be found in the LICENSE file.
 #### Acknowledgements and license notices of third party software
 Acknowledgements and license notices may be found in the Acknowledgements.md.
 
-#### Short description of CPP_Tracer
+#### Short description of CPP_HokusBlokus
 CPP_HokusBlokus is a implementation of the game Blokus for the Software-Challange Germany 2020/2021. The software will make extensive use of bitsets and bit operators.
-There is a chance that parallel processing might be implemented to boost performance using a multi core processor or a GPU. This will not help on the server of the SCG but will make life a lot easier for people wanting a fast software for rapid testing and training of computer clients. Either way the software will as always be optimized to the limit and as far as my programming knowledge will take me :D
 
 #### Setup
-Before using this implementation the script '''PieceSetGenerator.py''' must be run. This will create several binary images in a generatedResources directory for later use. The software will need these files later for initialization so they should be always shipped with a client.
+Before using this implementation the script '''PieceSetGenerator.py''' must be run. This will create several binary images in a generatedResources directory for later use. The software will need these files later for initialization so they should be always shipped alongside client. The client can easily be compiled with the help of CPPBuildAid.py with these commands: '''python CPPBuildAid.py -b release''' or '''python CPPBuildAid.py -b debug'''. Compile options can be changed in the CMakeLists.txt.
 
 #### Suggestions and cooperation
 I will gladly take any bugreports or feedback on the software. If you want to help improve the code, then feel free to do so.
-
-#### Note
-This project is actively worked on. Releases will be made when everyting is somewhat working.

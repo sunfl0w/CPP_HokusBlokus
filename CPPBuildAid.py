@@ -1,3 +1,5 @@
+# Version 1.2.0
+
 import sys
 import argparse
 import subprocess
@@ -7,9 +9,6 @@ import glob
 import time
 
 import xml.etree.ElementTree as ET
-
-# Version 2.0.0
-# Published under MIT license. Copyright (c) 2020 sunfl0w
 
 
 def main():
@@ -25,8 +24,6 @@ def build(argv):
     argumentParser.add_argument("-b", "--buildType")
     argumentParser.add_argument("-t", "--threads")
     argumentParser.add_argument("-i", "--installLocal", action='store_true')
-    argumentParser.add_argument("-s", "--useSwig", action='store_true')
-    argumentParser.add_argument("-l", "--swigLanguage")
 
     args = argumentParser.parse_args()
 
@@ -38,25 +35,28 @@ def build(argv):
     if(args.threads is not None and int(args.threads) >= 1):
         threads = args.threads
 
-    useSwig = args.useSwig
-    swigLanguage = args.swigLanguage
-
-    if(useSwig):
-        generateSwigInterface(swigLanguage);
-
     # Read project description
     projectDescription = readProjectDescriptionFile("projectDescription.xml")
 
     # Generating include list and source list files
-    print("Generating include list")
-    includeSearch = listFilesOfTypeInDirectories(projectDescription[0], (".h", ".hpp"))
-    print("Saving include list")
-    saveStringsInFile(includeSearch[1], "includelist.cmake")
+    if not os.path.exists("cmakeListings"):
+        os.mkdir("cmakeListings")
 
-    print("Generating source list")
+    print("Generating include lists")
+    includeSearch = listFilesOfTypeInDirectories(projectDescription[0], (".h", ".hpp"))
+    print("Saving include lists")
+    saveStringsInFile(includeSearch[0], "cmakeListings/includeFilesAbs.cmake")
+    saveStringsInFile(includeSearch[1], "cmakeListings/includeFilesRel.cmake")
+    saveStringsInFile(includeSearch[2], "cmakeListings/includeDirsAbs.cmake")
+    saveStringsInFile(includeSearch[3], "cmakeListings/includeDirsRel.cmake")
+
+    print("Generating source lists")
     sourceSearch = listFilesOfTypeInDirectories(projectDescription[1], (".c", ".cpp"))
-    print("Saving source list")
-    saveStringsInFile(sourceSearch[0], "sourcelist.cmake")
+    print("Saving source lists")
+    saveStringsInFile(sourceSearch[0], "cmakeListings/sourceFilesAbs.cmake")
+    saveStringsInFile(sourceSearch[1], "cmakeListings/sourceFilesRel.cmake")
+    saveStringsInFile(sourceSearch[2], "cmakeListings/sourceDirsAbs.cmake")
+    saveStringsInFile(sourceSearch[3], "cmakeListings/sourceDirsRel.cmake")
 
     # Count lines of code
     headerCodeLines = countLinesOfCode(includeSearch[0], projectDescription[2])
@@ -126,22 +126,27 @@ def readDirectoryPathsFromNode(node):
 
 
 def listFilesOfTypeInDirectories(directoryPathsToSearch, fileExtensions):
-    filePaths = []
-    populatedDirectoryPaths = []
+    filePathsAbs = []
+    filePathsRel = []
+    populatedDirectoryPathsAbs = []
+    populatedDirectoryPathsRel = []
 
     for directoryPath in directoryPathsToSearch:
         directoryPath = os.path.join(os.getcwd(), directoryPath)
         if directoryPath:
             for dirpath, dirs, files in os.walk(directoryPath):
                 relativeDirectoryPath = os.path.relpath(dirpath, os.getcwd())
-                if relativeDirectoryPath not in populatedDirectoryPaths:
-                    populatedDirectoryPaths.append(relativeDirectoryPath)
+                if relativeDirectoryPath not in populatedDirectoryPathsAbs:
+                    populatedDirectoryPathsAbs.append(os.path.abspath(relativeDirectoryPath))
+                    populatedDirectoryPathsRel.append(relativeDirectoryPath)
                 for filename in files:
                     filePath = os.path.relpath(os.path.join(dirpath, filename), os.getcwd())
-                    if isFileOfType(filename, fileExtensions) and filePath not in filePaths:
-                        filePaths.append(filePath)
+                    if isFileOfType(filename, fileExtensions) and filePath not in filePathsAbs:
+                        filePathsAbs.append(os.path.abspath(filePath))
+                    if isFileOfType(filename, fileExtensions) and filePath not in filePathsRel:
+                        filePathsRel.append(filePath)
 
-    return (filePaths, populatedDirectoryPaths)
+    return (filePathsAbs, filePathsRel, populatedDirectoryPathsAbs, populatedDirectoryPathsRel)
 
 
 def isFileOfType(filename, fileExtensions):
@@ -175,17 +180,6 @@ def isFileChildOfDirectories(filePath, directories):
         if absDirectoryPath == commonPath:
             return True
     return False
-
-
-def generateSwigInterface(swigLanguage):
-    if(swigLanguage == "python"):
-        subprocess.call(["swig", "-c++", "-wall", "-doxygen", "-python", "-py3", "-o", "swigInterface.cpp", "-oh", "swigInterface.hpp", "-outdir", "swigOut", "swig.i"])
-    else:
-        print("Swig language not supportet")
-        exit(1)
-    
-    os.replace("swigInterface.hpp", "include/swig/swigInterface.hpp")
-    os.replace("swigInterface.cpp", "src/swig/swigInterface.cpp")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,11 @@
+src
+src/blokus
+src/blokus/ai
+src/blokus/benchmark
+src/blokus/client
+src/blokus/communication
+src/blokus/optimization
+src/pbm
+src/util
+deps/src
+deps/src/pugiXML

@@ -8,13 +8,7 @@
         <Dir path="deps/src"/>
     </SourceDirs>
     <NotCountedDirs>
-        <Dir path="include/deps"/>
-        <Dir path="include/dependencies"/>
-        <Dir path="include/ext"/>
-        <Dir path="include/external"/>
-        <Dir path="src/deps"/>
-        <Dir path="src/dependencies"/>
-        <Dir path="src/ext"/>
-        <Dir path="src/external"/>
+        <Dir path="deps/include"/>
+        <Dir path="deps/src"/>
     </NotCountedDirs>
 </ProjectDescription>

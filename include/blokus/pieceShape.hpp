@@ -6,6 +6,10 @@
 #include "logger.hpp"
 
 namespace HokusBlokus::Blokus {
+    /**
+     * @brief Represents a PieceShape of a Blokus Piece
+     * 
+     */
     enum class PieceShape {
         MONOMINO = 0,
         DOMINO = 1,
@@ -30,11 +34,35 @@ namespace HokusBlokus::Blokus {
         PENTO_S = 20
     };
 
+    /**
+     * @brief Converts a PieceShape to an int
+     * 
+     * @param pieceShape The PieceShape to convert
+     * @return int 
+     */
     int PieceShapeToInt(PieceShape pieceShape);
 
+    /**
+     * @brief Converts a PieceShape to a String
+     * 
+     * @param pieceShape The PieceShape to convert
+     * @return std::string 
+     */
     std::string PieceShapeToString(PieceShape pieceShape);
 
+    /**
+     * @brief Converts an int to a PieceShape
+     * 
+     * @param value The int to convert
+     * @return PieceShape 
+     */
     PieceShape IntToPieceShape(int value);
 
+    /**
+     * @brief Converts a String to a PieceShape
+     * 
+     * @param pieceShapeString The String to convert
+     * @return PieceShape 
+     */
     PieceShape StringToPieceShape(std::string pieceShapeString);
 }

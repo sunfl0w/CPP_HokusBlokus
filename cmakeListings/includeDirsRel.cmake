@@ -6,7 +6,6 @@ include/blokus/client
 include/blokus/communication
 include/blokus/optimization
 include/pbm
-include/swig
 include/util
 include/util/logging
 deps/include

@@ -37,7 +37,8 @@ int main(int argc, char *argv[]) {
     try {
         blokusClient.Start(argc, argv);
     } catch(...) {
-        Logging::logger << "How could this happen. We are better than this\n";
+        Logging::logger << "Some error occured.\n";
+        Logging::logger << "How could this happen? We are better than this.\n";
     }
 
     //BenchmarkGPM(100000);

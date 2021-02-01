@@ -1,0 +1,12 @@
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/include
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/include/blokus
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/include/blokus/ai
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/include/blokus/benchmark
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/include/blokus/client
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/include/blokus/communication
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/include/blokus/optimization
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/include/pbm
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/include/util
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/include/util/logging
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/deps/include
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Socha/Blokus/CPP_HokusBlokus/deps/include/pugiXML

@@ -16,7 +16,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/CPP_HokusBlokus_Starter",
+            "program": "${workspaceFolder}/bin/CPP_HokusBlokus",
             "args": ["--verbose"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
