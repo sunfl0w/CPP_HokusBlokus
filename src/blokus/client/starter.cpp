@@ -41,18 +41,8 @@ int main(int argc, char *argv[]) {
         Logging::logger << "How could this happen? We are better than this.\n";
     }
 
-    //BenchmarkGPM(100000);
+    //benchmarkGPM(1000);
+    //perft(7);
 
-    /*GameState gameState = GameState();
-    gameState.InitStartingGameState();
-    gameState.Draw();
-    srand(time(NULL));
-    while(!gameState.IsGameOver()) {
-        std::vector<Move> possibleMoves = gameState.GetPossibleMoves();
-        gameState.PerformMove(possibleMoves[rand() % possibleMoves.size()]);
-
-        gameState.Draw();
-        int x = 0;
-    }*/
     return 0;
 }

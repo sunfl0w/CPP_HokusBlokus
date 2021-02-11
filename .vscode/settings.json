@@ -99,6 +99,9 @@
         "filesystem": "cpp",
         "hash_set": "cpp",
         "slist": "cpp",
-        "shared_mutex": "cpp"
+        "shared_mutex": "cpp",
+        "any": "cpp",
+        "source_location": "cpp",
+        "semaphore": "cpp"
     }
 }

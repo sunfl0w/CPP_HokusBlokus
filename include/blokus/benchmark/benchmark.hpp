@@ -10,5 +10,20 @@ namespace HokusBlokus::Blokus::Benchmark {
      * 
      * @param benchmarkTime The time in ms to benchmark
      */
-    void BenchmarkGPM(unsigned int benchmarkTime);
+    void benchmarkGPM(unsigned int benchmarkTime);
+
+    /**
+     * @brief Simple perft benchmark
+     * 
+     * @param depth Depth to fully search to
+     */
+    void perft(int depth);
+
+    /**
+     * @brief Simple recursive perft call
+     * 
+     * @param depth Current perft depth
+     * @param gameState Current GameState
+     */
+    long perftRecursive(int depth, GameState& gameState);
 }
