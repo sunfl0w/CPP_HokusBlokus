@@ -38,18 +38,6 @@ namespace HokusBlokus::Blokus {
         MoveType moveType;
 
         /**
-         * @brief Rotation of the moved Piece
-         * 
-         */
-        PieceRotation pieceRotation;
-
-        /**
-         * @brief Mirror state of the moved Piece
-         * 
-         */
-        bool mirrored;
-
-        /**
          * @brief Complement number of the move Piece. Used mostly internally
          * 
          */

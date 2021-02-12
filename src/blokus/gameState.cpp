@@ -31,7 +31,8 @@ namespace HokusBlokus::Blokus {
 	}
 
 	Color GameState::GetCurrentColor() const {
-		return IntToColor(turn % 4);;
+		return IntToColor(turn % 4);
+		;
 	}
 
 	Player& GameState::GetCurrentPlayer() {
@@ -155,9 +156,17 @@ namespace HokusBlokus::Blokus {
 			GetPlayerWithColor(lastMove.GetColor()).AddUndeployedPieceShape(lastMove.GetColor(), lastMove.GetPieceShape());
 		}
 
-		boundingRectOptimizer.OptimizeBoundingRectOfColor(GetCurrentColor(), GetBoard());
+		//boundingRectOptimizer.OptimizeBoundingRectOfColor(GetCurrentColor(), GetBoard());
 
 		turn--;
+
+		if(turn < 4) {
+			boundingRectOptimizer = BoundingRectOptimizer();
+		} else {
+			//boundingRectOptimizer.OptimizeBoundingRectOfColor(GetCurrentColor(), GetBoard());
+			boundingRectOptimizer.OptimizeBoundingRectOfColorRevertedMove(GetCurrentColor(), GetBoard());
+		}
+
 		performedMoves.pop_back();
 	}
 

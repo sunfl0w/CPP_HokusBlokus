@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
 
     HokusBlokus::Blokus::PieceManager::Init(std::filesystem::path(argv[0]).parent_path());
 
-    Logging::logger << "Starting client\n";
+    /*Logging::logger << "Starting client\n";
     Logic logic = Logic();
     BlokusClient blokusClient = BlokusClient(&logic);
 
@@ -39,10 +39,9 @@ int main(int argc, char *argv[]) {
     } catch(...) {
         Logging::logger << "Some error occured.\n";
         Logging::logger << "How could this happen? We are better than this.\n";
-    }
+    }*/
 
-    //benchmarkGPM(1000);
-    //perft(7);
+    perft(7);
 
     return 0;
 }

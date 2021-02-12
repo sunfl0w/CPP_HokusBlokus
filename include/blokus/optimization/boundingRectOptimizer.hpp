@@ -39,6 +39,14 @@ namespace HokusBlokus::Blokus::Optimization {
          * @param color The Color to optimize for
          * @param board The Board to optimize for
          */
-		void OptimizeBoundingRectOfColor(Color color, Board board);
+		void OptimizeBoundingRectOfColor(Color color, Board& board);
+
+        /**
+         * @brief Optimizes the bounding boxes according to a valid board state. Only useable for optimizing after a reverted move
+         * 
+         * @param color The Color to optimize for
+         * @param board The Board to optimize for
+         */
+		void OptimizeBoundingRectOfColorRevertedMove(Color color, Board& board);
 	};
 }  // namespace HokusBlokus::Blokus::Optimization

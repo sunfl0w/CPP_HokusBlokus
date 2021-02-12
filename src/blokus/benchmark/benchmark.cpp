@@ -33,6 +33,7 @@ namespace HokusBlokus::Blokus::Benchmark {
     void perft(int depth) {
         GameState gameState = GameState();
         gameState.InitStartingGameState();
+        gameState.SetStartingPieceShape(PieceShape::MONOMINO);
         std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
         long nodes = perftRecursive(depth, gameState);
         int time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count();
